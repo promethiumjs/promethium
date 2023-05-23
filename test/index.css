@@ -1,0 +1,30 @@
+:root {
+  --accent: #e63946ff;
+  --light: #f1faeeff;
+  --lighter: #a8dadcff;
+  --dark: #457b9dff;
+  --darker: #1d3557ff;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+
+body {
+  background: var(--darker);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: var(--light);
+}
+
+button:hover {
+  filter: hue-rotate(60deg);
+}
+
+.hidden {
+  display: none;
+}

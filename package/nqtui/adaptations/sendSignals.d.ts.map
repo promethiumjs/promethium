@@ -1,0 +1,1 @@
+{"version":3,"file":"sendSignals.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/sendSignals.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,KAAK,EAAE,MAAM,yBAAyB,CAAC;AAEhD,iBAAS,gBAAgB,CAAC,KAAK,EAAE,KAAK,EAAE,mBAAmB,EAAE,KAAK,GAAG,KAAK,QAYzE;AAED,iBAAS,gBAAgB,CAAC,KAAK,EAAE,KAAK,EAAE,mBAAmB,EAAE,KAAK,GAAG,KAAK,QAYzE;AAED,OAAO,EAAE,gBAAgB,EAAE,gBAAgB,EAAE,CAAC"}

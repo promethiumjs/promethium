@@ -1,0 +1,22 @@
+{
+  "name": "promethium",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev:package": "cd package && npm run dev",
+    "dev:test": "cd test && npm run dev",
+    "dev:all": "concurrently \"npm run dev:package\" \"npm run dev:test\"",
+    "install:package": "cd package && npm install",
+    "install:test": "cd test && npm install",
+    "install:all": "concurrently \"npm install\" \"npm run install:package\" \"npm run install:test\"",
+    "build:package": "cd package && npm run build",
+    "build:test": "cd test && npm run build",
+    "build:all": "concurrently \"npm run build:package\" \"npm run build:test\"",
+    "on:package": "cd package &&",
+    "on:test": "cd test &&"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
