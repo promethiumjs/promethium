@@ -12,7 +12,11 @@ export default function implicitDependencyExecuteFn(
   return () => effectAndDescendantCleanup(effect);
 }
 
-function internalFn(effect: Effect, fn: EffectFn, cleanupSet: Set<() => void>) {
+function internalFn(
+  effect: Effect,
+  fn: EffectFn,
+  cleanupSet: Set<() => void> | undefined
+) {
   //call effect with previous return value
   const fnReturnValue = fn(effect.returnValue);
   //create `returnValueCleanup` to be called on next run of effect
@@ -23,5 +27,5 @@ function internalFn(effect: Effect, fn: EffectFn, cleanupSet: Set<() => void>) {
     }
   };
 
-  cleanupSet.add(returnValueCleanup);
+  cleanupSet?.add(returnValueCleanup);
 }

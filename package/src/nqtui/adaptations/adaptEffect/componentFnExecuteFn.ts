@@ -26,7 +26,7 @@ export default function internalFn(
   fn: EffectFn,
   depArray: Getter[],
   options: EffectOptions = {},
-  cleanupSet: Set<() => void>
+  cleanupSet: Set<() => void> | undefined
 ) {
   //set tracking to "implicit" to enable tracking by state and memos in `depArray`
   effect.tracking = "implicit";
@@ -50,6 +50,6 @@ export default function internalFn(
     };
 
     //add cleanup to obtain new return value
-    cleanupSet.add(returnValueCleanup);
+    cleanupSet?.add(returnValueCleanup);
   }
 }

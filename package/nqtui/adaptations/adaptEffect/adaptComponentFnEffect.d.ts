@@ -1,4 +1,3 @@
-import { Getter } from "../adaptState/stateTypes";
-import { EffectFn, EffectOptions } from "./effectTypes";
-export default function adaptComponentFnEffect(fn: EffectFn, depArray?: Getter<any>[], options?: EffectOptions): (() => void) | readonly [() => void, () => any[], any[]];
+import { EffectFn, EffectOptions, DepArray } from "./effectTypes";
+export default function adaptComponentFnEffect<T = any, U extends any[] = any[]>(fn: EffectFn<T, U>, depArray: DepArray<U>, options?: EffectOptions): readonly [() => void, () => any[], any[]] | (() => void);
 //# sourceMappingURL=adaptComponentFnEffect.d.ts.map

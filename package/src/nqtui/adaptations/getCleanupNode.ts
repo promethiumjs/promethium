@@ -5,8 +5,8 @@ import { CleanupTree, Effect } from "./adaptEffect/effectTypes";
 export default function getCleanupNode(effect: Effect) {
   let cleanupNode = effect.cleanupTree;
 
-  effect.cleanupTreeNodePointer.forEach((part) => {
-    cleanupNode = cleanupNode.get(part) as CleanupTree;
+  effect.cleanupTreeNodePointer?.forEach((part) => {
+    cleanupNode = cleanupNode?.get(part) as CleanupTree;
   });
 
   return cleanupNode;

@@ -1,4 +1,3 @@
-import { Getter } from "../adaptState/stateTypes";
-import { EffectFn, EffectOptions } from "./effectTypes";
-export default function adaptEffect(fn: EffectFn, depArray?: Getter<any>[], options?: EffectOptions): Promise<() => void>;
+import { EffectFn, EffectOptions, DepArray } from "./effectTypes";
+export default function adaptEffect<T = any, U extends any[] = any[]>(fn: EffectFn<T, U>, depArray?: DepArray<U>, options?: EffectOptions): Promise<() => void>;
 //# sourceMappingURL=adaptEffect.d.ts.map

@@ -6,7 +6,7 @@ import {
 
 export default function sendSignal(
   memo: Memo,
-  fn: () => any,
+  fn: (prev?: any) => any,
   signal: "stale" | "fresh"
 ) {
   if (signal === "stale") {

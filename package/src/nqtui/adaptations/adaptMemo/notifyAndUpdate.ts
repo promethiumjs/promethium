@@ -19,40 +19,44 @@ export function sendStaleNotifications(memo: Memo) {
 //aside from a few caveats, this function basically runs like the execute function of an effect
 export function updateValueAndSendFreshNotifications(
   memo: Memo,
-  fn: () => any
+  fn: (prev?: any) => any
 ) {
   //set `childCount` back to zero to enable children effects to obtain correct positions upon recreation
   memo.childCount = 0;
 
   //fire cleanups make sure proceedings go smoothly
-  const cleanupSet = getCleanupNode(memo).get(0) as Set<Memo | (() => void)>;
-  for (const cleanup of cleanupSet) {
-    //if cleanup is a memo, return it and exit out of function because this means that if the function continues to run
-    //the memo would potentially run twice and re-trigger all of its dependents
-    if (typeof cleanup !== "function") {
-      return cleanup;
+  const cleanupSet = getCleanupNode(memo)?.get(0) as
+    | Set<Memo | (() => void)>
+    | undefined;
+  if (cleanupSet) {
+    for (const cleanup of cleanupSet) {
+      //if cleanup is a memo, return it and exit out of function because this means that if the function continues to run
+      //the memo would potentially run twice and re-trigger all of its dependents
+      if (typeof cleanup !== "function") {
+        return cleanup;
+      }
+      cleanup();
     }
-    cleanup();
   }
-  cleanupSet.clear();
+  cleanupSet?.clear();
 
   //push memo onto context to enable tracking by state and other memos
   effectContexts.push(memo);
 
-  memo.value = fn();
+  memo.value = fn(memo.value);
 
   if (memo.firstRun) {
     memo.firstRun = false;
     //on first run, add cleanup function to cleanupSet
-    cleanupSet.add(() => observableSubscriptionsCleanup(memo));
+    cleanupSet?.add(() => observableSubscriptionsCleanup(memo));
   } else {
     //else add memo to cleanupSet so that the check that runs inside the for of loop above is able to effectively do its job
     //and prevent memos from running twice, especially when nested in effects that also depend on them or in other "edge" cases
-    cleanupSet.add(memo);
+    cleanupSet?.add(memo);
     //then `queueCleanupUpdates` for later for the same reasons mentioned in the comment above
     queueCleanupUpdates(() => {
-      cleanupSet.clear();
-      cleanupSet.add(() => observableSubscriptionsCleanup(memo));
+      cleanupSet?.clear();
+      cleanupSet?.add(() => observableSubscriptionsCleanup(memo));
     });
   }
 

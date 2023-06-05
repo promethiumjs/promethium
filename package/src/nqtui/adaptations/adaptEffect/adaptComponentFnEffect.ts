@@ -1,14 +1,27 @@
-import { Getter } from "../adaptState/stateTypes";
 import createEffect from "./createEffect";
-import { EffectFn, EffectOptions } from "./effectTypes";
+import {
+  EffectFn,
+  EffectOptions,
+  ComponentFnExecuteFn,
+  DepArray,
+} from "./effectTypes";
 
-export default function adaptComponentFnEffect(
-  fn: EffectFn,
-  depArray?: Getter<any>[],
-  options?: EffectOptions
-) {
-  const [execute, effect] = createEffect("sync", "componentFn", fn, depArray);
+export default function adaptComponentFnEffect<
+  T = any,
+  U extends any[] = any[]
+>(fn: EffectFn<T, U>, depArray: DepArray<U>, options?: EffectOptions) {
+  const [execute, effect] = createEffect(
+    "sync",
+    "componentFn",
+    fn as EffectFn,
+    depArray
+  );
 
   //return cleanup function / component cleanup array
-  return execute(effect, fn, depArray, options);
+  return execute(
+    effect,
+    fn as EffectFn,
+    depArray,
+    options
+  ) as ReturnType<ComponentFnExecuteFn>;
 }

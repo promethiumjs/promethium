@@ -6,7 +6,8 @@
     "declarationMap": true,
     "declarationDir": "./",
     "emitDeclarationOnly": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strict": true
   },
   "include": ["./src/**/*"],
   "exclude": []

@@ -31,6 +31,11 @@ import {
   asyncReplace,
 } from "./nqtui";
 
+import type { Deletable } from "./nqtx";
+import { ParticleEntity } from "./nqtx";
+
+import { Router } from "./nqtrouter";
+
 export {
   Component,
   TemplateResult,
@@ -65,3 +70,7 @@ export {
   asyncAppend,
   asyncReplace,
 };
+
+export { ParticleEntity, Deletable };
+
+export { Router };

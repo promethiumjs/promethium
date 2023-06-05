@@ -1,4 +1,4 @@
 import { Getter } from "../adaptState/stateTypes";
 import { Effect } from "./effectTypes";
-export default function updateEffectDependencies(effect: Effect, depArray: Getter[]): any[];
+export default function updateEffectDependencies(effect: Effect, depArray: Getter[]): any[] | undefined;
 //# sourceMappingURL=updateEffectDependencies.d.ts.map

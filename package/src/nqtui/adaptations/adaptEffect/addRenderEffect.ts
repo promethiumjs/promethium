@@ -1,5 +1,5 @@
 const renderEffectArray1: any = [];
-const renderEffectArray2 = [];
+const renderEffectArray2: any = [];
 let one = true;
 
 export default function addRenderEffect(fn: any) {
@@ -11,7 +11,7 @@ export default function addRenderEffect(fn: any) {
   if (renderEffectArray.length === 1) {
     queueMicrotask(() => {
       one = newOne;
-      renderEffectArray.forEach((fn) => fn());
+      renderEffectArray.forEach((fn: any) => fn());
       renderEffectArray.length = 0;
     });
   }

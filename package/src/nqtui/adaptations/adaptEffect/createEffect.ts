@@ -3,7 +3,12 @@ import sendSignal from "./sendSignal";
 import setInitialParameters from "../setInitialParameters";
 import setCleanupSet from "../setCleanupSet";
 import { Getter } from "../adaptState/stateTypes";
-import { Effect, EffectFn } from "./effectTypes";
+import {
+  ComponentFnExecuteFn,
+  Effect,
+  EffectFn,
+  ExecuteFn,
+} from "./effectTypes";
 
 export default function createEffect(
   type: "async" | "sync" | "render",
@@ -39,7 +44,13 @@ export default function createEffect(
     //used to notify the effect when a state value of state currently tracking the effect turns
     //stale or freshens up after turning stale
     sendSignal: (signal: "fresh" | "stale"): void =>
-      sendSignal(effect, execute, fn, depArray, signal),
+      sendSignal(
+        effect,
+        execute as ExecuteFn | ComponentFnExecuteFn,
+        fn,
+        depArray!,
+        signal
+      ),
   };
 
   //create `cleanupTreeNodePointer` for effect and create `cleanupTree` for effect tree is this is the

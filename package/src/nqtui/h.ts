@@ -7,7 +7,7 @@ import {
 import queueRevertChangedToTrue from "./queueRevertChangedToTrue";
 import adaptComponentFnEffect from "./adaptations/adaptEffect/adaptComponentFnEffect";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
-import { ChildPart, noChange, TemplateResult } from "lit-html";
+import { ChildPart, noChange, TemplateResult, html } from "lit-html";
 import { Component } from "./render";
 
 class $ extends AsyncDirective {
@@ -23,6 +23,13 @@ class $ extends AsyncDirective {
 
     //boolean flag to enable initialization of the component in the update method.
     this.updateFlag = "initialize";
+    //initialize cleanups for component. this includes:
+    //1. general component cleanup for all its effects and memos
+    //2. cleanup of the effect created from the function (that returns a template result) the component returns
+    this.cleanups = [];
+    this.Component = () => html``;
+    //initialize "changed" flag as true.
+    this.changed = true;
   }
 
   protected disconnected(): void {
@@ -54,11 +61,6 @@ class $ extends AsyncDirective {
     parent: Node,
     props: any
   ) {
-    //initialize cleanups for component. this includes:
-    //1. general component cleanup for all its effects and memos
-    //2. cleanup of the effect created from the function (that returns a template result) the component returns
-    this.cleanups = [];
-
     //store the function (that returns a template result) the component returns in `htmlFn` for later us
     let htmlFn: () => TemplateResult;
     //initialize component effects and memos and store the cleanup (1st cleanup)
@@ -71,10 +73,10 @@ class $ extends AsyncDirective {
       ComponentDependencyUpdate,
       [htmlTemplateResult],
     ]: any = adaptComponentFnEffect(
-      (_, [htmlTemplateResult]: [TemplateResult]) => {
-        this.setValue(htmlTemplateResult);
+      (_, htmlTemplateResultArray?: TemplateResult[]) => {
+        this.setValue(htmlTemplateResultArray?.[0]);
       },
-      [htmlFn],
+      [htmlFn!],
       { defer: true, isComponent: true }
     );
 
@@ -89,7 +91,6 @@ class $ extends AsyncDirective {
       if (this.changed) {
         this.changed = false;
         queueRevertChangedToTrue(this);
-
         const [htmlTemplateResult] = this.ComponentDependencyUpdate?.();
 
         return htmlTemplateResult;
@@ -97,9 +98,6 @@ class $ extends AsyncDirective {
         return noChange;
       }
     };
-
-    //initialize "changed" flag as true.
-    this.changed = true;
     //prevent re-initialization of component on subsequent renders after initialization.
     this.updateFlag = "externalRender";
 

@@ -6,7 +6,7 @@ import { updateValueAndSendFreshNotifications } from "./notifyAndUpdate";
 import { Memo } from "./memoTypes";
 import { Getter } from "../adaptState/stateTypes";
 
-export default function adaptMemo<T = any>(fn: () => T): Getter<T> {
+export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
   const memo: Memo = {
     //state properties
     syncSubscriptions: {
@@ -19,7 +19,7 @@ export default function adaptMemo<T = any>(fn: () => T): Getter<T> {
     },
     asyncAndRenderSubscriptions: new Set(),
     activeSubscriptions: "one",
-    value: null,
+    value: undefined,
     //effect properties
     firstRun: true,
     type: "memo",
@@ -38,5 +38,7 @@ export default function adaptMemo<T = any>(fn: () => T): Getter<T> {
 
   const cleanupMemo = updateValueAndSendFreshNotifications(memo, fn);
 
-  return cleanupMemo ? () => get<T>(cleanupMemo) : () => get<T>(memo);
+  return (
+    cleanupMemo ? () => get<T>(cleanupMemo) : () => get<T>(memo)
+  ) as Getter<T>;
 }

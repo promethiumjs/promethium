@@ -5,17 +5,19 @@ import { Effect } from "./effectTypes";
 
 export function baseExecuteFn(
   effect: Effect,
-  fn: (cleanupSet: Set<() => void>) => void
+  fn: (cleanupSet: Set<() => void> | undefined) => void
 ) {
   //set `childCount` back to zero to enable children effects to obtain correct positions upon recreation
   effect.childCount = 0;
 
   //fire cleanups make sure proceedings go smoothly
-  const cleanupSet = getCleanupNode(effect).get(0) as Set<() => void>;
-  cleanupSet.forEach((cleanup) => {
+  const cleanupSet = getCleanupNode(effect)?.get(0) as
+    | Set<() => void>
+    | undefined;
+  cleanupSet?.forEach((cleanup) => {
     cleanup();
   });
-  cleanupSet.clear();
+  cleanupSet?.clear();
 
   //push effect onto context to enable tracking by state and memos
   effectContexts.push(effect);
@@ -23,7 +25,7 @@ export function baseExecuteFn(
   fn(cleanupSet);
 
   //add cleanup to remove effect from all old subscriptions
-  cleanupSet.add(() => observableSubscriptionsCleanup(effect));
+  cleanupSet?.add(() => observableSubscriptionsCleanup(effect));
 
   //remove effect from context to disable tracking by state and memos
   effectContexts.pop();

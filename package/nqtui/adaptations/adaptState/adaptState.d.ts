@@ -1,2 +1,4 @@
-export default function adaptState<T = any>(initialValue?: T): readonly [() => T, (nextValue: T) => void];
+import { StateTuple } from "./stateTypes";
+export declare function adaptState<T>(): StateTuple<T | undefined>;
+export declare function adaptState<T>(initialValue: T): StateTuple<T>;
 //# sourceMappingURL=adaptState.d.ts.map

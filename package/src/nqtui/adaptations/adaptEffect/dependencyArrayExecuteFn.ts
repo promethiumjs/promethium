@@ -21,7 +21,7 @@ function internalFn(
   fn: EffectFn,
   depArray: Getter[],
   options: EffectOptions = {},
-  cleanupSet: Set<() => void>
+  cleanupSet: Set<() => void> | undefined
 ) {
   //if effect is supposed to be deferred, do nothing on the first run
   if (effect.firstRun && options.defer) {
@@ -38,7 +38,7 @@ function internalFn(
     };
 
     //add cleanup to obtain new return value
-    cleanupSet.add(returnValueCleanup);
+    cleanupSet?.add(returnValueCleanup);
   }
 
   //set tracking to "implicit" to enable tracking by state and memos in `depArray`

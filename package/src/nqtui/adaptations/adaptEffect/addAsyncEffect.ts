@@ -1,5 +1,5 @@
 const asyncEffectArray1: any = [];
-const asyncEffectArray2 = [];
+const asyncEffectArray2: any = [];
 let one = true;
 
 export default function addAsyncEffect(fn: any) {
@@ -11,7 +11,7 @@ export default function addAsyncEffect(fn: any) {
   if (asyncEffectArray.length === 1) {
     queueMicrotask(() => {
       one = newOne;
-      asyncEffectArray.forEach((fn) => fn());
+      asyncEffectArray.forEach((fn: any) => fn());
       asyncEffectArray.length = 0;
     });
   }

@@ -1,1 +1,1 @@
-{"version":3,"file":"getCleanupNode.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/getCleanupNode.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,EAAE,MAAM,2BAA2B,CAAC;AAIhE,MAAM,CAAC,OAAO,UAAU,cAAc,CAAC,MAAM,EAAE,MAAM,eAQpD"}
+{"version":3,"file":"getCleanupNode.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/getCleanupNode.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,EAAE,MAAM,2BAA2B,CAAC;AAIhE,MAAM,CAAC,OAAO,UAAU,cAAc,CAAC,MAAM,EAAE,MAAM,sBAQpD"}

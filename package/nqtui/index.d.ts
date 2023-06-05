@@ -1,10 +1,10 @@
-import { render } from "./render";
-import type { Component } from "./render";
 import type { TemplateResult } from "lit-html";
 import type { DirectiveResult } from "lit-html/directive.js";
+import type { Component } from "./render";
+import { render } from "./render";
 import h from "./h";
 import { html } from "lit-html";
-import adaptState from "./adaptations/adaptState/adaptState";
+import { adaptState } from "./adaptations/adaptState/adaptState";
 import adaptEffect from "./adaptations/adaptEffect/adaptEffect";
 import adaptRenderEffect from "./adaptations/adaptEffect/adaptRenderEffect";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";

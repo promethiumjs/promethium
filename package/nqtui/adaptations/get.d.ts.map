@@ -1,1 +1,1 @@
-{"version":3,"file":"get.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/get.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,KAAK,EAAE,MAAM,yBAAyB,CAAC;AA2BhD,MAAM,CAAC,OAAO,UAAU,GAAG,CAAC,CAAC,GAAG,GAAG,EAAE,KAAK,EAAE,KAAK,CAAC,CAAC,CAAC,KAOnD"}
+{"version":3,"file":"get.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/get.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,KAAK,EAAE,MAAM,yBAAyB,CAAC;AA2BhD,MAAM,CAAC,OAAO,UAAU,GAAG,CAAC,CAAC,GAAG,GAAG,EAAE,KAAK,EAAE,KAAK,CAAC,CAAC,CAAC,iBAOnD"}

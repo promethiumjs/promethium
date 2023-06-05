@@ -1,9 +1,9 @@
 import getCleanupNode from "../getCleanupNode";
 import { CleanupTree, Effect } from "./effectTypes";
 
-function traverseAndEvaluate(cleanupNode: CleanupTree) {
+function traverseAndEvaluate(cleanupNode: CleanupTree | null) {
   let nextChildNode = 0;
-  while (cleanupNode.get(nextChildNode)) {
+  while (cleanupNode?.get(nextChildNode)) {
     if (nextChildNode === 0) {
       const cleanupSet = cleanupNode.get(0) as Set<() => void>;
       cleanupSet.forEach((cleanup) => {

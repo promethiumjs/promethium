@@ -22,7 +22,12 @@ export default function sendSignal(
     if (effect.staleStateValuesCount <= 0) {
       //to make sure "effect.stateStateValuesCount" doesn't go beyond zero
       effect.staleStateValuesCount = 0;
-      executeMap[effect.type](effect, execute, fn, depArray);
+      executeMap[effect.type as "sync" | "render" | "async"](
+        effect,
+        execute,
+        fn,
+        depArray
+      );
     }
   }
 }
@@ -30,19 +35,19 @@ export default function sendSignal(
 const executeMap = {
   sync: (
     effect: Effect,
-    execute: ExecuteFn,
+    execute: ExecuteFn | ComponentFnExecuteFn,
     fn: EffectFn,
     depArray: Getter[]
   ) => execute(effect, fn, depArray),
   async: (
     effect: Effect,
-    execute: ExecuteFn,
+    execute: ExecuteFn | ComponentFnExecuteFn,
     fn: EffectFn,
     depArray: Getter[]
   ) => addAsyncEffect(() => execute(effect, fn, depArray)),
   render: (
     effect: Effect,
-    execute: ExecuteFn,
+    execute: ExecuteFn | ComponentFnExecuteFn,
     fn: EffectFn,
     depArray: Getter[]
   ) => addRenderEffect(() => execute(effect, fn, depArray)),

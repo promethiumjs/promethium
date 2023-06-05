@@ -1,1 +1,1 @@
-{"version":3,"file":"adaptState.d.ts","sourceRoot":"","sources":["../../../src/nqtui/adaptations/adaptState/adaptState.ts"],"names":[],"mappings":"AAIA,MAAM,CAAC,OAAO,UAAU,UAAU,CAAC,CAAC,GAAG,GAAG,EAAE,YAAY,CAAC,EAAE,CAAC,kCA0B/B,CAAC,WAG7B"}
+{"version":3,"file":"adaptState.d.ts","sourceRoot":"","sources":["../../../src/nqtui/adaptations/adaptState/adaptState.ts"],"names":[],"mappings":"AAEA,OAAO,EAAS,UAAU,EAAE,MAAM,cAAc,CAAC;AAEjD,wBAAgB,UAAU,CAAC,CAAC,KAAK,UAAU,CAAC,CAAC,GAAG,SAAS,CAAC,CAAC;AAC3D,wBAAgB,UAAU,CAAC,CAAC,EAAE,YAAY,EAAE,CAAC,GAAG,UAAU,CAAC,CAAC,CAAC,CAAC"}
