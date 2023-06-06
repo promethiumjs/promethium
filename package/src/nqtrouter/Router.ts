@@ -29,7 +29,7 @@ export default class Router<P extends Paths> {
       window.location.pathname
     );
     this.paths = paths;
-    window.addEventListener("popstate", () => this.route);
+    window.addEventListener("popstate", () => this.route());
     this.route = this.route.bind(this);
     this.navigate = this.navigate.bind(this);
   }

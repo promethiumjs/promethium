@@ -758,7 +758,7 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
     constructor(paths){
         [this.currentPath, this.setCurrentPath] = (0, $2ea58473f796696a$export$9c07a256d814a0e)(window.location.pathname);
         this.paths = paths;
-        window.addEventListener("popstate", ()=>this.route);
+        window.addEventListener("popstate", ()=>this.route());
         this.route = this.route.bind(this);
         this.navigate = this.navigate.bind(this);
     }
