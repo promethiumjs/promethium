@@ -1,4 +1,6 @@
 import ParticleEntity from "./ParticleEntity";
-import type { Deletable } from "./ParticleEntity";
-export { ParticleEntity, Deletable };
+import DerivativeEntity from "./DerivativeEntity";
+import ActionEntity from "./ActionEntity";
+import type { Deletable } from "./entityTypes";
+export { ParticleEntity, DerivativeEntity, ActionEntity, Deletable };
 //# sourceMappingURL=index.d.ts.map

@@ -1,6 +1,7 @@
 import type { TemplateResult } from "lit-html";
 import type { DirectiveResult } from "lit-html/directive.js";
 import type { Component } from "./render";
+import type { Getter } from "./adaptations/adaptState/stateTypes";
 import { render } from "./render";
 import h from "./h";
 import { html } from "lit-html";
@@ -33,6 +34,7 @@ import { asyncReplace } from "lit-html/directives/async-replace.js";
 
 export {
   Component,
+  Getter,
   render,
   TemplateResult,
   DirectiveResult,

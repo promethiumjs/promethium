@@ -8,10 +8,10 @@ import {
   ExecuteFn,
 } from "./effectTypes";
 
-export default function sendSignal(
+export default function sendSignal<T extends any[] = any[]>(
   effect: Effect,
   execute: ExecuteFn | ComponentFnExecuteFn,
-  fn: EffectFn,
+  fn: EffectFn<T>,
   depArray: Getter[],
   signal: "stale" | "fresh"
 ) {
@@ -33,22 +33,22 @@ export default function sendSignal(
 }
 
 const executeMap = {
-  sync: (
+  sync: <T extends any[] = any[]>(
     effect: Effect,
     execute: ExecuteFn | ComponentFnExecuteFn,
-    fn: EffectFn,
+    fn: EffectFn<T>,
     depArray: Getter[]
   ) => execute(effect, fn, depArray),
-  async: (
+  async: <T extends any[] = any[]>(
     effect: Effect,
     execute: ExecuteFn | ComponentFnExecuteFn,
-    fn: EffectFn,
+    fn: EffectFn<T>,
     depArray: Getter[]
   ) => addAsyncEffect(() => execute(effect, fn, depArray)),
-  render: (
+  render: <T extends any[] = any[]>(
     effect: Effect,
     execute: ExecuteFn | ComponentFnExecuteFn,
-    fn: EffectFn,
+    fn: EffectFn<T>,
     depArray: Getter[]
   ) => addRenderEffect(() => execute(effect, fn, depArray)),
 };

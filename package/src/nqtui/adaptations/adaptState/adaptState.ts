@@ -3,8 +3,8 @@ import set from "./set";
 import { State, StateTuple } from "./stateTypes";
 
 export function adaptState<T>(): StateTuple<T | undefined>;
-export function adaptState<T>(initialValue: T): StateTuple<T>;
-export function adaptState<T>(initialValue?: T): StateTuple<T> {
+export function adaptState<T>(initialValue: T | (() => T)): StateTuple<T>;
+export function adaptState<T>(initialValue?: T | (() => T)): StateTuple<T> {
   //create state object with three sets of subscriptions
   const state: State<T> = {
     //one for sync effect subscriptions
@@ -26,11 +26,14 @@ export function adaptState<T>(initialValue?: T): StateTuple<T> {
     asyncAndRenderSubscriptions: new Set(),
     //use variable to effectively switch between subscription sets (for sync effects and memos)
     activeSubscriptions: "one",
-    value: initialValue,
+    value:
+      typeof initialValue === "function"
+        ? (initialValue as () => T)()
+        : initialValue,
   };
 
   const getter = () => get(state);
-  const setter = (nextValue: T) => set(state, nextValue);
+  const setter = (nextValue: T | ((prev: T) => T)) => set(state, nextValue);
 
   return [getter, setter] as StateTuple<T>;
 }

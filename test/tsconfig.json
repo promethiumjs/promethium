@@ -3,6 +3,10 @@
     "strict": true,
     "target": "es6",
     "lib": ["es5", "es6", "es2018", "dom", "dom.iterable"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
 }

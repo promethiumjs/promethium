@@ -15,5 +15,5 @@ export type State<T = any> = {
 };
 
 export type Getter<T = any> = () => T;
-export type Setter<T = any> = (nextValue: T) => void;
+export type Setter<T = any> = (nextValue: T | ((prev: T) => T)) => void;
 export type StateTuple<T> = readonly [Getter<T>, Setter<T>];

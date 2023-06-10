@@ -10,10 +10,10 @@ import {
   ExecuteFn,
 } from "./effectTypes";
 
-export default function createEffect(
+export default function createEffect<T extends any[] = any[]>(
   type: "async" | "sync" | "render",
   tracking: "implicit" | "depArray" | "componentFn",
-  fn: EffectFn,
+  fn: EffectFn<T>,
   depArray?: Getter<any>[]
 ) {
   const execute = executeFns[tracking];
@@ -39,8 +39,6 @@ export default function createEffect(
     observableSubscriptionSets: new Set(),
     //used to track the number of state values of states currently tracking the effect that are stale
     staleStateValuesCount: 0,
-    //used to store the return value of the previous effect execution
-    returnValue: null,
     //used to notify the effect when a state value of state currently tracking the effect turns
     //stale or freshens up after turning stale
     sendSignal: (signal: "fresh" | "stale"): void =>

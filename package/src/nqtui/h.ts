@@ -73,7 +73,7 @@ class $ extends AsyncDirective {
       ComponentDependencyUpdate,
       [htmlTemplateResult],
     ]: any = adaptComponentFnEffect(
-      (_, htmlTemplateResultArray?: TemplateResult[]) => {
+      (htmlTemplateResultArray?: [TemplateResult]) => {
         this.setValue(htmlTemplateResultArray?.[0]);
       },
       [htmlFn!],
@@ -124,16 +124,16 @@ class $ extends AsyncDirective {
   }
 }
 
-declare function hFunc(
+declare function hFn(
   Component: () => () => TemplateResult,
   props?: null
 ): DirectiveResult;
 
-declare function hFunc<Type>(
+declare function hFn<Type>(
   Component: Component<Type>,
   props: Type
 ): DirectiveResult;
 
-const h: typeof hFunc = directive($);
+const h: typeof hFn = directive($);
 
 export default h;

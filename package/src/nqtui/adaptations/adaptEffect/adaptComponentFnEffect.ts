@@ -6,21 +6,17 @@ import {
   DepArray,
 } from "./effectTypes";
 
-export default function adaptComponentFnEffect<
-  T = any,
-  U extends any[] = any[]
->(fn: EffectFn<T, U>, depArray: DepArray<U>, options?: EffectOptions) {
-  const [execute, effect] = createEffect(
-    "sync",
-    "componentFn",
-    fn as EffectFn,
-    depArray
-  );
+export default function adaptComponentFnEffect<T extends any[] = any[]>(
+  fn: EffectFn<T>,
+  depArray: DepArray<T>,
+  options?: EffectOptions
+) {
+  const [execute, effect] = createEffect("sync", "componentFn", fn, depArray);
 
   //return cleanup function / component cleanup array
   return execute(
     effect,
-    fn as EffectFn,
+    fn,
     depArray,
     options
   ) as ReturnType<ComponentFnExecuteFn>;

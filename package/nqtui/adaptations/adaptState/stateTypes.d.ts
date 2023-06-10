@@ -13,6 +13,6 @@ export declare type State<T = any> = {
     value: T | undefined;
 };
 export declare type Getter<T = any> = () => T;
-export declare type Setter<T = any> = (nextValue: T) => void;
+export declare type Setter<T = any> = (nextValue: T | ((prev: T) => T)) => void;
 export declare type StateTuple<T> = readonly [Getter<T>, Setter<T>];
 //# sourceMappingURL=stateTypes.d.ts.map

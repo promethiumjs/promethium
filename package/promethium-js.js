@@ -107,11 +107,10 @@ function $ba142649eb282e8a$export$2e2bcd8739ae039(effect, fn) {
 }
 function $ba142649eb282e8a$var$internalFn(effect, fn, cleanupSet) {
     //call effect with previous return value
-    const fnReturnValue = fn(effect.returnValue);
+    const fnReturnValue = fn();
     //create `returnValueCleanup` to be called on next run of effect
     const returnValueCleanup = ()=>{
-        if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
-        effect.returnValue = fnReturnValue();
+        if (typeof fnReturnValue === "function") fnReturnValue();
     };
     cleanupSet?.add(returnValueCleanup);
 }
@@ -128,11 +127,10 @@ function $8358f029406b3bf0$var$internalFn(effect, fn, depArray, options = {}, cl
     if (effect.firstRun && options.defer) effect.firstRun = false;
     else {
         //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-        const fnReturnValue = fn(effect.returnValue, effect.argsArray || []);
+        const fnReturnValue = fn(effect.argsArray);
         //create `returnValueCleanup` to be called on next run of effect
         const returnValueCleanup = ()=>{
-            if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
-            effect.returnValue = fnReturnValue();
+            if (typeof fnReturnValue === "function") fnReturnValue();
         };
         //add cleanup to obtain new return value
         cleanupSet?.add(returnValueCleanup);
@@ -179,11 +177,10 @@ function $77230c8e9bc6ad07$export$2e2bcd8739ae039(effect, fn, depArray, options 
     if (effect.firstRun && options.defer) effect.firstRun = false;
     else {
         //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-        const fnReturnValue = fn(effect.returnValue, effect.argsArray);
+        const fnReturnValue = fn(effect.argsArray);
         //create `returnValueCleanup` to be called on next run of effect
         const returnValueCleanup = ()=>{
-            if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
-            effect.returnValue = fnReturnValue();
+            if (typeof fnReturnValue === "function") fnReturnValue();
         };
         //add cleanup to obtain new return value
         cleanupSet?.add(returnValueCleanup);
@@ -324,8 +321,6 @@ function $09edb78f7635c27a$export$2e2bcd8739ae039(type, tracking, fn, depArray) 
         observableSubscriptionSets: new Set(),
         //used to track the number of state values of states currently tracking the effect that are stale
         staleStateValuesCount: 0,
-        //used to store the return value of the previous effect execution
-        returnValue: null,
         //used to notify the effect when a state value of state currently tracking the effect turns
         //stale or freshens up after turning stale
         sendSignal: (signal)=>(0, $d5fa6cf0040a6711$export$2e2bcd8739ae039)(effect, execute, fn, depArray, signal)
@@ -394,7 +389,7 @@ class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
         let htmlFn;
         //initialize component effects and memos and store the cleanup (1st cleanup)
         this.cleanups.push((0, $ed4eeacab2c72f4d$export$2e2bcd8739ae039)(()=>htmlFn = Component(props, parent), []));
-        const [ComponentCleanup, ComponentDependencyUpdate, [htmlTemplateResult], ] = (0, $d9192ce19ee672a1$export$2e2bcd8739ae039)((_, htmlTemplateResultArray)=>{
+        const [ComponentCleanup, ComponentDependencyUpdate, [htmlTemplateResult], ] = (0, $d9192ce19ee672a1$export$2e2bcd8739ae039)((htmlTemplateResultArray)=>{
             this.setValue(htmlTemplateResultArray?.[0]);
         }, [
             htmlFn
@@ -520,7 +515,7 @@ function $7f88e9e03e1610a7$export$2e2bcd8739ae039(state, nextValue) {
     //subscriptions if any
     (0, $84babe8016afdd4f$export$ac2bda8cd89c2590)(state, activeSubscriptions);
     //update state value
-    state.value = nextValue;
+    state.value = typeof nextValue === "function" ? nextValue(state.value) : nextValue;
     //let subscriptions know that their stale value has been updated so that they can notify and
     //update themselves and their subscriptions if any
     (0, $84babe8016afdd4f$export$436b218e987b82fc)(state, activeSubscriptions);
@@ -551,7 +546,7 @@ function $2ea58473f796696a$export$9c07a256d814a0e(initialValue) {
         asyncAndRenderSubscriptions: new Set(),
         //use variable to effectively switch between subscription sets (for sync effects and memos)
         activeSubscriptions: "one",
-        value: initialValue
+        value: typeof initialValue === "function" ? initialValue() : initialValue
     };
     const getter = ()=>(0, $9cecc7cf923e2acf$export$2e2bcd8739ae039)(state);
     const setter = (nextValue)=>(0, $7f88e9e03e1610a7$export$2e2bcd8739ae039)(state, nextValue);
@@ -726,26 +721,71 @@ class $7547703a902ec477$export$2e2bcd8739ae039 {
         this.createParticles(initialParticleValues);
         this.adaptParticle = this.adaptParticle.bind(this);
         this.deleteParticles = this.deleteParticles.bind(this);
+        this.getParticleValues = this.getParticleValues.bind(this);
+    }
+    adaptParticle(id, initialValue) {
+        if (this.particles[id] === undefined) this.createParticles({
+            [id]: initialValue
+        });
+        return this.particles[id];
     }
     createParticles(particleValues) {
         if (particleValues) Object.keys(particleValues).forEach((particleValue)=>{
             this.particles[particleValue] = (0, $2ea58473f796696a$export$9c07a256d814a0e)(particleValues[particleValue]);
         });
     }
-    adaptParticle(optionsOrId) {
-        if (typeof optionsOrId === "string") {
-            const id = optionsOrId;
-            return this.particles[id];
-        } else {
-            const options = optionsOrId;
-            if (this.particles[options.id] === undefined) this.createParticles({
-                [options.id]: options.initialValue
-            });
-            return this.particles[options.id];
-        }
-    }
     deleteParticles(particleIds) {
         particleIds.forEach((particleId)=>delete this.particles[particleId]);
+    }
+    getParticleValues() {
+        const particleValues = {};
+        Object.keys(this.particles).forEach((particle)=>particleValues[particle] = this.particles[particle][0]());
+        return particleValues;
+    }
+}
+
+
+
+class $911171dbae4499f3$export$2e2bcd8739ae039 {
+    constructor(initialDerivativeFns){
+        this.derivatives = {};
+        this.createDerivatives(initialDerivativeFns);
+        this.adaptDerivative = this.adaptDerivative.bind(this);
+        this.deleteDerivatives = this.deleteDerivatives.bind(this);
+        this.getDerivativeValues = this.getDerivativeValues.bind(this);
+    }
+    createDerivatives(derivativeFns) {
+        if (derivativeFns) Object.keys(derivativeFns).forEach((derivativeFn)=>{
+            this.derivatives[derivativeFn] = derivativeFns[derivativeFn]?.();
+        });
+    }
+    adaptDerivative(id, initialDerivativeFn) {
+        if (this.derivatives[id] === undefined) {
+            const fallBackDerivativeFn = ()=>(0, $4ff487e726c286d2$export$2e2bcd8739ae039)(()=>undefined);
+            this.createDerivatives({
+                [id]: initialDerivativeFn || fallBackDerivativeFn
+            });
+        }
+        return this.derivatives[id];
+    }
+    deleteDerivatives(derivativeIds) {
+        derivativeIds.forEach((derivativeId)=>delete this.derivatives[derivativeId]);
+    }
+    getDerivativeValues() {
+        const derivativeValues = {};
+        Object.keys(this.derivatives).forEach((derivative)=>derivativeValues[derivative] = this.derivatives[derivative]());
+        return derivativeValues;
+    }
+}
+
+
+class $d58cca3b38bc6f70$export$2e2bcd8739ae039 {
+    constructor(actions){
+        this.actions = actions;
+        this.dispatch = this.dispatch.bind(this);
+    }
+    dispatch(actionId, payload) {
+        return this.actions[actionId](payload);
     }
 }
 
@@ -796,5 +836,5 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
 
 
 
-export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $60affc760575bcb6$re_export$html as html, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
+export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $60affc760575bcb6$re_export$html as html, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
 //# sourceMappingURL=promethium-js.js.map

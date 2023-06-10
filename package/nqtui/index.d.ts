@@ -1,6 +1,7 @@
 import type { TemplateResult } from "lit-html";
 import type { DirectiveResult } from "lit-html/directive.js";
 import type { Component } from "./render";
+import type { Getter } from "./adaptations/adaptState/stateTypes";
 import { render } from "./render";
 import h from "./h";
 import { html } from "lit-html";
@@ -30,5 +31,5 @@ import { unsafeSVG } from "lit-html/directives/unsafe-svg.js";
 import { until } from "lit-html/directives/until.js";
 import { asyncAppend } from "lit-html/directives/async-append.js";
 import { asyncReplace } from "lit-html/directives/async-replace.js";
-export { Component, render, TemplateResult, DirectiveResult, h, html, adaptState, adaptEffect, adaptRenderEffect, adaptSyncEffect, adaptMemo, classMap, styleMap, when, choose, guard, cache, keyed, map, repeat, join, range, live, ifDefined, ref, createRef, templateContent, unsafeHTML, unsafeSVG, until, asyncAppend, asyncReplace, };
+export { Component, Getter, render, TemplateResult, DirectiveResult, h, html, adaptState, adaptEffect, adaptRenderEffect, adaptSyncEffect, adaptMemo, classMap, styleMap, when, choose, guard, cache, keyed, map, repeat, join, range, live, ifDefined, ref, createRef, templateContent, unsafeHTML, unsafeSVG, until, asyncAppend, asyncReplace, };
 //# sourceMappingURL=index.d.ts.map

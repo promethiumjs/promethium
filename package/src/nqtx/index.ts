@@ -1,4 +1,6 @@
 import ParticleEntity from "./ParticleEntity";
-import type { Deletable } from "./ParticleEntity";
+import DerivativeEntity from "./DerivativeEntity";
+import ActionEntity from "./ActionEntity";
+import type { Deletable } from "./entityTypes";
 
-export { ParticleEntity, Deletable };
+export { ParticleEntity, DerivativeEntity, ActionEntity, Deletable };

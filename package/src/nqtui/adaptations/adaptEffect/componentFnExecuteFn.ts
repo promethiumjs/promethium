@@ -4,9 +4,9 @@ import effectAndDescendantCleanup from "./effectAndDescendantCeanup";
 import { Effect, EffectFn, EffectOptions } from "./effectTypes";
 import updateEffectDependencies from "./updateEffectDependencies";
 
-export function componentFnExecuteFn(
+export function componentFnExecuteFn<T extends any[] = any[]>(
   effect: Effect,
-  fn: EffectFn,
+  fn: EffectFn<T>,
   depArray: Getter[],
   options: EffectOptions = {}
 ) {
@@ -21,9 +21,9 @@ export function componentFnExecuteFn(
   ] as const;
 }
 
-export default function internalFn(
+export default function internalFn<T extends any[] = any[]>(
   effect: Effect,
-  fn: EffectFn,
+  fn: EffectFn<T>,
   depArray: Getter[],
   options: EffectOptions = {},
   cleanupSet: Set<() => void> | undefined
@@ -40,12 +40,11 @@ export default function internalFn(
     effect.firstRun = false;
   } else {
     //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-    const fnReturnValue = fn(effect.returnValue, effect.argsArray);
+    const fnReturnValue = fn(effect.argsArray as T);
     //create `returnValueCleanup` to be called on next run of effect
     const returnValueCleanup = () => {
       if (typeof fnReturnValue === "function") {
-        //extract new `returnValue` from effect's returned function
-        effect.returnValue = fnReturnValue();
+        fnReturnValue();
       }
     };
 

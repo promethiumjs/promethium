@@ -1,15 +1,6 @@
 import { StateTuple } from "./../nqtui/adaptations/adaptState/stateTypes";
 import { adaptState } from "../nqtui";
-
-type OptionalLiteralKeys<T> = keyof {
-  [K in keyof T as string extends K
-    ? never
-    : number extends K
-    ? never
-    : {} extends Pick<T, K>
-    ? K
-    : never]: 0;
-};
+import { Deletable, OptionalLiteralKeys } from "./entityTypes";
 
 type ParticleValues = {
   [key: string]: any;
@@ -17,10 +8,6 @@ type ParticleValues = {
 
 type Particles<PV> = {
   [ParticleValue in keyof PV]: StateTuple<PV[ParticleValue]>;
-};
-
-export type Deletable = string & {
-  deletable: true;
 };
 
 export default class ParticleEntity<
@@ -33,6 +20,25 @@ export default class ParticleEntity<
     this.createParticles(initialParticleValues);
     this.adaptParticle = this.adaptParticle.bind(this);
     this.deleteParticles = this.deleteParticles.bind(this);
+    this.getParticleValues = this.getParticleValues.bind(this);
+  }
+
+  adaptParticle<T extends keyof PV>(id: T): StateTuple<PV[T]>;
+  adaptParticle<T extends keyof PV>(
+    id: T,
+    initialValue: NonNullable<PV[T]>
+  ): StateTuple<NonNullable<PV[T]>>;
+  adaptParticle<T extends keyof PV>(
+    id: T,
+    initialValue?: PV[T]
+  ): StateTuple<PV[T]> | StateTuple<NonNullable<PV[T]>> {
+    if (this.particles[id] === undefined) {
+      this.createParticles({
+        [id as keyof PV]: initialValue as PV[keyof PV],
+      } as Partial<PV>);
+    }
+
+    return this.particles[id] as StateTuple<PV[T]>;
   }
 
   createParticles(particleValues: Partial<PV>) {
@@ -45,41 +51,18 @@ export default class ParticleEntity<
     }
   }
 
-  adaptParticle<T extends keyof PV>(id: T): StateTuple<PV[T]>;
-  adaptParticle<T extends keyof PV>(options: {
-    id: T;
-    initialValue: NonNullable<PV[T]>;
-  }): StateTuple<NonNullable<PV[T]>>;
-  adaptParticle<T extends keyof PV>(
-    optionsOrId:
-      | {
-          id: T;
-          initialValue: PV[T];
-        }
-      | T
-  ): StateTuple<PV[T]> | StateTuple<NonNullable<PV[T]>> {
-    if (typeof optionsOrId === "string") {
-      const id = optionsOrId;
-
-      return this.particles[id] as StateTuple<PV[T]>;
-    } else {
-      const options = optionsOrId as {
-        id: T;
-        initialValue: PV[T];
-      };
-      if (this.particles[options.id] === undefined) {
-        this.createParticles({
-          [options.id as keyof PV]: options.initialValue as PV[keyof PV],
-        } as Partial<PV>);
-      }
-
-      return this.particles[options.id] as StateTuple<PV[T]>;
-    }
-  }
-
   deleteParticles(particleIds: Array<OptionalLiteralKeys<PV> | Deletable>) {
     particleIds.forEach(
       (particleId) => delete this.particles[particleId as keyof PV]
     );
+  }
+
+  getParticleValues() {
+    const particleValues = {} as ParticleValues;
+    Object.keys(this.particles).forEach(
+      (particle) => (particleValues[particle] = this.particles[particle][0]())
+    );
+
+    return particleValues;
   }
 }

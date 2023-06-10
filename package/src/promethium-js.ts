@@ -1,4 +1,9 @@
-import type { Component, TemplateResult, DirectiveResult } from "./nqtui";
+import type {
+  Component,
+  Getter,
+  TemplateResult,
+  DirectiveResult,
+} from "./nqtui";
 import {
   render,
   h,
@@ -32,12 +37,13 @@ import {
 } from "./nqtui";
 
 import type { Deletable } from "./nqtx";
-import { ParticleEntity } from "./nqtx";
+import { ParticleEntity, DerivativeEntity, ActionEntity } from "./nqtx";
 
 import { Router } from "./nqtrouter";
 
 export {
   Component,
+  Getter,
   TemplateResult,
   DirectiveResult,
   render,
@@ -71,6 +77,6 @@ export {
   asyncReplace,
 };
 
-export { ParticleEntity, Deletable };
+export { ParticleEntity, DerivativeEntity, ActionEntity, Deletable };
 
 export { Router };

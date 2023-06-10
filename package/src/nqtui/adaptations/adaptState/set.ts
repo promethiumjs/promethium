@@ -2,7 +2,10 @@ import { updateMemoCleanups } from "../cleanupUpdateFns";
 import { sendStaleSignals, sendFreshSignals } from "../sendSignals";
 import { State } from "./stateTypes";
 
-export default function set<T>(state: State<T>, nextValue: T) {
+export default function set<T>(
+  state: State<T>,
+  nextValue: T | ((prev: T) => T)
+) {
   //get active subscriptions to properly manange sync effects and memos
   const activeSubscriptions = state.activeSubscriptions;
   //toggle active subscriptions
@@ -13,7 +16,10 @@ export default function set<T>(state: State<T>, nextValue: T) {
   sendStaleSignals(state, activeSubscriptions);
 
   //update state value
-  state.value = nextValue;
+  state.value =
+    typeof nextValue === "function"
+      ? (nextValue as (prev: T) => T)(state.value!)
+      : nextValue;
 
   //let subscriptions know that their stale value has been updated so that they can notify and
   //update themselves and their subscriptions if any
