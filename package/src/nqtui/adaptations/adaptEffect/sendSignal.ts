@@ -3,17 +3,18 @@ import addAsyncEffect from "./addAsyncEffect";
 import addRenderEffect from "./addRenderEffect";
 import {
   ComponentFnExecuteFn,
+  DepArray,
   Effect,
   EffectFn,
   ExecuteFn,
 } from "./effectTypes";
 
-export default function sendSignal<T extends any[] = any[]>(
+export default function sendSignal<T = any, U extends any[] = any[]>(
   effect: Effect,
   execute: ExecuteFn | ComponentFnExecuteFn,
-  fn: EffectFn<T>,
-  depArray: Getter[],
-  signal: "stale" | "fresh"
+  fn: EffectFn<T, U>,
+  signal: "stale" | "fresh",
+  depArray?: DepArray<U>
 ) {
   if (signal === "stale") {
     effect.staleStateValuesCount++;
@@ -33,22 +34,22 @@ export default function sendSignal<T extends any[] = any[]>(
 }
 
 const executeMap = {
-  sync: <T extends any[] = any[]>(
+  sync: <T = any, U extends any[] = any[]>(
     effect: Effect,
     execute: ExecuteFn | ComponentFnExecuteFn,
-    fn: EffectFn<T>,
-    depArray: Getter[]
-  ) => execute(effect, fn, depArray),
-  async: <T extends any[] = any[]>(
+    fn: EffectFn<T, U>,
+    depArray?: DepArray<U>
+  ) => execute(effect, fn, depArray!),
+  async: <T = any, U extends any[] = any[]>(
     effect: Effect,
     execute: ExecuteFn | ComponentFnExecuteFn,
-    fn: EffectFn<T>,
-    depArray: Getter[]
-  ) => addAsyncEffect(() => execute(effect, fn, depArray)),
-  render: <T extends any[] = any[]>(
+    fn: EffectFn<T, U>,
+    depArray?: DepArray<U>
+  ) => addAsyncEffect(() => execute(effect, fn, depArray!)),
+  render: <T = any, U extends any[] = any[]>(
     effect: Effect,
     execute: ExecuteFn | ComponentFnExecuteFn,
-    fn: EffectFn<T>,
-    depArray: Getter[]
-  ) => addRenderEffect(() => execute(effect, fn, depArray)),
+    fn: EffectFn<T, U>,
+    depArray?: DepArray<U>
+  ) => addRenderEffect(() => execute(effect, fn, depArray!)),
 };

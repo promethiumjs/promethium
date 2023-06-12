@@ -107,10 +107,11 @@ function $ba142649eb282e8a$export$2e2bcd8739ae039(effect, fn) {
 }
 function $ba142649eb282e8a$var$internalFn(effect, fn, cleanupSet) {
     //call effect with previous return value
-    const fnReturnValue = fn();
+    const fnReturnValue = fn(effect.returnValue);
     //create `returnValueCleanup` to be called on next run of effect
     const returnValueCleanup = ()=>{
-        if (typeof fnReturnValue === "function") fnReturnValue();
+        if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
+        effect.returnValue = fnReturnValue();
     };
     cleanupSet?.add(returnValueCleanup);
 }
@@ -127,10 +128,11 @@ function $8358f029406b3bf0$var$internalFn(effect, fn, depArray, options = {}, cl
     if (effect.firstRun && options.defer) effect.firstRun = false;
     else {
         //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-        const fnReturnValue = fn(effect.argsArray);
+        const fnReturnValue = fn(effect.returnValue, effect.argsArray);
         //create `returnValueCleanup` to be called on next run of effect
         const returnValueCleanup = ()=>{
-            if (typeof fnReturnValue === "function") fnReturnValue();
+            if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
+            effect.returnValue = fnReturnValue();
         };
         //add cleanup to obtain new return value
         cleanupSet?.add(returnValueCleanup);
@@ -177,10 +179,11 @@ function $77230c8e9bc6ad07$export$2e2bcd8739ae039(effect, fn, depArray, options 
     if (effect.firstRun && options.defer) effect.firstRun = false;
     else {
         //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-        const fnReturnValue = fn(effect.argsArray);
+        const fnReturnValue = fn(effect.returnValue, effect.argsArray);
         //create `returnValueCleanup` to be called on next run of effect
         const returnValueCleanup = ()=>{
-            if (typeof fnReturnValue === "function") fnReturnValue();
+            if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
+            effect.returnValue = fnReturnValue();
         };
         //add cleanup to obtain new return value
         cleanupSet?.add(returnValueCleanup);
@@ -226,7 +229,7 @@ function $c894b2ac0568d031$export$2e2bcd8739ae039(fn) {
 }
 
 
-function $d5fa6cf0040a6711$export$2e2bcd8739ae039(effect, execute, fn, depArray, signal) {
+function $d5fa6cf0040a6711$export$2e2bcd8739ae039(effect, execute, fn, signal, depArray) {
     if (signal === "stale") effect.staleStateValuesCount++;
     else if (signal === "fresh") {
         effect.staleStateValuesCount--;
@@ -323,7 +326,7 @@ function $09edb78f7635c27a$export$2e2bcd8739ae039(type, tracking, fn, depArray) 
         staleStateValuesCount: 0,
         //used to notify the effect when a state value of state currently tracking the effect turns
         //stale or freshens up after turning stale
-        sendSignal: (signal)=>(0, $d5fa6cf0040a6711$export$2e2bcd8739ae039)(effect, execute, fn, depArray, signal)
+        sendSignal: (signal)=>(0, $d5fa6cf0040a6711$export$2e2bcd8739ae039)(effect, execute, fn, signal, depArray)
     };
     //create `cleanupTreeNodePointer` for effect and create `cleanupTree` for effect tree is this is the
     //topmost parent effect (father of the whole tree)
@@ -389,7 +392,7 @@ class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
         let htmlFn;
         //initialize component effects and memos and store the cleanup (1st cleanup)
         this.cleanups.push((0, $ed4eeacab2c72f4d$export$2e2bcd8739ae039)(()=>htmlFn = Component(props, parent), []));
-        const [ComponentCleanup, ComponentDependencyUpdate, [htmlTemplateResult], ] = (0, $d9192ce19ee672a1$export$2e2bcd8739ae039)((htmlTemplateResultArray)=>{
+        const [ComponentCleanup, ComponentDependencyUpdate, [htmlTemplateResult], ] = (0, $d9192ce19ee672a1$export$2e2bcd8739ae039)((_, htmlTemplateResultArray)=>{
             this.setValue(htmlTemplateResultArray?.[0]);
         }, [
             htmlFn

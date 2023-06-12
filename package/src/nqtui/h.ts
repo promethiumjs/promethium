@@ -73,7 +73,7 @@ class $ extends AsyncDirective {
       ComponentDependencyUpdate,
       [htmlTemplateResult],
     ]: any = adaptComponentFnEffect(
-      (htmlTemplateResultArray?: [TemplateResult]) => {
+      (_, htmlTemplateResultArray?: [TemplateResult]) => {
         this.setValue(htmlTemplateResultArray?.[0]);
       },
       [htmlFn!],

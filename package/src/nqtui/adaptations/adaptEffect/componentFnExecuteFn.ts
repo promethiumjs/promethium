@@ -1,13 +1,12 @@
-import { Getter } from "../adaptState/stateTypes";
 import { baseExecuteFn } from "./baseExecuteFn";
 import effectAndDescendantCleanup from "./effectAndDescendantCeanup";
-import { Effect, EffectFn, EffectOptions } from "./effectTypes";
+import { DepArray, Effect, EffectFn, EffectOptions } from "./effectTypes";
 import updateEffectDependencies from "./updateEffectDependencies";
 
-export function componentFnExecuteFn<T extends any[] = any[]>(
-  effect: Effect,
-  fn: EffectFn<T>,
-  depArray: Getter[],
+export function componentFnExecuteFn<T = any, U extends any[] = any[]>(
+  effect: Effect<T, U>,
+  fn: EffectFn<T, U>,
+  depArray: DepArray<U>,
   options: EffectOptions = {}
 ) {
   baseExecuteFn(effect, (cleanupSet) =>
@@ -21,16 +20,16 @@ export function componentFnExecuteFn<T extends any[] = any[]>(
   ] as const;
 }
 
-export default function internalFn<T extends any[] = any[]>(
-  effect: Effect,
-  fn: EffectFn<T>,
-  depArray: Getter[],
+export default function internalFn<T = any, U extends any[] = any[]>(
+  effect: Effect<T, U>,
+  fn: EffectFn<T, U>,
+  depArray: DepArray<U>,
   options: EffectOptions = {},
   cleanupSet: Set<() => void> | undefined
 ) {
   //set tracking to "implicit" to enable tracking by state and memos in `depArray`
   effect.tracking = "implicit";
-  effect.argsArray = depArray.map((state) => state());
+  effect.argsArray = depArray.map((state) => state()) as U;
   //set tracking back to "depArray" to disable other forms of implicit tracking
   //(only allow state and memos in `depArray` to track effect)
   effect.tracking = "depArray";
@@ -40,11 +39,12 @@ export default function internalFn<T extends any[] = any[]>(
     effect.firstRun = false;
   } else {
     //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-    const fnReturnValue = fn(effect.argsArray as T);
+    const fnReturnValue = fn(effect.returnValue, effect.argsArray);
     //create `returnValueCleanup` to be called on next run of effect
     const returnValueCleanup = () => {
       if (typeof fnReturnValue === "function") {
-        fnReturnValue();
+        //extract new `returnValue` from effect's returned function
+        effect.returnValue = fnReturnValue() as T | undefined;
       }
     };
 

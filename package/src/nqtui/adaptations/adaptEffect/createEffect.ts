@@ -2,23 +2,23 @@ import executeFns from "./executeFns";
 import sendSignal from "./sendSignal";
 import setInitialParameters from "../setInitialParameters";
 import setCleanupSet from "../setCleanupSet";
-import { Getter } from "../adaptState/stateTypes";
 import {
   ComponentFnExecuteFn,
+  DepArray,
   Effect,
   EffectFn,
   ExecuteFn,
 } from "./effectTypes";
 
-export default function createEffect<T extends any[] = any[]>(
+export default function createEffect<T = any, U extends any[] = any[]>(
   type: "async" | "sync" | "render",
   tracking: "implicit" | "depArray" | "componentFn",
-  fn: EffectFn<T>,
-  depArray?: Getter<any>[]
+  fn: EffectFn<T, U>,
+  depArray?: DepArray<U>
 ) {
   const execute = executeFns[tracking];
 
-  const effect: Effect = {
+  const effect: Effect<T, U> = {
     //whether or not the effect hasn't been ran before
     firstRun: true,
     //whether the effect is async, sync or a render effect
@@ -46,8 +46,8 @@ export default function createEffect<T extends any[] = any[]>(
         effect,
         execute as ExecuteFn | ComponentFnExecuteFn,
         fn,
-        depArray!,
-        signal
+        signal,
+        depArray
       ),
   };
 

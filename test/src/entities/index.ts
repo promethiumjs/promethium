@@ -7,7 +7,7 @@ import {
 } from "promethium-js";
 
 const particleEntity = new ParticleEntity<{ count: number; name: string }>({
-  count: 5,
+  count: 0,
   name: "Paul",
 });
 
@@ -15,11 +15,11 @@ const derivativeEntity = new DerivativeEntity<{
   countPlusOne: () => Getter<number>;
   namePlusHello?: () => Getter<string>;
 }>({
-  countPlusOne: () => adaptMemo((prev?: number) => 2),
+  countPlusOne: () => adaptMemo(() => 2),
 });
 
 export const { dispatch, actions } = new ActionEntity({
-  addToCount: (payload?: { inc: number }) => {
+  addToCount: () => {
     adaptParticle("count")[1]((count) => {
       return count + 2;
     });

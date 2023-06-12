@@ -1,9 +1,9 @@
 import createEffect from "./createEffect";
 import { EffectFn, EffectOptions, ExecuteFn, DepArray } from "./effectTypes";
 
-export default function adaptSyncEffect<T extends any[] = any[]>(
-  fn: EffectFn<T>,
-  depArray?: DepArray<T>,
+export default function adaptSyncEffect<T = any, U extends any[] = any[]>(
+  fn: EffectFn<T, U>,
+  depArray?: DepArray<U>,
   options?: EffectOptions
 ) {
   //determine if the effect is tracked by the state it uses implicitly, or using the
