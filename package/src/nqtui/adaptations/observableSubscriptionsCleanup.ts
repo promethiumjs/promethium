@@ -1,6 +1,8 @@
-import { Effect } from "./adaptEffect/effectTypes";
+import { InternalEffectObject } from "./adaptEffect/effectTypes";
 
-export default function observableSubscriptionsCleanup(effect: Effect) {
+export default function observableSubscriptionsCleanup(
+  effect: InternalEffectObject
+) {
   effect.observableSubscriptionSets.forEach((observableSubscriptionSet) => {
     observableSubscriptionSet.delete(effect);
   });

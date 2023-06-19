@@ -1,4 +1,4 @@
-import { Effect } from "../adaptEffect/effectTypes";
-import { State } from "../adaptState/stateTypes";
-export declare type Memo = State & Effect;
+import { InternalEffectObject } from "../adaptEffect/effectTypes";
+import { InternalStateObject } from "../adaptState/stateTypes";
+export declare type InternalMemoObject = InternalStateObject & InternalEffectObject;
 //# sourceMappingURL=memoTypes.d.ts.map

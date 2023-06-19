@@ -1,87 +1,81 @@
-import { Getter, adaptMemo } from "../nqtui";
 import { Deletable, OptionalLiteralKeys } from "./entityTypes";
 
-type DerivativeFns = {
-  [key: string]: () => Getter<any>;
+type Derivatives = {
+  [key: string]: () => any;
 };
 
-type DerivativeValues<DF extends DerivativeFns> = {
-  [DerivativeFn in keyof DF]: ReturnType<ReturnType<DF[DerivativeFn]>>;
-};
-
-type Derivatives<DF extends DerivativeFns> = {
-  [DerivativeFn in keyof DF]: ReturnType<DF[DerivativeFn]>;
+type DerivativeValues<D extends Derivatives> = {
+  [Derivative in keyof D]: ReturnType<D[Derivative]>;
 };
 
 type CompleteAdaptDerivativeReturnType<
-  DF extends DerivativeFns,
-  T extends keyof DF
+  D extends Derivatives,
+  T extends keyof D
 > =
-  | ReturnType<DF[T]>
-  | ReturnType<NonNullable<DF[T]>>
-  | Getter<ReturnType<ReturnType<NonNullable<DF[T]>>> | undefined>;
+  | D[T]
+  | NonNullable<D[T]>
+  | (() => ReturnType<NonNullable<D[T]>> | undefined);
 
-export default class DerivativeEntity<
-  DF extends DerivativeFns = DerivativeFns
-> {
-  derivatives: Derivatives<DF>;
+export default class DerivativeEntity<D extends Derivatives = Derivatives> {
+  private derivatives: D;
 
-  constructor(initialDerivativeFns: DF) {
-    this.derivatives = {} as Derivatives<DF>;
+  constructor(initialDerivativeFns: D) {
+    this.derivatives = {} as D;
     this.createDerivatives(initialDerivativeFns);
     this.adaptDerivative = this.adaptDerivative.bind(this);
     this.deleteDerivatives = this.deleteDerivatives.bind(this);
     this.getDerivativeValues = this.getDerivativeValues.bind(this);
   }
 
-  createDerivatives(derivativeFns: Partial<DF>) {
-    if (derivativeFns) {
-      Object.keys(derivativeFns).forEach((derivativeFn: keyof DF) => {
-        this.derivatives[derivativeFn] = derivativeFns[
-          derivativeFn
-        ]?.() as ReturnType<DF[keyof DF]>;
+  private createDerivatives(derivatives: Partial<D>) {
+    if (derivatives) {
+      Object.keys(derivatives).forEach((derivative: keyof D) => {
+        this.derivatives[derivative] = derivatives[derivative] as D[keyof D];
       });
     }
   }
 
-  adaptDerivative<T extends keyof DF>(
+  adaptDerivative<T extends keyof D>(
     id: T
-  ): undefined extends DF[T]
-    ? Getter<ReturnType<ReturnType<NonNullable<DF[T]>>> | undefined>
-    : ReturnType<DF[T]>;
-  adaptDerivative<T extends keyof DF>(
+  ): undefined extends D[T]
+    ? () => ReturnType<NonNullable<D[T]>> | undefined
+    : D[T];
+  adaptDerivative<T extends keyof D>(
     id: T,
-    initialDerivativeFn: NonNullable<DF[T]>
-  ): ReturnType<NonNullable<DF[T]>>;
-  adaptDerivative<T extends keyof DF>(
+    initialDerivativeFn: NonNullable<D[T]>
+  ): NonNullable<D[T]>;
+  adaptDerivative<T extends keyof D>(
     id: T,
-    initialDerivativeFn?: DF[T]
-  ): CompleteAdaptDerivativeReturnType<DF, T> {
+    initialDerivativeFn?: D[T]
+  ): CompleteAdaptDerivativeReturnType<D, T> {
     if (this.derivatives[id] === undefined) {
-      const fallBackDerivativeFn = () => adaptMemo(() => undefined);
+      const fallBackDerivativeFn = () => undefined;
       this.createDerivatives({
-        [id as keyof DF]: (initialDerivativeFn ||
-          fallBackDerivativeFn) as DF[keyof DF],
-      } as Partial<DF>);
+        [id as keyof D]: (initialDerivativeFn ||
+          fallBackDerivativeFn) as D[keyof D],
+      } as Partial<D>);
     }
 
-    return this.derivatives[id] as ReturnType<DF[T]>;
+    return this.derivatives[id] as D[T];
   }
 
-  deleteDerivatives(derivativeIds: Array<OptionalLiteralKeys<DF> | Deletable>) {
+  deleteDerivatives(derivativeIds: Array<OptionalLiteralKeys<D> | Deletable>) {
     derivativeIds.forEach(
-      (derivativeId) => delete this.derivatives[derivativeId as keyof DF]
+      (derivativeId) => delete this.derivatives[derivativeId as keyof D]
     );
   }
 
   getDerivativeValues() {
-    const derivativeValues = {} as DerivativeValues<DF>;
+    const derivativeValues = {} as DerivativeValues<D>;
     Object.keys(this.derivatives).forEach(
-      (derivative) =>
-        (derivativeValues[derivative as keyof DerivativeValues<DF>] =
-          this.derivatives[derivative]())
+      (derivative: keyof DerivativeValues<D>) =>
+        (derivativeValues[derivative] = this.derivatives[derivative]())
     );
 
     return derivativeValues;
+  }
+
+  getDerivatives() {
+    return this.derivatives;
   }
 }

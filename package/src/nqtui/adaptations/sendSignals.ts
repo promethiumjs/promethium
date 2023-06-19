@@ -1,6 +1,9 @@
-import { State } from "./adaptState/stateTypes";
+import { InternalStateObject } from "./adaptState/stateTypes";
 
-function sendStaleSignals(state: State, activeSubscriptions: "one" | "two") {
+function sendStaleSignals(
+  state: InternalStateObject,
+  activeSubscriptions: "one" | "two"
+) {
   state.memoSubscriptions[activeSubscriptions].forEach((subscription) => {
     subscription.sendSignal("stale");
   });
@@ -14,7 +17,10 @@ function sendStaleSignals(state: State, activeSubscriptions: "one" | "two") {
   });
 }
 
-function sendFreshSignals(state: State, activeSubscriptions: "one" | "two") {
+function sendFreshSignals(
+  state: InternalStateObject,
+  activeSubscriptions: "one" | "two"
+) {
   state.memoSubscriptions[activeSubscriptions].forEach((subscription) => {
     subscription.sendSignal("fresh");
   });

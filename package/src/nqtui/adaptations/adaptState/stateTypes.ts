@@ -1,19 +1,23 @@
-import { Effect } from "../adaptEffect/effectTypes";
+import { InternalEffectObject } from "../adaptEffect/effectTypes";
 
-export type State<T = any> = {
+export type InternalStateObject<T = any> = {
   syncSubscriptions: {
-    one: Set<Effect>;
-    two: Set<Effect>;
+    one: Set<InternalEffectObject>;
+    two: Set<InternalEffectObject>;
   };
   memoSubscriptions: {
-    one: Set<Effect>;
-    two: Set<Effect>;
+    one: Set<InternalEffectObject>;
+    two: Set<InternalEffectObject>;
   };
-  asyncAndRenderSubscriptions: Set<Effect>;
+  asyncAndRenderSubscriptions: Set<InternalEffectObject>;
   activeSubscriptions: "one" | "two";
   value: T | undefined;
 };
 
-export type Getter<T = any> = () => T;
-export type Setter<T = any> = (nextValue: T | ((prev: T) => T)) => void;
-export type StateTuple<T> = readonly [Getter<T>, Setter<T>];
+export type Getter<T> = () => T;
+export type Setter<T> = (nextValue: T | ((prev: T) => T)) => void;
+export type State<T> = readonly [Getter<T>, Setter<T>];
+export interface UnifiedState<T> {
+  (): T;
+  (nextValue: T | ((prev: T) => T)): void;
+}

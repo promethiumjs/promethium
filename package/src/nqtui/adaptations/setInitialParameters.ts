@@ -1,7 +1,7 @@
-import { Effect } from "./adaptEffect/effectTypes";
+import { InternalEffectObject } from "./adaptEffect/effectTypes";
 import { effectContexts } from "./effectContexts";
 
-export default function setInitialParameters(effect: Effect) {
+export default function setInitialParameters(effect: InternalEffectObject) {
   const parentEffect = effectContexts[effectContexts.length - 1];
   if (parentEffect) {
     //use "position" and "level" to determine location of effect cleanup

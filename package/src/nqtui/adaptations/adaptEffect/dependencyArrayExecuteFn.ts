@@ -1,9 +1,14 @@
 import { baseExecuteFn } from "./baseExecuteFn";
 import effectAndDescendantCleanup from "./effectAndDescendantCeanup";
-import { DepArray, Effect, EffectFn, EffectOptions } from "./effectTypes";
+import {
+  DepArray,
+  InternalEffectObject,
+  EffectFn,
+  EffectOptions,
+} from "./effectTypes";
 
 export function dependencyArrayExecuteFn<T = any, U extends any[] = any[]>(
-  effect: Effect<T, U>,
+  effect: InternalEffectObject<T, U>,
   fn: EffectFn<T, U>,
   depArray: DepArray<U>,
   options: EffectOptions = {}
@@ -16,7 +21,7 @@ export function dependencyArrayExecuteFn<T = any, U extends any[] = any[]>(
 }
 
 function internalFn<T = any, U extends any[] = any[]>(
-  effect: Effect<T, U>,
+  effect: InternalEffectObject<T, U>,
   fn: EffectFn<T, U>,
   depArray: DepArray<U>,
   options: EffectOptions = {},

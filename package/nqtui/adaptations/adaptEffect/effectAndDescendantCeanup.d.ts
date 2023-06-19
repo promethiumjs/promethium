@@ -1,3 +1,3 @@
-import { Effect } from "./effectTypes";
-export default function effectAndDescendantCleanup(effect: Effect): void;
+import { InternalEffectObject } from "./effectTypes";
+export default function effectAndDescendantCleanup(effect: InternalEffectObject): void;
 //# sourceMappingURL=effectAndDescendantCeanup.d.ts.map

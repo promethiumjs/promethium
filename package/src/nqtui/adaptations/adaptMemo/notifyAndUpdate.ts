@@ -3,9 +3,9 @@ import getCleanupNode from "../getCleanupNode";
 import { effectContexts } from "../effectContexts";
 import { queueCleanupUpdates } from "../cleanupUpdateFns";
 import { sendStaleSignals, sendFreshSignals } from "../sendSignals";
-import { Memo } from "./memoTypes";
+import { InternalMemoObject } from "./memoTypes";
 
-export function sendStaleNotifications(memo: Memo) {
+export function sendStaleNotifications(memo: InternalMemoObject) {
   //get active subscriptions to properly manange sync effects and memos
   const activeSubscriptions = memo.activeSubscriptions;
   //toggle active subscriptions
@@ -18,7 +18,7 @@ export function sendStaleNotifications(memo: Memo) {
 
 //aside from a few caveats, this function basically runs like the execute function of an effect
 export function updateValueAndSendFreshNotifications(
-  memo: Memo,
+  memo: InternalMemoObject,
   fn: (prev?: any) => any
 ) {
   //set `childCount` back to zero to enable children effects to obtain correct positions upon recreation
@@ -26,7 +26,7 @@ export function updateValueAndSendFreshNotifications(
 
   //fire cleanups make sure proceedings go smoothly
   const cleanupSet = getCleanupNode(memo)?.get(0) as
-    | Set<Memo | (() => void)>
+    | Set<InternalMemoObject | (() => void)>
     | undefined;
   if (cleanupSet) {
     for (const cleanup of cleanupSet) {

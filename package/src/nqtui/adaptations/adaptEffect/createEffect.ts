@@ -5,7 +5,7 @@ import setCleanupSet from "../setCleanupSet";
 import {
   ComponentFnExecuteFn,
   DepArray,
-  Effect,
+  InternalEffectObject,
   EffectFn,
   ExecuteFn,
 } from "./effectTypes";
@@ -18,7 +18,7 @@ export default function createEffect<T = any, U extends any[] = any[]>(
 ) {
   const execute = executeFns[tracking];
 
-  const effect: Effect<T, U> = {
+  const effect: InternalEffectObject<T, U> = {
     //whether or not the effect hasn't been ran before
     firstRun: true,
     //whether the effect is async, sync or a render effect

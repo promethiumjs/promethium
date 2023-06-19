@@ -3,11 +3,11 @@ import get from "../get";
 import setInitialParameters from "../setInitialParameters";
 import setCleanupSet from "../setCleanupSet";
 import { updateValueAndSendFreshNotifications } from "./notifyAndUpdate";
-import { Memo } from "./memoTypes";
+import { InternalMemoObject } from "./memoTypes";
 import { Getter } from "../adaptState/stateTypes";
 
 export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
-  const memo: Memo = {
+  const memo: InternalMemoObject = {
     //state properties
     syncSubscriptions: {
       one: new Set(),

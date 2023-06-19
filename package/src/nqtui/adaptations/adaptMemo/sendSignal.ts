@@ -1,11 +1,11 @@
-import { Memo } from "./memoTypes";
+import { InternalMemoObject } from "./memoTypes";
 import {
   sendStaleNotifications,
   updateValueAndSendFreshNotifications,
 } from "./notifyAndUpdate";
 
 export default function sendSignal(
-  memo: Memo,
+  memo: InternalMemoObject,
   fn: (prev?: any) => any,
   signal: "stale" | "fresh"
 ) {

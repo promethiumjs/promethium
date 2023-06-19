@@ -1,22 +1,19 @@
-import { Getter } from "../nqtui";
 import { Deletable, OptionalLiteralKeys } from "./entityTypes";
-declare type DerivativeFns = {
-    [key: string]: () => Getter<any>;
+declare type Derivatives = {
+    [key: string]: () => any;
 };
-declare type DerivativeValues<DF extends DerivativeFns> = {
-    [DerivativeFn in keyof DF]: ReturnType<ReturnType<DF[DerivativeFn]>>;
+declare type DerivativeValues<D extends Derivatives> = {
+    [Derivative in keyof D]: ReturnType<D[Derivative]>;
 };
-declare type Derivatives<DF extends DerivativeFns> = {
-    [DerivativeFn in keyof DF]: ReturnType<DF[DerivativeFn]>;
-};
-export default class DerivativeEntity<DF extends DerivativeFns = DerivativeFns> {
-    derivatives: Derivatives<DF>;
-    constructor(initialDerivativeFns: DF);
-    createDerivatives(derivativeFns: Partial<DF>): void;
-    adaptDerivative<T extends keyof DF>(id: T): undefined extends DF[T] ? Getter<ReturnType<ReturnType<NonNullable<DF[T]>>> | undefined> : ReturnType<DF[T]>;
-    adaptDerivative<T extends keyof DF>(id: T, initialDerivativeFn: NonNullable<DF[T]>): ReturnType<NonNullable<DF[T]>>;
-    deleteDerivatives(derivativeIds: Array<OptionalLiteralKeys<DF> | Deletable>): void;
-    getDerivativeValues(): DerivativeValues<DF>;
+export default class DerivativeEntity<D extends Derivatives = Derivatives> {
+    private derivatives;
+    constructor(initialDerivativeFns: D);
+    private createDerivatives;
+    adaptDerivative<T extends keyof D>(id: T): undefined extends D[T] ? () => ReturnType<NonNullable<D[T]>> | undefined : D[T];
+    adaptDerivative<T extends keyof D>(id: T, initialDerivativeFn: NonNullable<D[T]>): NonNullable<D[T]>;
+    deleteDerivatives(derivativeIds: Array<OptionalLiteralKeys<D> | Deletable>): void;
+    getDerivativeValues(): DerivativeValues<D>;
+    getDerivatives(): D;
 }
 export {};
 //# sourceMappingURL=DerivativeEntity.d.ts.map

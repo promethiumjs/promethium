@@ -1,6 +1,6 @@
-import { CleanupTree, Effect } from "./adaptEffect/effectTypes";
+import { CleanupTree, InternalEffectObject } from "./adaptEffect/effectTypes";
 
-export default function setCleanupSet(effect: Effect) {
+export default function setCleanupSet(effect: InternalEffectObject) {
   //create variable to store `cleanupNode` of effect and initially set the variable to the cleanup tree
   let cleanupNode: CleanupTree | null = effect.cleanupTree;
 

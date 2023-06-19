@@ -1,12 +1,12 @@
 import get from "../get";
 import set from "./set";
-import { State, StateTuple } from "./stateTypes";
+import { InternalStateObject, State } from "./stateTypes";
 
-export function adaptState<T>(): StateTuple<T | undefined>;
-export function adaptState<T>(initialValue: T | (() => T)): StateTuple<T>;
-export function adaptState<T>(initialValue?: T | (() => T)): StateTuple<T> {
+export function adaptState<T>(): State<T | undefined>;
+export function adaptState<T>(initialValue: T | (() => T)): State<T>;
+export function adaptState<T>(initialValue?: T | (() => T)): State<T> {
   //create state object with three sets of subscriptions
-  const state: State<T> = {
+  const state: InternalStateObject<T> = {
     //one for sync effect subscriptions
     //use two sets to effectively manage synchronous subscriptions (prevents recursive filling
     //and running of effects resulting in stack overflow)
@@ -35,5 +35,5 @@ export function adaptState<T>(initialValue?: T | (() => T)): StateTuple<T> {
   const getter = () => get(state);
   const setter = (nextValue: T | ((prev: T) => T)) => set(state, nextValue);
 
-  return [getter, setter] as StateTuple<T>;
+  return [getter, setter] as State<T>;
 }

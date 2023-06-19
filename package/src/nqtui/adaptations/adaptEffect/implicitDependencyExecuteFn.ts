@@ -1,11 +1,11 @@
 import { baseExecuteFn } from "./baseExecuteFn";
 import effectAndDescendantCleanup from "./effectAndDescendantCeanup";
-import { Effect, EffectFn } from "./effectTypes";
+import { InternalEffectObject, EffectFn } from "./effectTypes";
 
 export default function implicitDependencyExecuteFn<
   T = any,
   U extends any[] = any[]
->(effect: Effect<T, U>, fn: EffectFn<T, U>) {
+>(effect: InternalEffectObject<T, U>, fn: EffectFn<T, U>) {
   baseExecuteFn(effect, (cleanupSet) => internalFn(effect, fn, cleanupSet));
 
   //return cleanup function for effect and its descendants
@@ -13,7 +13,7 @@ export default function implicitDependencyExecuteFn<
 }
 
 function internalFn<T = any, U extends any[] = any[]>(
-  effect: Effect<T, U>,
+  effect: InternalEffectObject<T, U>,
   fn: EffectFn<T, U>,
   cleanupSet: Set<() => void> | undefined
 ) {

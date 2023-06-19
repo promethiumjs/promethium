@@ -560,6 +560,15 @@ function $2ea58473f796696a$export$9c07a256d814a0e(initialValue) {
 }
 
 
+function $bdea889b8fd4ff63$export$2e2bcd8739ae039(state) {
+    function unifiedState(nextValue) {
+        if (nextValue === undefined) return state[0]();
+        else return state[1](nextValue);
+    }
+    return unifiedState;
+}
+
+
 
 function $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039(fn, depArray, options) {
     //determine if the effect is tracked by the state it uses implicitly, or using the
@@ -745,8 +754,10 @@ class $7547703a902ec477$export$2e2bcd8739ae039 {
         Object.keys(this.particles).forEach((particle)=>particleValues[particle] = this.particles[particle][0]());
         return particleValues;
     }
+    getParticles() {
+        return this.particles;
+    }
 }
-
 
 
 class $911171dbae4499f3$export$2e2bcd8739ae039 {
@@ -757,14 +768,14 @@ class $911171dbae4499f3$export$2e2bcd8739ae039 {
         this.deleteDerivatives = this.deleteDerivatives.bind(this);
         this.getDerivativeValues = this.getDerivativeValues.bind(this);
     }
-    createDerivatives(derivativeFns) {
-        if (derivativeFns) Object.keys(derivativeFns).forEach((derivativeFn)=>{
-            this.derivatives[derivativeFn] = derivativeFns[derivativeFn]?.();
+    createDerivatives(derivatives) {
+        if (derivatives) Object.keys(derivatives).forEach((derivative)=>{
+            this.derivatives[derivative] = derivatives[derivative];
         });
     }
     adaptDerivative(id, initialDerivativeFn) {
         if (this.derivatives[id] === undefined) {
-            const fallBackDerivativeFn = ()=>(0, $4ff487e726c286d2$export$2e2bcd8739ae039)(()=>undefined);
+            const fallBackDerivativeFn = ()=>undefined;
             this.createDerivatives({
                 [id]: initialDerivativeFn || fallBackDerivativeFn
             });
@@ -778,6 +789,9 @@ class $911171dbae4499f3$export$2e2bcd8739ae039 {
         const derivativeValues = {};
         Object.keys(this.derivatives).forEach((derivative)=>derivativeValues[derivative] = this.derivatives[derivative]());
         return derivativeValues;
+    }
+    getDerivatives() {
+        return this.derivatives;
     }
 }
 
@@ -839,5 +853,5 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
 
 
 
-export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $60affc760575bcb6$re_export$html as html, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
+export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $60affc760575bcb6$re_export$html as html, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $bdea889b8fd4ff63$export$2e2bcd8739ae039 as unify, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
 //# sourceMappingURL=promethium-js.js.map

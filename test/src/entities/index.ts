@@ -6,25 +6,25 @@ import {
   Getter,
 } from "promethium-js";
 
-const particleEntity = new ParticleEntity<{ count: number; name: string }>({
+export const particleEntity = new ParticleEntity<{
+  count: number;
+  name: string;
+}>({
   count: 0,
   name: "Paul",
 });
 
-const derivativeEntity = new DerivativeEntity<{
-  countPlusOne: () => Getter<number>;
-  namePlusHello?: () => Getter<string>;
+export const derivativeEntity = new DerivativeEntity<{
+  countPlusOne: Getter<number>;
+  namePlusHello?: () => string;
 }>({
-  countPlusOne: () => adaptMemo(() => 2),
+  countPlusOne: adaptMemo(() => 2),
 });
 
-export const { dispatch, actions } = new ActionEntity({
+export const actionEntity = new ActionEntity({
   addToCount: () => {
-    adaptParticle("count")[1]((count) => {
+    particleEntity.adaptParticle("count")[1]((count) => {
       return count + 2;
     });
   },
 });
-
-export const { adaptParticle, deleteParticles } = particleEntity;
-export const { adaptDerivative } = derivativeEntity;

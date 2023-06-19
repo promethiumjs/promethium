@@ -1,1 +1,1 @@
-{"version":3,"file":"setInitialParameters.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/setInitialParameters.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,2BAA2B,CAAC;AAGnD,MAAM,CAAC,OAAO,UAAU,oBAAoB,CAAC,MAAM,EAAE,MAAM,QA0C1D"}
+{"version":3,"file":"setInitialParameters.d.ts","sourceRoot":"","sources":["../../src/nqtui/adaptations/setInitialParameters.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,oBAAoB,EAAE,MAAM,2BAA2B,CAAC;AAGjE,MAAM,CAAC,OAAO,UAAU,oBAAoB,CAAC,MAAM,EAAE,oBAAoB,QA0CxE"}

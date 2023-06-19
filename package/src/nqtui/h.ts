@@ -9,6 +9,7 @@ import adaptComponentFnEffect from "./adaptations/adaptEffect/adaptComponentFnEf
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
 import { ChildPart, noChange, TemplateResult, html } from "lit-html";
 import { Component } from "./render";
+import { EffectOptions } from "./adaptations/adaptEffect/effectTypes";
 
 class $ extends AsyncDirective {
   updateFlag: "initialize" | "externalRender";
@@ -77,7 +78,7 @@ class $ extends AsyncDirective {
         this.setValue(htmlTemplateResultArray?.[0]);
       },
       [htmlFn!],
-      { defer: true, isComponent: true }
+      { defer: true, isComponent: true } as EffectOptions // check `effectTypes.ts` to understand why type coercion is used here
     );
 
     //store 2nd cleanup

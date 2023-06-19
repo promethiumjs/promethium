@@ -1,11 +1,11 @@
-import { html, h } from "promethium-js";
+import { html, h, unify } from "promethium-js";
 import Home from "./Home";
 import About from "./About";
-import { adaptParticle } from "@/entities";
+import { particleEntity } from "@/entities";
 import { Link, Switch, paths } from "@/router";
 
 const App = () => {
-  const [count, setCount] = adaptParticle("count");
+  const count = unify(particleEntity.adaptParticle("count"));
 
   return () =>
     html`<div>Hello Promethium</div>
@@ -18,7 +18,7 @@ const App = () => {
         ],
         default: Home(),
       })}
-      <button @click=${() => setCount(count() + 1)}>${count()}</button> `;
+      <button @click=${() => count((count) => count + 1)}>${count()}</button> `;
 };
 
 export default App;

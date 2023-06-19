@@ -1,9 +1,9 @@
 import { updateMemoCleanups } from "../cleanupUpdateFns";
 import { sendStaleSignals, sendFreshSignals } from "../sendSignals";
-import { State } from "./stateTypes";
+import { InternalStateObject } from "./stateTypes";
 
 export default function set<T>(
-  state: State<T>,
+  state: InternalStateObject<T>,
   nextValue: T | ((prev: T) => T)
 ) {
   //get active subscriptions to properly manange sync effects and memos

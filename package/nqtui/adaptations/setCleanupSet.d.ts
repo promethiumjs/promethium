@@ -1,3 +1,3 @@
-import { Effect } from "./adaptEffect/effectTypes";
-export default function setCleanupSet(effect: Effect): void;
+import { InternalEffectObject } from "./adaptEffect/effectTypes";
+export default function setCleanupSet(effect: InternalEffectObject): void;
 //# sourceMappingURL=setCleanupSet.d.ts.map

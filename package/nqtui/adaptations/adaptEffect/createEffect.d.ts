@@ -1,3 +1,3 @@
-import { DepArray, Effect, EffectFn } from "./effectTypes";
-export default function createEffect<T = any, U extends any[] = any[]>(type: "async" | "sync" | "render", tracking: "implicit" | "depArray" | "componentFn", fn: EffectFn<T, U>, depArray?: DepArray<U>): readonly [typeof import("./implicitDependencyExecuteFn").default | typeof import("./dependencyArrayExecuteFn").dependencyArrayExecuteFn | typeof import("./componentFnExecuteFn").componentFnExecuteFn, Effect<T, U>];
+import { DepArray, InternalEffectObject, EffectFn } from "./effectTypes";
+export default function createEffect<T = any, U extends any[] = any[]>(type: "async" | "sync" | "render", tracking: "implicit" | "depArray" | "componentFn", fn: EffectFn<T, U>, depArray?: DepArray<U>): readonly [typeof import("./implicitDependencyExecuteFn").default | typeof import("./dependencyArrayExecuteFn").dependencyArrayExecuteFn | typeof import("./componentFnExecuteFn").componentFnExecuteFn, InternalEffectObject<T, U>];
 //# sourceMappingURL=createEffect.d.ts.map

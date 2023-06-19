@@ -1,10 +1,10 @@
 import { effectContexts } from "../effectContexts";
 import getCleanupNode from "../getCleanupNode";
 import observableSubscriptionsCleanup from "../observableSubscriptionsCleanup";
-import { Effect } from "./effectTypes";
+import { InternalEffectObject } from "./effectTypes";
 
 export function baseExecuteFn(
-  effect: Effect,
+  effect: InternalEffectObject,
   fn: (cleanupSet: Set<() => void> | undefined) => void
 ) {
   //set `childCount` back to zero to enable children effects to obtain correct positions upon recreation

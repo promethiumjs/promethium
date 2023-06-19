@@ -1,4 +1,4 @@
-import { Effect } from "../adaptEffect/effectTypes";
-import { State } from "../adaptState/stateTypes";
+import { InternalEffectObject } from "../adaptEffect/effectTypes";
+import { InternalStateObject } from "../adaptState/stateTypes";
 
-export type Memo = State & Effect;
+export type InternalMemoObject = InternalStateObject & InternalEffectObject;

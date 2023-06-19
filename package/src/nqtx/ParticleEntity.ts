@@ -1,5 +1,4 @@
-import { StateTuple } from "./../nqtui/adaptations/adaptState/stateTypes";
-import { adaptState } from "../nqtui";
+import { adaptState, State } from "../nqtui";
 import { Deletable, OptionalLiteralKeys } from "./entityTypes";
 
 type ParticleValues = {
@@ -7,13 +6,13 @@ type ParticleValues = {
 };
 
 type Particles<PV> = {
-  [ParticleValue in keyof PV]: StateTuple<PV[ParticleValue]>;
+  [ParticleValue in keyof PV]: State<PV[ParticleValue]>;
 };
 
 export default class ParticleEntity<
   PV extends ParticleValues = ParticleValues
 > {
-  particles: Particles<PV>;
+  private particles: Particles<PV>;
 
   constructor(initialParticleValues: PV) {
     this.particles = {} as Particles<PV>;
@@ -23,30 +22,30 @@ export default class ParticleEntity<
     this.getParticleValues = this.getParticleValues.bind(this);
   }
 
-  adaptParticle<T extends keyof PV>(id: T): StateTuple<PV[T]>;
+  adaptParticle<T extends keyof PV>(id: T): State<PV[T]>;
   adaptParticle<T extends keyof PV>(
     id: T,
     initialValue: NonNullable<PV[T]>
-  ): StateTuple<NonNullable<PV[T]>>;
+  ): State<NonNullable<PV[T]>>;
   adaptParticle<T extends keyof PV>(
     id: T,
     initialValue?: PV[T]
-  ): StateTuple<PV[T]> | StateTuple<NonNullable<PV[T]>> {
+  ): State<PV[T]> | State<NonNullable<PV[T]>> {
     if (this.particles[id] === undefined) {
       this.createParticles({
         [id as keyof PV]: initialValue as PV[keyof PV],
       } as Partial<PV>);
     }
 
-    return this.particles[id] as StateTuple<PV[T]>;
+    return this.particles[id] as State<PV[T]>;
   }
 
-  createParticles(particleValues: Partial<PV>) {
+  private createParticles(particleValues: Partial<PV>) {
     if (particleValues) {
       Object.keys(particleValues).forEach((particleValue: keyof PV) => {
         this.particles[particleValue] = adaptState(
           particleValues[particleValue]
-        ) as StateTuple<PV[keyof PV]>;
+        ) as State<PV[keyof PV]>;
       });
     }
   }
@@ -64,5 +63,9 @@ export default class ParticleEntity<
     );
 
     return particleValues;
+  }
+
+  getParticles() {
+    return this.particles;
   }
 }
