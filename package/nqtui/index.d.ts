@@ -4,8 +4,8 @@ import type { Component } from "./render";
 import type { Getter, Setter, State, UnifiedState } from "./adaptations/adaptState/stateTypes";
 import type { EffectFn, EffectOptions, DepArray } from "./adaptations/adaptEffect/effectTypes";
 import { render } from "./render";
-import h from "./h";
-import { html } from "lit-html";
+import h, { renderComponentNamesAsWrapperComments } from "./h";
+import { html, svg } from "lit-html";
 import { adaptState } from "./adaptations/adaptState/adaptState";
 import unify from "./adaptations/adaptState/unify";
 import adaptEffect from "./adaptations/adaptEffect/adaptEffect";
@@ -33,5 +33,5 @@ import { unsafeSVG } from "lit-html/directives/unsafe-svg.js";
 import { until } from "lit-html/directives/until.js";
 import { asyncAppend } from "lit-html/directives/async-append.js";
 import { asyncReplace } from "lit-html/directives/async-replace.js";
-export { Component, Getter, Setter, State, UnifiedState, EffectFn, EffectOptions, DepArray, render, TemplateResult, DirectiveResult, h, html, adaptState, unify, adaptEffect, adaptRenderEffect, adaptSyncEffect, adaptMemo, classMap, styleMap, when, choose, guard, cache, keyed, map, repeat, join, range, live, ifDefined, ref, createRef, templateContent, unsafeHTML, unsafeSVG, until, asyncAppend, asyncReplace, };
+export { Component, Getter, Setter, State, UnifiedState, EffectFn, EffectOptions, DepArray, render, TemplateResult, DirectiveResult, h, renderComponentNamesAsWrapperComments, html, svg, adaptState, unify, adaptEffect, adaptRenderEffect, adaptSyncEffect, adaptMemo, classMap, styleMap, when, choose, guard, cache, keyed, map, repeat, join, range, live, ifDefined, ref, createRef, templateContent, unsafeHTML, unsafeSVG, until, asyncAppend, asyncReplace, };
 //# sourceMappingURL=index.d.ts.map

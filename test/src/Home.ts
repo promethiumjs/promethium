@@ -1,7 +1,15 @@
-import { html } from "promethium-js";
+import { adaptState, h, html } from "promethium-js";
+import Hall from "./Hall";
 
 const Home = () => {
-  return () => html`<div>This is my Home page!</div>`;
+  const [num, setNum] = adaptState(0);
+  return () => {
+    console.log("Home!");
+
+    return html`<div>This is my Home page!</div>
+      ${h(Hall, { num })}
+      <button @click=${() => setNum(num() + 1)}>Let's see</button> `;
+  };
 };
 
 export default Home;

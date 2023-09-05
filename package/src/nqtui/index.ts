@@ -13,8 +13,8 @@ import type {
   DepArray,
 } from "./adaptations/adaptEffect/effectTypes";
 import { render } from "./render";
-import h from "./h";
-import { html } from "lit-html";
+import h, { renderComponentNamesAsWrapperComments } from "./h";
+import { html, svg } from "lit-html";
 import { adaptState } from "./adaptations/adaptState/adaptState";
 import unify from "./adaptations/adaptState/unify";
 import adaptEffect from "./adaptations/adaptEffect/adaptEffect";
@@ -56,7 +56,9 @@ export {
   TemplateResult,
   DirectiveResult,
   h,
+  renderComponentNamesAsWrapperComments,
   html,
+  svg,
   adaptState,
   unify,
   adaptEffect,

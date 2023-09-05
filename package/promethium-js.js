@@ -1,4 +1,4 @@
-import {html as $60affc760575bcb6$re_export$html, render as $2lYhx$render, noChange as $2lYhx$noChange} from "lit-html";
+import {html as $60affc760575bcb6$re_export$html, svg as $60affc760575bcb6$re_export$svg, render as $2lYhx$render, noChange as $2lYhx$noChange} from "lit-html";
 import {classMap as $60affc760575bcb6$re_export$classMap} from "lit-html/directives/class-map.js";
 import {styleMap as $60affc760575bcb6$re_export$styleMap} from "lit-html/directives/style-map.js";
 import {when as $60affc760575bcb6$re_export$when} from "lit-html/directives/when.js";
@@ -23,19 +23,6 @@ import {AsyncDirective as $2lYhx$AsyncDirective, directive as $2lYhx$directive} 
 
 
 
-const $afe3fcee1cf27466$var$changedArray1 = [];
-const $afe3fcee1cf27466$var$changedArray2 = [];
-let $afe3fcee1cf27466$var$one = true;
-function $afe3fcee1cf27466$export$2e2bcd8739ae039(componentAsyncDirective) {
-    const changedArray = $afe3fcee1cf27466$var$one ? $afe3fcee1cf27466$var$changedArray1 : $afe3fcee1cf27466$var$changedArray2;
-    const newOne = $afe3fcee1cf27466$var$one ? false : true;
-    changedArray.push(componentAsyncDirective);
-    if (changedArray.length === 1) queueMicrotask(()=>{
-        $afe3fcee1cf27466$var$one = newOne;
-        changedArray.forEach((componentAsyncDirective)=>componentAsyncDirective.changed = true);
-        changedArray.length = 0;
-    });
-}
 
 
 const $67984ac6bea14c49$export$24642de4c13f18dd = [];
@@ -146,55 +133,9 @@ function $8358f029406b3bf0$var$internalFn(effect, fn, depArray, options = {}, cl
 }
 
 
-
-
-
-function $b44040c6e9499e95$export$2e2bcd8739ae039(effect, depArray) {
-    (0, $c5f83c37529ef113$export$52109d3cb696f898)(effect, ()=>$b44040c6e9499e95$var$internalFn(effect, depArray));
-    return effect.argsArray;
-}
-function $b44040c6e9499e95$var$internalFn(effect, depArray) {
-    effect.tracking = "implicit";
-    effect.argsArray = depArray.map((state)=>state());
-    effect.tracking = "depArray";
-}
-
-
-function $77230c8e9bc6ad07$export$9a2f3fcb7b180ad7(effect, fn, depArray, options = {}) {
-    (0, $c5f83c37529ef113$export$52109d3cb696f898)(effect, (cleanupSet)=>$77230c8e9bc6ad07$export$2e2bcd8739ae039(effect, fn, depArray, options, cleanupSet));
-    return [
-        ()=>(0, $f1bfabf6cab52e09$export$2e2bcd8739ae039)(effect),
-        ()=>(0, $b44040c6e9499e95$export$2e2bcd8739ae039)(effect, depArray),
-        effect.argsArray, 
-    ];
-}
-function $77230c8e9bc6ad07$export$2e2bcd8739ae039(effect, fn, depArray, options = {}, cleanupSet) {
-    //set tracking to "implicit" to enable tracking by state and memos in `depArray`
-    effect.tracking = "implicit";
-    effect.argsArray = depArray.map((state)=>state());
-    //set tracking back to "depArray" to disable other forms of implicit tracking
-    //(only allow state and memos in `depArray` to track effect)
-    effect.tracking = "depArray";
-    //if effect is supposed to be deferred, do nothing on the first run
-    if (effect.firstRun && options.defer) effect.firstRun = false;
-    else {
-        //call effect with previous return value and previous state values of tracking state and memos in an `argsArray`
-        const fnReturnValue = fn(effect.returnValue, effect.argsArray);
-        //create `returnValueCleanup` to be called on next run of effect
-        const returnValueCleanup = ()=>{
-            if (typeof fnReturnValue === "function") //extract new `returnValue` from effect's returned function
-            effect.returnValue = fnReturnValue();
-        };
-        //add cleanup to obtain new return value
-        cleanupSet?.add(returnValueCleanup);
-    }
-}
-
-
 const $01da2ed5eea48407$var$executeFns = {
     implicit: (0, $ba142649eb282e8a$export$2e2bcd8739ae039),
-    depArray: (0, $8358f029406b3bf0$export$b43a9f030091b83d),
-    componentFn: (0, $77230c8e9bc6ad07$export$9a2f3fcb7b180ad7)
+    depArray: (0, $8358f029406b3bf0$export$b43a9f030091b83d)
 };
 var $01da2ed5eea48407$export$2e2bcd8739ae039 = $01da2ed5eea48407$var$executeFns;
 
@@ -293,11 +234,11 @@ function $63b2a67046e0c80d$export$2e2bcd8739ae039(effect) {
     let cleanupNode = effect.cleanupTree;
     //extract the `cleanupNode` from the `cleanupTree` and set it to the `cleanupNode` variable
     effect.cleanupTreeNodePointer?.forEach((part)=>{
-        if (cleanupNode?.get(part)) cleanupNode.set(part, new Map());
+        if (!cleanupNode?.get(part)) cleanupNode?.set(part, new Map());
         cleanupNode = cleanupNode?.get(part);
     });
     //set cleanup set for effect if it doesn't already exist in the cleanup map
-    if (cleanupNode?.get(0)) cleanupNode.set(0, new Set());
+    if (!cleanupNode?.get(0)) cleanupNode?.set(0, new Set());
 }
 
 
@@ -341,14 +282,6 @@ function $09edb78f7635c27a$export$2e2bcd8739ae039(type, tracking, fn, depArray) 
 }
 
 
-function $d9192ce19ee672a1$export$2e2bcd8739ae039(fn, depArray, options) {
-    const [execute, effect] = (0, $09edb78f7635c27a$export$2e2bcd8739ae039)("sync", "componentFn", fn, depArray);
-    //return cleanup function / component cleanup array
-    return execute(effect, fn, depArray, options);
-}
-
-
-
 function $ed4eeacab2c72f4d$export$2e2bcd8739ae039(fn, depArray, options) {
     //determine if the effect is tracked by the state it uses implicitly, or using the
     //state provided by its dependency array
@@ -359,8 +292,13 @@ function $ed4eeacab2c72f4d$export$2e2bcd8739ae039(fn, depArray, options) {
 }
 
 
-
-
+const $904a7c359f86196f$export$28420e4dad55371c = (()=>{
+    let renderComponentNamesAsWrapperComments = false;
+    return (newrenderComponentNamesAsWrapperComments)=>{
+        if (newrenderComponentNamesAsWrapperComments) renderComponentNamesAsWrapperComments = newrenderComponentNamesAsWrapperComments;
+        else return renderComponentNamesAsWrapperComments;
+    };
+})();
 class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
     constructor(partInfo){
         super(partInfo);
@@ -370,63 +308,54 @@ class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
         //1. general component cleanup for all its effects and memos
         //2. cleanup of the effect created from the function (that returns a template result) the component returns
         this.cleanups = [];
-        this.Component = ()=>(0, $60affc760575bcb6$re_export$html)``;
-        //initialize "changed" flag as true.
-        this.changed = true;
     }
     disconnected() {
         this.cleanups.forEach((cleanup)=>cleanup());
     }
-    //normal render process
-    externalRender(props) {
-        for(const prop in props)this.props[prop] = props[prop];
-        return this.render();
-    }
     //first time initialization of component
     initialize(props, part, Component) {
         this.props = props;
-        return this.initializeComponent(Component, part.parentNode, this.props);
+        return this.initializeComponent(Component, part, this.props);
     }
-    initializeComponent(Component, parent, props) {
-        //store the function (that returns a template result) the component returns in `htmlFn` for later us
+    initializeComponent(Component, part, props) {
+        //store the function (that returns a template result) the component returns in `htmlFn` for later use
         let htmlFn;
-        //initialize component effects and memos and store the cleanup (1st cleanup)
-        this.cleanups.push((0, $ed4eeacab2c72f4d$export$2e2bcd8739ae039)(()=>htmlFn = Component(props, parent), []));
-        const [ComponentCleanup, ComponentDependencyUpdate, [htmlTemplateResult], ] = (0, $d9192ce19ee672a1$export$2e2bcd8739ae039)((_, htmlTemplateResultArray)=>{
-            this.setValue(htmlTemplateResultArray?.[0]);
-        }, [
-            htmlFn
-        ], {
-            defer: true,
-            isComponent: true
+        //initialize component effects and memos and store the 1st cleanup
+        this.cleanups.push((0, $ed4eeacab2c72f4d$export$2e2bcd8739ae039)(()=>{
+            htmlFn = Component(props);
+        }, []));
+        let templateResult;
+        const componentCleanup = (0, $ed4eeacab2c72f4d$export$2e2bcd8739ae039)(()=>{
+            templateResult = htmlFn();
+            if (this.updateFlag !== "initialize") this.setValue(templateResult);
         });
         //store 2nd cleanup
-        this.cleanups.push(ComponentCleanup);
-        //store reference to function used to update component return function dependencies and return template
-        //result for rendering
-        this.ComponentDependencyUpdate = ComponentDependencyUpdate;
-        this.Component = ()=>{
-            //check "changed" flag to prevent multiple redundant re-rendering of components.
-            if (this.changed) {
-                this.changed = false;
-                (0, $afe3fcee1cf27466$export$2e2bcd8739ae039)(this);
-                const [htmlTemplateResult] = this.ComponentDependencyUpdate?.();
-                return htmlTemplateResult;
-            } else return 0, $2lYhx$noChange;
-        };
-        //prevent re-initialization of component on subsequent renders after initialization.
-        this.updateFlag = "externalRender";
-        return htmlTemplateResult;
+        this.cleanups.push(componentCleanup);
+        // conditionally render component name as comments
+        if ($904a7c359f86196f$export$28420e4dad55371c()) {
+            console.log(part);
+            const componentNameComment = document.createComment(Component.name);
+            const startNode = part.startNode;
+            startNode?.parentNode?.insertBefore(componentNameComment.cloneNode(), startNode);
+            const endNode = part.endNode;
+            endNode?.parentNode?.insertBefore(componentNameComment, endNode.nextSibling);
+        }
+        this.updateFlag = "updateProps";
+        return templateResult;
     }
     update(part, [Component, props]) {
-        //initialize component for the first time or go through normal rendering processes based on the state of `updateFlag`
+        //initialize component for the first time or update props based on the state of `updateFlag`
         return this[this.updateFlag](props, part, Component);
     }
     reconnected() {
         this.updateFlag = "initialize";
     }
     render() {
-        return this.Component();
+        return 0, $2lYhx$noChange;
+    }
+    updateProps(props) {
+        for(const prop in props)this.props[prop] = props[prop];
+        return 0, $2lYhx$noChange;
     }
 }
 const $904a7c359f86196f$var$h = (0, $2lYhx$directive)($904a7c359f86196f$var$$);
@@ -853,5 +782,5 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
 
 
 
-export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $60affc760575bcb6$re_export$html as html, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $bdea889b8fd4ff63$export$2e2bcd8739ae039 as unify, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
+export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $904a7c359f86196f$export$28420e4dad55371c as renderComponentNamesAsWrapperComments, $60affc760575bcb6$re_export$html as html, $60affc760575bcb6$re_export$svg as svg, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $bdea889b8fd4ff63$export$2e2bcd8739ae039 as unify, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
 //# sourceMappingURL=promethium-js.js.map

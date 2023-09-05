@@ -20,7 +20,6 @@ export type InternalEffectObject<T = any, U extends any[] = any[]> = {
 
 export type EffectOptions = {
   defer?: boolean;
-  // isComponent?: boolean; // commented out because this option is only used internally
 };
 
 export type EffectFn<T = any, U extends any[] = any[]> = (
@@ -38,10 +37,3 @@ export type ExecuteFn = <T = any, U extends any[] = any[]>(
   depArray?: DepArray<U>,
   options?: EffectOptions
 ) => () => void;
-
-export type ComponentFnExecuteFn = <T = any, U extends any[] = any[]>(
-  effect: InternalEffectObject,
-  fn: EffectFn<T, U>,
-  depArray: DepArray<U>,
-  options?: EffectOptions
-) => readonly [() => void, () => any[], any[]] | (() => void);

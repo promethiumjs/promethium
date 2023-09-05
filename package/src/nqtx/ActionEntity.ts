@@ -9,7 +9,10 @@ export default class ActionEntity<A extends Actions = Actions> {
     this.dispatch = this.dispatch.bind(this);
   }
 
-  dispatch(actionId: keyof A, payload: Parameters<A[keyof A]>[0]) {
+  dispatch(
+    actionId: keyof A,
+    payload: Parameters<A[keyof A]>[0]
+  ): ReturnType<A[keyof A]> {
     return this.actions[actionId](payload);
   }
 }

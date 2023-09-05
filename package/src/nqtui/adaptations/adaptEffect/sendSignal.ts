@@ -1,8 +1,6 @@
-import { Getter } from "../adaptState/stateTypes";
 import addAsyncEffect from "./addAsyncEffect";
 import addRenderEffect from "./addRenderEffect";
 import {
-  ComponentFnExecuteFn,
   DepArray,
   InternalEffectObject,
   EffectFn,
@@ -11,7 +9,7 @@ import {
 
 export default function sendSignal<T = any, U extends any[] = any[]>(
   effect: InternalEffectObject,
-  execute: ExecuteFn | ComponentFnExecuteFn,
+  execute: ExecuteFn,
   fn: EffectFn<T, U>,
   signal: "stale" | "fresh",
   depArray?: DepArray<U>
@@ -36,19 +34,19 @@ export default function sendSignal<T = any, U extends any[] = any[]>(
 const executeMap = {
   sync: <T = any, U extends any[] = any[]>(
     effect: InternalEffectObject,
-    execute: ExecuteFn | ComponentFnExecuteFn,
+    execute: ExecuteFn,
     fn: EffectFn<T, U>,
     depArray?: DepArray<U>
   ) => execute(effect, fn, depArray!),
   async: <T = any, U extends any[] = any[]>(
     effect: InternalEffectObject,
-    execute: ExecuteFn | ComponentFnExecuteFn,
+    execute: ExecuteFn,
     fn: EffectFn<T, U>,
     depArray?: DepArray<U>
   ) => addAsyncEffect(() => execute(effect, fn, depArray!)),
   render: <T = any, U extends any[] = any[]>(
     effect: InternalEffectObject,
-    execute: ExecuteFn | ComponentFnExecuteFn,
+    execute: ExecuteFn,
     fn: EffectFn<T, U>,
     depArray?: DepArray<U>
   ) => addRenderEffect(() => execute(effect, fn, depArray!)),

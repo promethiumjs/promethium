@@ -26,5 +26,6 @@ export const actionEntity = new ActionEntity({
     particleEntity.adaptParticle("count")[1]((count) => {
       return count + 2;
     });
+    return 5 as const;
   },
 });

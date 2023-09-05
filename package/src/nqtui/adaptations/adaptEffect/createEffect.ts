@@ -3,7 +3,6 @@ import sendSignal from "./sendSignal";
 import setInitialParameters from "../setInitialParameters";
 import setCleanupSet from "../setCleanupSet";
 import {
-  ComponentFnExecuteFn,
   DepArray,
   InternalEffectObject,
   EffectFn,
@@ -12,7 +11,7 @@ import {
 
 export default function createEffect<T = any, U extends any[] = any[]>(
   type: "async" | "sync" | "render",
-  tracking: "implicit" | "depArray" | "componentFn",
+  tracking: "implicit" | "depArray",
   fn: EffectFn<T, U>,
   depArray?: DepArray<U>
 ) {
@@ -42,13 +41,7 @@ export default function createEffect<T = any, U extends any[] = any[]>(
     //used to notify the effect when a state value of state currently tracking the effect turns
     //stale or freshens up after turning stale
     sendSignal: (signal: "fresh" | "stale"): void =>
-      sendSignal(
-        effect,
-        execute as ExecuteFn | ComponentFnExecuteFn,
-        fn,
-        signal,
-        depArray
-      ),
+      sendSignal(effect, execute as ExecuteFn, fn, signal, depArray),
   };
 
   //create `cleanupTreeNodePointer` for effect and create `cleanupTree` for effect tree is this is the

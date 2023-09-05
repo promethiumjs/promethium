@@ -23,5 +23,4 @@ export declare type DepArray<U extends any[] = any[]> = {
     [I in keyof U]: Getter<U[I]>;
 };
 export declare type ExecuteFn = <T = any, U extends any[] = any[]>(effect: InternalEffectObject, fn: EffectFn<T, U>, depArray?: DepArray<U>, options?: EffectOptions) => () => void;
-export declare type ComponentFnExecuteFn = <T = any, U extends any[] = any[]>(effect: InternalEffectObject, fn: EffectFn<T, U>, depArray: DepArray<U>, options?: EffectOptions) => readonly [() => void, () => any[], any[]] | (() => void);
 //# sourceMappingURL=effectTypes.d.ts.map

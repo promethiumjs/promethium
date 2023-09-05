@@ -1,6 +1,6 @@
 {
   "name": "promethium-js",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Yet Another JavaScript Framework",
   "source": "src/promethium-js.ts",
   "main": "promethium-js.js",

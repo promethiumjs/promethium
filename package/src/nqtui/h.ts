@@ -4,19 +4,25 @@ import {
   DirectiveResult,
   PartInfo,
 } from "lit-html/async-directive.js";
-import queueRevertChangedToTrue from "./queueRevertChangedToTrue";
-import adaptComponentFnEffect from "./adaptations/adaptEffect/adaptComponentFnEffect";
-import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
-import { ChildPart, noChange, TemplateResult, html } from "lit-html";
+import { ChildPart, noChange, TemplateResult } from "lit-html";
 import { Component } from "./render";
-import { EffectOptions } from "./adaptations/adaptEffect/effectTypes";
+import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
+
+export const renderComponentNamesAsWrapperComments = (() => {
+  let renderComponentNamesAsWrapperComments = false;
+  return (newrenderComponentNamesAsWrapperComments?: boolean) => {
+    if (newrenderComponentNamesAsWrapperComments) {
+      renderComponentNamesAsWrapperComments =
+        newrenderComponentNamesAsWrapperComments;
+    } else {
+      return renderComponentNamesAsWrapperComments;
+    }
+  };
+})();
 
 class $ extends AsyncDirective {
-  updateFlag: "initialize" | "externalRender";
-  cleanups: any[];
-  ComponentDependencyUpdate: any;
-  Component: () => TemplateResult;
-  changed: boolean;
+  updateFlag: "initialize" | "updateProps";
+  cleanups: (() => void)[];
   props: any;
 
   constructor(partInfo: PartInfo) {
@@ -28,100 +34,92 @@ class $ extends AsyncDirective {
     //1. general component cleanup for all its effects and memos
     //2. cleanup of the effect created from the function (that returns a template result) the component returns
     this.cleanups = [];
-    this.Component = () => html``;
-    //initialize "changed" flag as true.
-    this.changed = true;
   }
 
-  protected disconnected(): void {
+  protected disconnected() {
     this.cleanups.forEach((cleanup) => cleanup());
-  }
-
-  //normal render process
-  externalRender(props: any) {
-    for (const prop in props) {
-      this.props[prop] = props[prop];
-    }
-
-    return this.render();
   }
 
   //first time initialization of component
   initialize(
     props: any,
     part: ChildPart,
-    Component: (props: any, parent: Node) => () => TemplateResult
+    Component: (props: any) => () => TemplateResult
   ) {
     this.props = props;
 
-    return this.initializeComponent(Component, part.parentNode, this.props);
+    return this.initializeComponent(Component, part, this.props);
   }
 
   initializeComponent(
-    Component: (props: any, parent: Node) => () => TemplateResult,
-    parent: Node,
+    Component: (props: any) => () => TemplateResult,
+    part: ChildPart,
     props: any
   ) {
-    //store the function (that returns a template result) the component returns in `htmlFn` for later us
+    //store the function (that returns a template result) the component returns in `htmlFn` for later use
     let htmlFn: () => TemplateResult;
-    //initialize component effects and memos and store the cleanup (1st cleanup)
+    //initialize component effects and memos and store the 1st cleanup
     this.cleanups.push(
-      adaptSyncEffect(() => (htmlFn = Component(props, parent)), [])
+      adaptSyncEffect(() => {
+        htmlFn = Component(props);
+      }, [])
     );
 
-    const [
-      ComponentCleanup,
-      ComponentDependencyUpdate,
-      [htmlTemplateResult],
-    ]: any = adaptComponentFnEffect(
-      (_, htmlTemplateResultArray?: [TemplateResult]) => {
-        this.setValue(htmlTemplateResultArray?.[0]);
-      },
-      [htmlFn!],
-      { defer: true, isComponent: true } as EffectOptions // check `effectTypes.ts` to understand why type coercion is used here
-    );
+    let templateResult: TemplateResult;
+    const componentCleanup = adaptSyncEffect(() => {
+      templateResult = htmlFn();
+      if (this.updateFlag !== "initialize") {
+        this.setValue(templateResult);
+      }
+    });
 
     //store 2nd cleanup
-    this.cleanups.push(ComponentCleanup);
-    //store reference to function used to update component return function dependencies and return template
-    //result for rendering
-    this.ComponentDependencyUpdate = ComponentDependencyUpdate;
+    this.cleanups.push(componentCleanup);
 
-    this.Component = () => {
-      //check "changed" flag to prevent multiple redundant re-rendering of components.
-      if (this.changed) {
-        this.changed = false;
-        queueRevertChangedToTrue(this);
-        const [htmlTemplateResult] = this.ComponentDependencyUpdate?.();
+    // conditionally render component name as comments
+    if (renderComponentNamesAsWrapperComments()) {
+      console.log(part);
 
-        return htmlTemplateResult;
-      } else {
-        return noChange;
-      }
-    };
-    //prevent re-initialization of component on subsequent renders after initialization.
-    this.updateFlag = "externalRender";
+      const componentNameComment = document.createComment(Component.name);
+      const startNode = part.startNode;
+      startNode?.parentNode?.insertBefore(
+        componentNameComment.cloneNode(),
+        startNode
+      );
+      const endNode = part.endNode;
+      endNode?.parentNode?.insertBefore(
+        componentNameComment,
+        endNode.nextSibling
+      );
+    }
 
-    return htmlTemplateResult;
+    this.updateFlag = "updateProps";
+
+    return templateResult!;
   }
 
   update(
     part: ChildPart,
-    [Component, props]: [
-      (props: any, parent: Node) => () => TemplateResult,
-      any
-    ]
+    [Component, props]: [(props: any) => () => TemplateResult, any]
   ) {
-    //initialize component for the first time or go through normal rendering processes based on the state of `updateFlag`
+    //initialize component for the first time or update props based on the state of `updateFlag`
     return this[this.updateFlag](props, part, Component);
   }
 
-  protected reconnected(): void {
+  protected reconnected() {
     this.updateFlag = "initialize";
   }
 
   render() {
-    return this.Component();
+    return noChange;
+  }
+
+  updateProps(props: any) {
+    for (const prop in props) {
+      this.props[prop] = props[prop];
+    }
+
+    return noChange;
   }
 }
 
