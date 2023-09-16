@@ -5,7 +5,7 @@ import {
   PartInfo,
 } from "lit-html/async-directive.js";
 import { ChildPart, noChange, TemplateResult } from "lit-html";
-import { Component } from "./render";
+import { Component } from "./renderComponent";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
 
 export const renderComponentNamesAsWrapperComments = (() => {
@@ -19,6 +19,11 @@ export const renderComponentNamesAsWrapperComments = (() => {
     }
   };
 })();
+
+// type ComponentTree = Record<string, ComponentTree | string>
+// const componentTree: Component  = {
+
+// }
 
 class $ extends AsyncDirective {
   updateFlag: "initialize" | "updateProps";
@@ -77,10 +82,11 @@ class $ extends AsyncDirective {
     this.cleanups.push(componentCleanup);
 
     // conditionally render component name as comments
+    // console.log(part);
     if (renderComponentNamesAsWrapperComments()) {
-      console.log(part);
-
-      const componentNameComment = document.createComment(Component.name);
+      const componentNameComment = document.createComment(
+        `__$$promethium-tag-${Component.name}`
+      );
       const startNode = part.startNode;
       startNode?.parentNode?.insertBefore(
         componentNameComment.cloneNode(),

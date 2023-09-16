@@ -1,4 +1,4 @@
-import { html } from "promethium-js";
+import { html } from "lit-html";
 import { count } from "./App";
 
 const Couch = () => {

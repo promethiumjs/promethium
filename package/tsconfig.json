@@ -7,7 +7,12 @@
     "declarationDir": "./",
     "emitDeclarationOnly": true,
     "moduleResolution": "node",
-    "strict": true
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["./src/**/*"],
   "exclude": []

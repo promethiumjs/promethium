@@ -1,6 +1,6 @@
 {
   "name": "promethium-js",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "JavaScript framework built on top of lit-html",
   "source": "src/promethium-js.ts",
   "main": "promethium-js.js",

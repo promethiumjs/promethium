@@ -1,11 +1,7 @@
-import {
-  Component,
-  TemplateResult,
-  adaptMemo,
-  choose,
-  ifDefined,
-} from "../nqtui";
-import { adaptState, html } from "../nqtui";
+import { Component, adaptMemo, adaptState } from "../nqtui";
+import { html, TemplateResult } from "lit-html";
+import { choose } from "lit-html/directives/choose.js";
+import { ifDefined } from "lit-html/directives/if-defined.js";
 import type {
   Getter,
   Setter,

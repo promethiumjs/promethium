@@ -1,5 +1,6 @@
-import { h, html } from "promethium-js";
+import { h } from "promethium-js";
 import Couch from "./Couch";
+import { html } from "lit-html";
 
 const Hall = (props: { num: () => number }) => {
   return () => {

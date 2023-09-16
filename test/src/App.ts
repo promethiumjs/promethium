@@ -1,10 +1,12 @@
-import { html, h, unify } from "promethium-js";
+import { h, unify } from "promethium-js";
+import { html } from "lit-html";
 import Home from "./Home";
 import About from "./About";
 import { particleEntity } from "@/entities";
 import { Link, Switch, paths } from "@/router";
 
 export const count = unify(particleEntity.adaptParticle("count"));
+
 const App = () => {
   return () => {
     console.log("App!");

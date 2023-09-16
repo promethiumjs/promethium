@@ -1,20 +1,19 @@
-import { Deletable, OptionalLiteralKeys } from "./entityTypes";
+import { getValue } from "../nqtui";
+import {
+  Deletable,
+  OptionalLiteralKeys,
+  RequiredLiteralKeys,
+} from "./entityTypes";
 
 type Derivatives = {
   [key: string]: () => any;
 };
 
 type DerivativeValues<D extends Derivatives> = {
-  [Derivative in keyof D]: ReturnType<D[Derivative]>;
+  [T in keyof D]: T extends RequiredLiteralKeys<D>
+    ? ReturnType<Exclude<D[T], undefined>>
+    : ReturnType<Exclude<D[T], undefined>> | undefined;
 };
-
-type CompleteAdaptDerivativeReturnType<
-  D extends Derivatives,
-  T extends keyof D
-> =
-  | D[T]
-  | NonNullable<D[T]>
-  | (() => ReturnType<NonNullable<D[T]>> | undefined);
 
 export default class DerivativeEntity<D extends Derivatives = Derivatives> {
   private derivatives: D;
@@ -23,49 +22,41 @@ export default class DerivativeEntity<D extends Derivatives = Derivatives> {
     this.derivatives = {} as D;
     this.createDerivatives(initialDerivativeFns);
     this.adaptDerivative = this.adaptDerivative.bind(this);
+    this.adaptDerivatives = this.adaptDerivatives.bind(this);
+    this.adaptDerivativeValue = this.adaptDerivativeValue.bind(this);
+    this.adaptDerivativeValues = this.adaptDerivativeValues.bind(this);
+    this.createDerivative = this.createDerivative.bind(this);
+    this.createDerivatives = this.createDerivatives.bind(this);
+    this.deleteDerivative = this.deleteDerivative.bind(this);
     this.deleteDerivatives = this.deleteDerivatives.bind(this);
-    this.getDerivativeValues = this.getDerivativeValues.bind(this);
-  }
-
-  private createDerivatives(derivatives: Partial<D>) {
-    if (derivatives) {
-      Object.keys(derivatives).forEach((derivative: keyof D) => {
-        this.derivatives[derivative] = derivatives[derivative] as D[keyof D];
-      });
-    }
   }
 
   adaptDerivative<T extends keyof D>(
     id: T
-  ): undefined extends D[T]
-    ? () => ReturnType<NonNullable<D[T]>> | undefined
-    : D[T];
-  adaptDerivative<T extends keyof D>(
-    id: T,
-    initialDerivativeFn: NonNullable<D[T]>
-  ): NonNullable<D[T]>;
-  adaptDerivative<T extends keyof D>(
-    id: T,
-    initialDerivativeFn?: D[T]
-  ): CompleteAdaptDerivativeReturnType<D, T> {
-    if (this.derivatives[id] === undefined) {
-      const fallBackDerivativeFn = () => undefined;
-      this.createDerivatives({
-        [id as keyof D]: (initialDerivativeFn ||
-          fallBackDerivativeFn) as D[keyof D],
-      } as Partial<D>);
-    }
-
-    return this.derivatives[id] as D[T];
+  ): T extends RequiredLiteralKeys<D>
+    ? Exclude<D[T], undefined>
+    : Exclude<D[T], undefined> | undefined {
+    return this.derivatives[id] as T extends RequiredLiteralKeys<D>
+      ? Exclude<D[T], undefined>
+      : Exclude<D[T], undefined> | undefined;
   }
 
-  deleteDerivatives(derivativeIds: Array<OptionalLiteralKeys<D> | Deletable>) {
-    derivativeIds.forEach(
-      (derivativeId) => delete this.derivatives[derivativeId as keyof D]
-    );
+  adaptDerivatives(): [keyof D, Exclude<D[keyof D], undefined>][] {
+    return Object.entries(this.derivatives) as [
+      keyof D,
+      Exclude<D[keyof D], undefined>
+    ][];
   }
 
-  getDerivativeValues() {
+  adaptDerivativeValue<T extends keyof D>(
+    id: T
+  ): T extends RequiredLiteralKeys<D>
+    ? ReturnType<Exclude<D[T], undefined>>
+    : ReturnType<Exclude<D[T], undefined>> | undefined {
+    return getValue(this.derivatives[id]);
+  }
+
+  adaptDerivativeValues() {
     const derivativeValues = {} as DerivativeValues<D>;
     Object.keys(this.derivatives).forEach(
       (derivative: keyof DerivativeValues<D>) =>
@@ -75,7 +66,30 @@ export default class DerivativeEntity<D extends Derivatives = Derivatives> {
     return derivativeValues;
   }
 
-  getDerivatives() {
-    return this.derivatives;
+  createDerivative<T extends keyof D>(
+    id: T,
+    initialDerivativeFn: D[T]
+  ): Exclude<D[T], undefined> {
+    if (this.derivatives[id] === undefined) {
+      this.derivatives[id] = initialDerivativeFn;
+    }
+
+    return this.derivatives[id] as Exclude<D[T], undefined>;
+  }
+
+  createDerivatives(derivatives: Partial<D>) {
+    if (derivatives) {
+      Object.keys(derivatives).forEach((id: keyof D) => {
+        this.createDerivative(id, derivatives[id] as D[keyof D]);
+      });
+    }
+  }
+
+  deleteDerivative(id: OptionalLiteralKeys<D> | Deletable) {
+    delete this.derivatives[id as keyof D];
+  }
+
+  deleteDerivatives(ids: Array<OptionalLiteralKeys<D> | Deletable>) {
+    ids.forEach((id) => this.deleteDerivative(id));
   }
 }

@@ -13,5 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "lit-html": "^2.8.0"
   }
 }

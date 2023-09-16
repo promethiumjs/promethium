@@ -1,25 +1,21 @@
-import {html as $60affc760575bcb6$re_export$html, svg as $60affc760575bcb6$re_export$svg, render as $2lYhx$render, noChange as $2lYhx$noChange} from "lit-html";
-import {classMap as $60affc760575bcb6$re_export$classMap} from "lit-html/directives/class-map.js";
-import {styleMap as $60affc760575bcb6$re_export$styleMap} from "lit-html/directives/style-map.js";
-import {when as $60affc760575bcb6$re_export$when} from "lit-html/directives/when.js";
-import {choose as $60affc760575bcb6$re_export$choose} from "lit-html/directives/choose.js";
-import {map as $60affc760575bcb6$re_export$map} from "lit-html/directives/map.js";
-import {repeat as $60affc760575bcb6$re_export$repeat} from "lit-html/directives/repeat.js";
-import {join as $60affc760575bcb6$re_export$join} from "lit-html/directives/join.js";
-import {range as $60affc760575bcb6$re_export$range} from "lit-html/directives/range.js";
-import {ifDefined as $60affc760575bcb6$re_export$ifDefined} from "lit-html/directives/if-defined.js";
-import {cache as $60affc760575bcb6$re_export$cache} from "lit-html/directives/cache.js";
-import {keyed as $60affc760575bcb6$re_export$keyed} from "lit-html/directives/keyed.js";
-import {guard as $60affc760575bcb6$re_export$guard} from "lit-html/directives/guard.js";
-import {live as $60affc760575bcb6$re_export$live} from "lit-html/directives/live.js";
-import {ref as $60affc760575bcb6$re_export$ref, createRef as $60affc760575bcb6$re_export$createRef} from "lit-html/directives/ref.js";
-import {templateContent as $60affc760575bcb6$re_export$templateContent} from "lit-html/directives/template-content.js";
-import {unsafeHTML as $60affc760575bcb6$re_export$unsafeHTML} from "lit-html/directives/unsafe-html.js";
-import {unsafeSVG as $60affc760575bcb6$re_export$unsafeSVG} from "lit-html/directives/unsafe-svg.js";
-import {until as $60affc760575bcb6$re_export$until} from "lit-html/directives/until.js";
-import {asyncAppend as $60affc760575bcb6$re_export$asyncAppend} from "lit-html/directives/async-append.js";
-import {asyncReplace as $60affc760575bcb6$re_export$asyncReplace} from "lit-html/directives/async-replace.js";
+import {render as $2lYhx$render, noChange as $2lYhx$noChange, html as $2lYhx$html} from "lit-html";
 import {AsyncDirective as $2lYhx$AsyncDirective, directive as $2lYhx$directive} from "lit-html/async-directive.js";
+import {choose as $2lYhx$choose} from "lit-html/directives/choose.js";
+import {ifDefined as $2lYhx$ifDefined} from "lit-html/directives/if-defined.js";
+
+
+function $b2d0e9a15885fd2d$export$fa7f552cb3a457a6(RootTemplateResult, props) {
+    //check whether or not "renderContainer" is a string and handle it
+    //accordingly.
+    if (typeof props.renderContainer === "string" || props.renderContainer instanceof String) props.renderContainer = document.querySelector(props.renderContainer);
+    const renderComponent = ()=>{
+        return (0, $2lYhx$render)(RootTemplateResult, props.renderContainer, props.renderOptions);
+    };
+    renderComponent();
+    //return "renderComponent" function to allow re-rendering of whole root
+    //component tree.
+    return renderComponent;
+}
 
 
 
@@ -299,6 +295,9 @@ const $904a7c359f86196f$export$28420e4dad55371c = (()=>{
         else return renderComponentNamesAsWrapperComments;
     };
 })();
+// type ComponentTree = Record<string, ComponentTree | string>
+// const componentTree: Component  = {
+// }
 class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
     constructor(partInfo){
         super(partInfo);
@@ -332,9 +331,9 @@ class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
         //store 2nd cleanup
         this.cleanups.push(componentCleanup);
         // conditionally render component name as comments
+        // console.log(part);
         if ($904a7c359f86196f$export$28420e4dad55371c()) {
-            console.log(part);
-            const componentNameComment = document.createComment(Component.name);
+            const componentNameComment = document.createComment(`__$$promethium-tag-${Component.name}`);
             const startNode = part.startNode;
             startNode?.parentNode?.insertBefore(componentNameComment.cloneNode(), startNode);
             const endNode = part.endNode;
@@ -360,21 +359,6 @@ class $904a7c359f86196f$var$$ extends (0, $2lYhx$AsyncDirective) {
 }
 const $904a7c359f86196f$var$h = (0, $2lYhx$directive)($904a7c359f86196f$var$$);
 var $904a7c359f86196f$export$2e2bcd8739ae039 = $904a7c359f86196f$var$h;
-
-
-function $20f84131e3cf668b$export$b3890eb0ae9dca99(Component, props) {
-    //check whether or not "renderContainer" is a string and handle it
-    //accordingly.
-    if (typeof props.renderContainer === "string" || props.renderContainer instanceof String) props.renderContainer = document.querySelector(props.renderContainer);
-    const renderComponent = ()=>(0, $2lYhx$render)((0, $60affc760575bcb6$re_export$html)`${(0, $904a7c359f86196f$export$2e2bcd8739ae039)(Component, props)}`, props.renderContainer, props.renderOptions);
-    //queue microtask to render the component to enable all extensions to run first.
-    queueMicrotask(renderComponent);
-    //return "renderComponent" function to allow re-rendering of whole root
-    //component tree.
-    return renderComponent;
-}
-
-
 
 
 
@@ -489,12 +473,28 @@ function $2ea58473f796696a$export$9c07a256d814a0e(initialValue) {
 }
 
 
-function $bdea889b8fd4ff63$export$2e2bcd8739ae039(state) {
-    function unifiedState(nextValue) {
-        if (nextValue === undefined) return state[0]();
-        else return state[1](nextValue);
-    }
-    return unifiedState;
+function $6cc483cacb6f41b9$export$ce47dfca80edb48d(state) {
+    if (state !== undefined) {
+        function unifiedState(nextValue) {
+            if (nextValue === undefined) return state[0]();
+            else return state[1](nextValue);
+        }
+        return unifiedState;
+    } else return undefined;
+}
+function $6cc483cacb6f41b9$export$bf7199a9ebcb84a9(stateOrGetter) {
+    if (stateOrGetter !== undefined) {
+        if (typeof stateOrGetter === "function") return stateOrGetter();
+        else return stateOrGetter[0]();
+    } else return undefined;
+}
+function $6cc483cacb6f41b9$export$f959ad33008f7aab(state) {
+    if (state !== undefined) return state[0];
+    else return undefined;
+}
+function $6cc483cacb6f41b9$export$5f176306d3b12a5e(state) {
+    if (state !== undefined) return state[1];
+    else return undefined;
 }
 
 
@@ -635,58 +635,58 @@ function $4ff487e726c286d2$export$2e2bcd8739ae039(fn) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class $7547703a902ec477$export$2e2bcd8739ae039 {
     constructor(initialParticleValues){
         this.particles = {};
         this.createParticles(initialParticleValues);
         this.adaptParticle = this.adaptParticle.bind(this);
+        this.adaptParticleGetter = this.adaptParticleGetter.bind(this);
+        this.adaptParticles = this.adaptParticles.bind(this);
+        this.adaptParticleSetter = this.adaptParticleSetter.bind(this);
+        this.adaptParticleValue = this.adaptParticleValue.bind(this);
+        this.adaptParticleValues = this.adaptParticleValues.bind(this);
+        this.createParticle = this.createParticle.bind(this);
+        this.createParticles = this.createParticles.bind(this);
+        this.deleteParticle = this.deleteParticle.bind(this);
         this.deleteParticles = this.deleteParticles.bind(this);
-        this.getParticleValues = this.getParticleValues.bind(this);
     }
-    adaptParticle(id, initialValue) {
-        if (this.particles[id] === undefined) this.createParticles({
-            [id]: initialValue
-        });
+    adaptParticle(id) {
         return this.particles[id];
     }
-    createParticles(particleValues) {
-        if (particleValues) Object.keys(particleValues).forEach((particleValue)=>{
-            this.particles[particleValue] = (0, $2ea58473f796696a$export$9c07a256d814a0e)(particleValues[particleValue]);
-        });
+    adaptParticleGetter(id) {
+        return (0, $6cc483cacb6f41b9$export$f959ad33008f7aab)(this.particles[id]);
     }
-    deleteParticles(particleIds) {
-        particleIds.forEach((particleId)=>delete this.particles[particleId]);
+    adaptParticles() {
+        return Object.entries(this.particles);
     }
-    getParticleValues() {
+    adaptParticleSetter(id) {
+        return (0, $6cc483cacb6f41b9$export$5f176306d3b12a5e)(this.particles[id]);
+    }
+    adaptParticleValue(id) {
+        return (0, $6cc483cacb6f41b9$export$bf7199a9ebcb84a9)(this.particles[id]);
+    }
+    adaptParticleValues() {
         const particleValues = {};
         Object.keys(this.particles).forEach((particle)=>particleValues[particle] = this.particles[particle][0]());
         return particleValues;
     }
-    getParticles() {
-        return this.particles;
+    createParticle(id, initialValue) {
+        if (this.particles[id] === undefined) this.particles[id] = (0, $2ea58473f796696a$export$9c07a256d814a0e)(initialValue);
+        return this.particles[id];
+    }
+    createParticles(particleValues) {
+        if (particleValues) Object.keys(particleValues).forEach((id)=>{
+            this.createParticle(id, particleValues[id]);
+        });
+    }
+    deleteParticle(id) {
+        delete this.particles[id];
+    }
+    deleteParticles(ids) {
+        ids.forEach((id)=>this.deleteParticle(id));
     }
 }
+
 
 
 class $911171dbae4499f3$export$2e2bcd8739ae039 {
@@ -694,46 +694,62 @@ class $911171dbae4499f3$export$2e2bcd8739ae039 {
         this.derivatives = {};
         this.createDerivatives(initialDerivativeFns);
         this.adaptDerivative = this.adaptDerivative.bind(this);
+        this.adaptDerivatives = this.adaptDerivatives.bind(this);
+        this.adaptDerivativeValue = this.adaptDerivativeValue.bind(this);
+        this.adaptDerivativeValues = this.adaptDerivativeValues.bind(this);
+        this.createDerivative = this.createDerivative.bind(this);
+        this.createDerivatives = this.createDerivatives.bind(this);
+        this.deleteDerivative = this.deleteDerivative.bind(this);
         this.deleteDerivatives = this.deleteDerivatives.bind(this);
-        this.getDerivativeValues = this.getDerivativeValues.bind(this);
     }
-    createDerivatives(derivatives) {
-        if (derivatives) Object.keys(derivatives).forEach((derivative)=>{
-            this.derivatives[derivative] = derivatives[derivative];
-        });
-    }
-    adaptDerivative(id, initialDerivativeFn) {
-        if (this.derivatives[id] === undefined) {
-            const fallBackDerivativeFn = ()=>undefined;
-            this.createDerivatives({
-                [id]: initialDerivativeFn || fallBackDerivativeFn
-            });
-        }
+    adaptDerivative(id) {
         return this.derivatives[id];
     }
-    deleteDerivatives(derivativeIds) {
-        derivativeIds.forEach((derivativeId)=>delete this.derivatives[derivativeId]);
+    adaptDerivatives() {
+        return Object.entries(this.derivatives);
     }
-    getDerivativeValues() {
+    adaptDerivativeValue(id) {
+        return (0, $6cc483cacb6f41b9$export$bf7199a9ebcb84a9)(this.derivatives[id]);
+    }
+    adaptDerivativeValues() {
         const derivativeValues = {};
         Object.keys(this.derivatives).forEach((derivative)=>derivativeValues[derivative] = this.derivatives[derivative]());
         return derivativeValues;
     }
-    getDerivatives() {
-        return this.derivatives;
+    createDerivative(id, initialDerivativeFn) {
+        if (this.derivatives[id] === undefined) this.derivatives[id] = initialDerivativeFn;
+        return this.derivatives[id];
+    }
+    createDerivatives(derivatives) {
+        if (derivatives) Object.keys(derivatives).forEach((id)=>{
+            this.createDerivative(id, derivatives[id]);
+        });
+    }
+    deleteDerivative(id) {
+        delete this.derivatives[id];
+    }
+    deleteDerivatives(ids) {
+        ids.forEach((id)=>this.deleteDerivative(id));
     }
 }
 
 
 class $d58cca3b38bc6f70$export$2e2bcd8739ae039 {
-    constructor(actions){
+    constructor(actions, stateEntities){
         this.actions = actions;
+        this.stateEntities = stateEntities ?? {};
         this.dispatch = this.dispatch.bind(this);
+        this.adaptStateEntity = this.adaptStateEntity.bind(this);
     }
-    dispatch(actionId, payload) {
-        return this.actions[actionId](payload);
+    dispatch(id, payload) {
+        return this.actions[id](payload, this.stateEntities);
+    }
+    adaptStateEntity(id) {
+        return this.stateEntities[id];
     }
 }
+
+
 
 
 
@@ -750,14 +766,14 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
     }
     Link = (props)=>{
         const isActive = (0, $4ff487e726c286d2$export$2e2bcd8739ae039)(()=>this.currentPath() === props.to);
-        return ()=>(0, $60affc760575bcb6$re_export$html)`<a
+        return ()=>(0, $2lYhx$html)`<a
         href=${props.to}
         @click=${(e)=>{
                 e.preventDefault();
                 this.navigate(props.to);
             }}
-        class=${(0, $60affc760575bcb6$re_export$ifDefined)(props.class?.(isActive()))}
-        style=${(0, $60affc760575bcb6$re_export$ifDefined)(props.style?.(isActive()))}
+        class=${(0, $2lYhx$ifDefined)(props.class?.(isActive()))}
+        style=${(0, $2lYhx$ifDefined)(props.style?.(isActive()))}
         >${props.content || props.text}</a
       >`;
     };
@@ -770,7 +786,7 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
         this.setCurrentPath(window.location.pathname);
     }
     Switch = (props)=>{
-        return ()=>(0, $60affc760575bcb6$re_export$html)`${(0, $60affc760575bcb6$re_export$choose)(this.currentPath(), props.routes, props.default)}`;
+        return ()=>(0, $2lYhx$html)`${(0, $2lYhx$choose)(this.currentPath(), props.routes, props.default)}`;
     };
     setTitle(title) {
         document.title = title;
@@ -782,5 +798,5 @@ class $3c0b88deb2963834$export$2e2bcd8739ae039 {
 
 
 
-export {$20f84131e3cf668b$export$b3890eb0ae9dca99 as render, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $904a7c359f86196f$export$28420e4dad55371c as renderComponentNamesAsWrapperComments, $60affc760575bcb6$re_export$html as html, $60affc760575bcb6$re_export$svg as svg, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $bdea889b8fd4ff63$export$2e2bcd8739ae039 as unify, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $60affc760575bcb6$re_export$classMap as classMap, $60affc760575bcb6$re_export$styleMap as styleMap, $60affc760575bcb6$re_export$when as when, $60affc760575bcb6$re_export$choose as choose, $60affc760575bcb6$re_export$guard as guard, $60affc760575bcb6$re_export$cache as cache, $60affc760575bcb6$re_export$keyed as keyed, $60affc760575bcb6$re_export$map as map, $60affc760575bcb6$re_export$repeat as repeat, $60affc760575bcb6$re_export$join as join, $60affc760575bcb6$re_export$range as range, $60affc760575bcb6$re_export$live as live, $60affc760575bcb6$re_export$ifDefined as ifDefined, $60affc760575bcb6$re_export$ref as ref, $60affc760575bcb6$re_export$createRef as createRef, $60affc760575bcb6$re_export$templateContent as templateContent, $60affc760575bcb6$re_export$unsafeHTML as unsafeHTML, $60affc760575bcb6$re_export$unsafeSVG as unsafeSVG, $60affc760575bcb6$re_export$until as until, $60affc760575bcb6$re_export$asyncAppend as asyncAppend, $60affc760575bcb6$re_export$asyncReplace as asyncReplace, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
+export {$b2d0e9a15885fd2d$export$fa7f552cb3a457a6 as renderComponent, $904a7c359f86196f$export$2e2bcd8739ae039 as h, $904a7c359f86196f$export$28420e4dad55371c as renderComponentNamesAsWrapperComments, $2ea58473f796696a$export$9c07a256d814a0e as adaptState, $6cc483cacb6f41b9$export$ce47dfca80edb48d as unify, $1e5a3ea0f27ba6e4$export$2e2bcd8739ae039 as adaptEffect, $275745f9245c13d5$export$2e2bcd8739ae039 as adaptRenderEffect, $ed4eeacab2c72f4d$export$2e2bcd8739ae039 as adaptSyncEffect, $4ff487e726c286d2$export$2e2bcd8739ae039 as adaptMemo, $7547703a902ec477$export$2e2bcd8739ae039 as ParticleEntity, $911171dbae4499f3$export$2e2bcd8739ae039 as DerivativeEntity, $d58cca3b38bc6f70$export$2e2bcd8739ae039 as ActionEntity, $3c0b88deb2963834$export$2e2bcd8739ae039 as Router};
 //# sourceMappingURL=promethium-js.js.map

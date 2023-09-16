@@ -1,4 +1,5 @@
-import { Component, TemplateResult } from "../nqtui";
+import { Component } from "../nqtui";
+import { TemplateResult } from "lit-html";
 import type { Getter, Setter } from "../nqtui/adaptations/adaptState/stateTypes";
 declare type PathsArray = ReadonlyArray<string>;
 declare type PathsObject = {
