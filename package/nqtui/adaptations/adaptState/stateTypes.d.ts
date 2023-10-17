@@ -1,5 +1,5 @@
 import { InternalEffectObject } from "../adaptEffect/effectTypes";
-export declare type InternalStateObject<T = any> = {
+export type InternalStateObject<T = any> = {
     syncSubscriptions: {
         one: Set<InternalEffectObject>;
         two: Set<InternalEffectObject>;
@@ -12,9 +12,9 @@ export declare type InternalStateObject<T = any> = {
     activeSubscriptions: "one" | "two";
     value: T | undefined;
 };
-export declare type Getter<T> = () => T;
-export declare type Setter<T> = (nextValue: T | ((prev: T) => T)) => void;
-export declare type State<T> = readonly [Getter<T>, Setter<T>];
+export type Getter<T> = () => T;
+export type Setter<T> = (nextValue: T | ((prev: T) => T)) => void;
+export type State<T> = readonly [Getter<T>, Setter<T>];
 export interface UnifiedState<T> {
     (): T;
     (nextValue: T | ((prev: T) => T)): void;

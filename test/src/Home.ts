@@ -1,5 +1,5 @@
 import { adaptState, h } from "promethium-js";
-import { html } from "lit-html";
+import { html } from "lit";
 import Hall from "./Hall";
 
 const Home = () => {

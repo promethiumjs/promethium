@@ -3,9 +3,9 @@ import {
   directive,
   DirectiveResult,
   PartInfo,
-} from "lit-html/async-directive.js";
-import { ChildPart, noChange, TemplateResult } from "lit-html";
-import { Component } from "./renderComponent";
+} from "lit/async-directive.js";
+import { ChildPart, noChange, TemplateResult } from "lit";
+import { Component } from "./renderTemplateFn";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
 
 export const renderComponentNamesAsWrapperComments = (() => {

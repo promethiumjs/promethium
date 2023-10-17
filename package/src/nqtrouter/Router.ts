@@ -1,19 +1,17 @@
 import { Component, adaptMemo, adaptState } from "../nqtui";
-import { html, TemplateResult } from "lit-html";
-import { choose } from "lit-html/directives/choose.js";
-import { ifDefined } from "lit-html/directives/if-defined.js";
+import { html, TemplateResult } from "lit";
+import { choose } from "lit/directives/choose.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 import type {
   Getter,
   Setter,
 } from "../nqtui/adaptations/adaptState/stateTypes";
 
-type PathsArray = ReadonlyArray<string>;
-
 type PathsObject = {
   [key: string]: string;
 };
 
-type Paths = PathsArray | PathsObject;
+type Paths = PathsObject;
 
 export default class Router<P extends Paths> {
   paths: P;
@@ -31,7 +29,7 @@ export default class Router<P extends Paths> {
   }
 
   Link: Component<{
-    to: P extends PathsArray ? P[number] : P[keyof P];
+    to: P[keyof P];
     content?: TemplateResult | string | number;
     text?: string | number;
     class?: (isActive: boolean) => string;
@@ -67,9 +65,7 @@ export default class Router<P extends Paths> {
   }
 
   Switch: Component<{
-    routes: Array<
-      [P extends PathsArray ? P[number] : P[keyof P], () => TemplateResult]
-    >;
+    routes: Array<[P[keyof P], () => TemplateResult]>;
     default?: () => TemplateResult;
   }> = (props) => {
     return () =>

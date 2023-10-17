@@ -1,7 +1,7 @@
 import DerivativeEntity from "./DerivativeEntity";
 import ParticleEntity from "./ParticleEntity";
-export declare type StateEntities = Record<string, ParticleEntity | DerivativeEntity>;
-declare type Actions<S extends StateEntities> = {
+export type StateEntities = Record<string, ParticleEntity | DerivativeEntity>;
+type Actions<S extends StateEntities> = {
     [key: string]: (payload: any, stateEntities: S) => any;
 };
 export default class ActionEntity<S extends StateEntities = StateEntities, A extends Actions<S> = Actions<S>> {

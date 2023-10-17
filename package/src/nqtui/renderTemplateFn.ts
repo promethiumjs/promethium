@@ -1,11 +1,11 @@
-import { render, TemplateResult, RootPart, RenderOptions } from "lit-html";
+import { render, TemplateResult, RootPart, RenderOptions } from "lit";
 
 export type Component<T = null> = T extends null
   ? (props?: null) => () => TemplateResult
   : (props: T) => () => TemplateResult;
 
-export function renderComponent(
-  RootTemplateResult: TemplateResult,
+export function renderTemplateFn(
+  RootTemplateResult: () => TemplateResult,
   props: {
     renderContainer: string | HTMLElement | DocumentFragment;
     renderOptions?: RenderOptions;
@@ -22,16 +22,16 @@ export function renderComponent(
     );
   }
 
-  const renderComponent = () => {
+  const renderTemplateFn = () => {
     return render(
-      RootTemplateResult,
+      RootTemplateResult(),
       props.renderContainer as HTMLElement | DocumentFragment,
       props.renderOptions
     );
   };
-  renderComponent();
+  renderTemplateFn();
 
-  //return "renderComponent" function to allow re-rendering of whole root
+  //return "renderTemplateFn" function to allow re-rendering of whole root
   //component tree.
-  return renderComponent;
+  return renderTemplateFn;
 }

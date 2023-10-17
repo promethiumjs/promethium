@@ -1,9 +1,9 @@
 import { State, Getter, Setter } from "../nqtui";
 import { Deletable, OptionalLiteralKeys, RequiredLiteralKeys } from "./entityTypes";
-declare type ParticleValues = {
+type ParticleValues = {
     [key: string]: any;
 };
-declare type ReturnedParticleValues<PV> = {
+type ReturnedParticleValues<PV> = {
     [T in keyof PV]: T extends RequiredLiteralKeys<PV> ? PV[T] : PV[T] | undefined;
 };
 export default class ParticleEntity<PV extends ParticleValues = ParticleValues> {

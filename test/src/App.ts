@@ -1,5 +1,5 @@
 import { h, unify } from "promethium-js";
-import { html } from "lit-html";
+import { html } from "lit";
 import Home from "./Home";
 import About from "./About";
 import { particleEntity } from "@/entities";

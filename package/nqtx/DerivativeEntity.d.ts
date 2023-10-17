@@ -1,8 +1,8 @@
 import { Deletable, OptionalLiteralKeys, RequiredLiteralKeys } from "./entityTypes";
-declare type Derivatives = {
+type Derivatives = {
     [key: string]: () => any;
 };
-declare type DerivativeValues<D extends Derivatives> = {
+type DerivativeValues<D extends Derivatives> = {
     [T in keyof D]: T extends RequiredLiteralKeys<D> ? ReturnType<Exclude<D[T], undefined>> : ReturnType<Exclude<D[T], undefined>> | undefined;
 };
 export default class DerivativeEntity<D extends Derivatives = Derivatives> {

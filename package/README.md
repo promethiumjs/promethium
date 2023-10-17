@@ -1,4 +1,4 @@
 # PromethiumJS
 
-A JavaScript Application Framework built on top of [lit-html](https://lit.dev/docs/libraries/standalone-templates/).
+The Radioactive JavaScript Framework. Built on top of [lit](https://lit.dev/).
 It aims to make the building of complex web apps simple, easy and nice.

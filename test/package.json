@@ -12,9 +12,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "vite": "^4.3.9"
+    "typescript": "5.0.x",
+    "vite": "^4.4.11"
   },
   "dependencies": {
-    "lit-html": "^2.8.0"
+    "lit": ">=2.x"
   }
 }

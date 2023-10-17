@@ -5,8 +5,8 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "./",
-    "emitDeclarationOnly": true,
     "moduleResolution": "node",
+    "outDir": ".",
 
     /* Linting */
     "strict": true,

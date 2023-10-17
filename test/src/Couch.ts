@@ -1,4 +1,4 @@
-import { html } from "lit-html";
+import { html } from "lit";
 import { count } from "./App";
 
 const Couch = () => {

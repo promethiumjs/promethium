@@ -1,4 +1,4 @@
-import type { Component } from "./renderComponent";
+import type { Component } from "./renderTemplateFn";
 import type {
   Getter,
   Setter,
@@ -10,7 +10,7 @@ import type {
   EffectOptions,
   DepArray,
 } from "./adaptations/adaptEffect/effectTypes";
-import { renderComponent } from "./renderComponent";
+import { renderTemplateFn } from "./renderTemplateFn";
 import h, { renderComponentNamesAsWrapperComments } from "./h";
 import { adaptState } from "./adaptations/adaptState/adaptState";
 import {
@@ -33,7 +33,7 @@ export {
   EffectFn,
   EffectOptions,
   DepArray,
-  renderComponent,
+  renderTemplateFn,
   h,
   renderComponentNamesAsWrapperComments,
   adaptState,

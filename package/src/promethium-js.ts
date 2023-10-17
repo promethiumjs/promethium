@@ -9,7 +9,7 @@ import type {
   DepArray,
 } from "./nqtui";
 import {
-  renderComponent,
+  renderTemplateFn,
   h,
   renderComponentNamesAsWrapperComments,
   adaptState,
@@ -34,7 +34,7 @@ export {
   EffectFn,
   EffectOptions,
   DepArray,
-  renderComponent,
+  renderTemplateFn,
   h,
   renderComponentNamesAsWrapperComments,
   adaptState,
