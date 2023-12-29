@@ -1,1 +1,0 @@
-{"version":3,"file":"adaptState.d.ts","sourceRoot":"","sources":["../../../src/nqtui/adaptations/adaptState/adaptState.ts"],"names":[],"mappings":"AAEA,OAAO,EAAuB,KAAK,EAAE,MAAM,cAAc,CAAC;AAE1D,wBAAgB,UAAU,CAAC,CAAC,KAAK,KAAK,CAAC,CAAC,GAAG,SAAS,CAAC,CAAC;AACtD,wBAAgB,UAAU,CAAC,CAAC,EAAE,YAAY,EAAE,CAAC,GAAG,CAAC,MAAM,CAAC,CAAC,GAAG,KAAK,CAAC,CAAC,CAAC,CAAC"}

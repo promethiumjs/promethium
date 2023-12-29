@@ -1,1 +1,0 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/nqtx/index.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,gBAAgB,CAAC;AACpD,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,eAAe,CAAC;AAC/C,OAAO,cAAc,MAAM,kBAAkB,CAAC;AAC9C,OAAO,gBAAgB,MAAM,oBAAoB,CAAC;AAClD,OAAO,YAAY,MAAM,gBAAgB,CAAC;AAE1C,OAAO,EACL,aAAa,EACb,SAAS,EACT,cAAc,EACd,gBAAgB,EAChB,YAAY,GACb,CAAC"}

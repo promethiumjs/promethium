@@ -122,3 +122,9 @@ dist
 *.css.map
 *.sass.map
 *.scss.map
+
+# generated package files
+package/nqtrouter
+package/nqtui
+package/nqtx
+package/promethium-js*
