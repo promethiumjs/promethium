@@ -8,23 +8,6 @@ import { ChildPart, noChange, TemplateResult } from "lit";
 import { Component } from "./renderTemplateFn";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
 
-export const renderComponentNamesAsWrapperComments = (() => {
-  let renderComponentNamesAsWrapperComments = false;
-  return (newrenderComponentNamesAsWrapperComments?: boolean) => {
-    if (newrenderComponentNamesAsWrapperComments) {
-      renderComponentNamesAsWrapperComments =
-        newrenderComponentNamesAsWrapperComments;
-    } else {
-      return renderComponentNamesAsWrapperComments;
-    }
-  };
-})();
-
-// type ComponentTree = Record<string, ComponentTree | string>
-// const componentTree: Component  = {
-
-// }
-
 class $ extends AsyncDirective {
   updateFlag: "initialize" | "updateProps";
   cleanups: (() => void)[];
@@ -48,17 +31,16 @@ class $ extends AsyncDirective {
   //first time initialization of component
   initialize(
     props: any,
-    part: ChildPart,
+    _: ChildPart,
     Component: (props: any) => () => TemplateResult
   ) {
     this.props = props;
 
-    return this.initializeComponent(Component, part, this.props);
+    return this.initializeComponent(Component, this.props);
   }
 
   initializeComponent(
     Component: (props: any) => () => TemplateResult,
-    part: ChildPart,
     props: any
   ) {
     //store the function (that returns a template result) the component returns in `htmlFn` for later use
@@ -80,24 +62,6 @@ class $ extends AsyncDirective {
 
     //store 2nd cleanup
     this.cleanups.push(componentCleanup);
-
-    // conditionally render component name as comments
-    // console.log(part);
-    if (renderComponentNamesAsWrapperComments()) {
-      const componentNameComment = document.createComment(
-        `__$$promethium-tag-${Component.name}`
-      );
-      const startNode = part.startNode;
-      startNode?.parentNode?.insertBefore(
-        componentNameComment.cloneNode(),
-        startNode
-      );
-      const endNode = part.endNode;
-      endNode?.parentNode?.insertBefore(
-        componentNameComment,
-        endNode.nextSibling
-      );
-    }
 
     this.updateFlag = "updateProps";
 
@@ -129,14 +93,12 @@ class $ extends AsyncDirective {
   }
 }
 
-declare function hFn(
-  Component: () => () => TemplateResult,
-  props?: null
-): DirectiveResult;
+declare function hFn(Component: () => () => TemplateResult): DirectiveResult;
+declare function hFn(Component: Component<{}>): DirectiveResult;
 
 declare function hFn<Type>(
   Component: Component<Type>,
-  props: Type
+  props: Type extends object ? Parameters<typeof Component>[0] : never
 ): DirectiveResult;
 
 const h: typeof hFn = directive($);

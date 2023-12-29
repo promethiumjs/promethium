@@ -11,7 +11,6 @@ import type {
 import {
   renderTemplateFn,
   h,
-  renderComponentNamesAsWrapperComments,
   adaptState,
   unify,
   adaptEffect,
@@ -36,7 +35,6 @@ export {
   DepArray,
   renderTemplateFn,
   h,
-  renderComponentNamesAsWrapperComments,
   adaptState,
   unify,
   adaptEffect,

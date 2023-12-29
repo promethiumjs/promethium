@@ -5,7 +5,7 @@
   "scripts": {
     "dev:package": "cd package && pnpm run dev",
     "dev:test": "cd test && pnpm run dev",
-    "dev": "concurrently \"pnpm run dev:package\" \"pnpm run dev:test\"",
+    "dev": "concurrently \"pnpm run dev:package\" \"pnpm run dev:test\" \"pnpm run test:package\"",
     "install:package": "cd package && pnpm install",
     "install:test": "cd test && pnpm install",
     "install": "concurrently \"pnpm run install:package\" \"pnpm run install:test\"",
@@ -16,8 +16,11 @@
     "on:package": "cd package &&",
     "on:test": "cd test &&",
     "publish:package": "cd package && pnpm publish",
-    "uninstall:package": "cd package && pnpm uninstall",
     "link:package": "cd test && pnpm link ../package",
+    "clean:package": "cd package && pnpm run clean",
+    "test:package": "cd package && pnpm test",
+    "coverage:package": "cd package && pnpm run coverage",
+    "uninstall:package": "cd package && pnpm uninstall",
     "uninstall:test": "cd test && pnpm uninstall"
   },
   "license": "MIT",
