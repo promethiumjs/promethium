@@ -21,10 +21,10 @@ export default class ActionEntity<
     this.adaptStateEntity = this.adaptStateEntity.bind(this);
   }
 
-  dispatch(
-    id: keyof A,
-    payload: Parameters<A[keyof A]>[0]
-  ): ReturnType<A[keyof A]> {
+  dispatch<T extends keyof A>(
+    id: T,
+    payload: Parameters<A[T]>[0]
+  ): ReturnType<A[T]> {
     return this.actions[id](payload, this.stateEntities);
   }
 

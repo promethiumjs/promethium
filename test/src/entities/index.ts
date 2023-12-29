@@ -46,12 +46,18 @@ console.log(w);
 
 export const actionEntity = new ActionEntity(
   {
-    addToCount: (_, { particleEntity }) => {
+    addToCount: (_: undefined, { particleEntity }) => {
       particleEntity.adaptParticle("count")[1]((count) => {
         return count + 9;
       });
       return 5 as const;
     },
+    whatever: (num: number) => {
+      return 6;
+    },
   },
   { particleEntity, derivativeEntity }
 );
+
+actionEntity.dispatch("addToCount", undefined);
+actionEntity.dispatch("whatever", 3);
