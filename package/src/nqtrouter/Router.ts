@@ -20,7 +20,7 @@ export default class Router<P extends Paths> {
 
   constructor(paths: P) {
     [this.currentPath, this.setCurrentPath] = adaptState(
-      window.location.pathname
+      window.location.pathname,
     );
     this.paths = paths;
     window.addEventListener("popstate", () => this.route());

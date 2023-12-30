@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
+    "lib": ["es5", "es6", "es2018", "dom", "dom.iterable"],
     "noEmit": true
   },
-  "include": ["__type-tests__"],
-  "references": [{ "path": "./tsconfig.json" }]
+  "include": ["__type-tests__"]
 }

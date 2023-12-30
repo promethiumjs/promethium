@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, expectTypeOf, test } from "vitest";
 import { adaptState } from "../src/nqtui/adaptations/adaptState/adaptState";
 import { adaptMemo } from "../src/nqtui/adaptations/adaptMemo/adaptMemo";
 
@@ -8,6 +8,7 @@ describe("adaptState", () => {
     expect(count()).toBe(0);
     setCount(3);
     expect(count()).toBe(3);
+    expectTypeOf(count()).toEqualTypeOf<string>();
   });
 
   test("testing adaptMemo", () => {
