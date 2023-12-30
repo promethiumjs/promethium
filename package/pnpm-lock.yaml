@@ -19,6 +19,9 @@ devDependencies:
   concurrently:
     specifier: ^7.5.0
     version: 7.6.0
+  expect-type:
+    specifier: ^0.17.3
+    version: 0.17.3
   rimraf:
     specifier: ^5.0.5
     version: 5.0.5
@@ -815,6 +818,11 @@ packages:
       onetime: 6.0.0
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
+    dev: true
+
+  /expect-type@0.17.3:
+    resolution: {integrity: sha512-K0ZdZJ97jiAtaOwhEHHz/f0N6Xbj5reRz5g6+5BO7+OvqQ7PMQz0/c8bFSJs1zPotNJL5HJaC6t6lGPEAtGyOw==}
+    engines: {node: '>=12.0.0'}
     dev: true
 
   /fast-glob@3.3.2:

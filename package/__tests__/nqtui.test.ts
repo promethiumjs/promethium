@@ -2,8 +2,8 @@ import { describe, expect, test } from "vitest";
 import { adaptState } from "../src/nqtui/adaptations/adaptState/adaptState";
 import { adaptMemo } from "../src/nqtui/adaptations/adaptMemo/adaptMemo";
 
-describe("testing adaptState", () => {
-  test("testing adaptState", () => {
+describe("adaptState", () => {
+  test("basic stuff", () => {
     const [count, setCount] = adaptState(0);
     expect(count()).toBe(0);
     setCount(3);

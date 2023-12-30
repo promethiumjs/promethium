@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["__type-tests__"],
+  "references": [{ "path": "./tsconfig.json" }]
+}

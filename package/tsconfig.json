@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    /* added to test something with tsconfig.test.json */
+    "composite": true,
     "target": "es6",
     "lib": ["es5", "es6", "es2018", "dom", "dom.iterable"],
     "declaration": true,
