@@ -22,5 +22,6 @@ export default function sendSignal(
       memo.staleStateValuesCount = 0;
       updateValueAndSendFreshNotifications(memo, fn);
     }
+  } else if (signal === "falseAlarm") {
   }
 }
