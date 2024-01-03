@@ -4,8 +4,17 @@ import { InternalStateObject } from "./stateTypes";
 
 export default function set<T>(
   state: InternalStateObject<T>,
-  nextValue: T | ((prev: T) => T)
+  nextValue: T | ((prev: T) => T),
 ) {
+  const newStateValue =
+    typeof nextValue === "function"
+      ? (nextValue as (prev: T) => T)(state.value!)
+      : nextValue;
+
+  if (Object.is(newStateValue, state.value)) {
+    return;
+  }
+
   //get active subscriptions to properly manange sync effects and memos
   const activeSubscriptions = state.activeSubscriptions;
   //toggle active subscriptions
@@ -16,10 +25,7 @@ export default function set<T>(
   sendStaleSignals(state, activeSubscriptions);
 
   //update state value
-  state.value =
-    typeof nextValue === "function"
-      ? (nextValue as (prev: T) => T)(state.value!)
-      : nextValue;
+  state.value = newStateValue;
 
   //let subscriptions know that their stale value has been updated so that they can notify and
   //update themselves and their subscriptions if any

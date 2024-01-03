@@ -20,9 +20,9 @@
     "test:cmd": "cd test &&",
     "test:link-package": "cd test && pnpm link ../package",
     "test:uninstall": "cd test && pnpm uninstall",
-    "dev": "concurrently \"pnpm run dev:package\" \"pnpm run dev:test\" \"pnpm run test:package\"",
-    "build": "concurrently \"pnpm run build:package\" \"pnpm run build:test\"",
-    "install": "concurrently \"pnpm run install:package\" \"pnpm run install:test\""
+    "dev": "concurrently \"pnpm run package:dev\" \"pnpm run test:dev\" \"pnpm run package:test\"",
+    "build": "concurrently \"pnpm run package:build\" \"pnpm run test:build\"",
+    "install": "concurrently \"pnpm run package:install\" \"pnpm run test:install\""
   },
   "license": "MIT",
   "devDependencies": {

@@ -9,7 +9,7 @@ export default function addAsyncEffect(fn: any) {
   asyncEffectArray.push(fn);
 
   if (asyncEffectArray.length === 1) {
-    queueMicrotask(() => {
+    setTimeout(() => {
       one = newOne;
       asyncEffectArray.forEach((fn: any) => fn());
       asyncEffectArray.length = 0;

@@ -7,13 +7,14 @@ import {
   InternalEffectObject,
   EffectFn,
   ExecuteFn,
+  SignalTypes,
 } from "./effectTypes";
 
 export default function createEffect<T = any, U extends any[] = any[]>(
   type: "async" | "sync" | "render",
   tracking: "implicit" | "depArray",
   fn: EffectFn<T, U>,
-  depArray?: DepArray<U>
+  depArray?: DepArray<U>,
 ) {
   const execute = executeFns[tracking];
 
@@ -38,9 +39,12 @@ export default function createEffect<T = any, U extends any[] = any[]>(
     observableSubscriptionSets: new Set(),
     //used to track the number of state values of states currently tracking the effect that are stale
     staleStateValuesCount: 0,
+    //used to track the number of state values of states currently tracking the effect that say they are stale
+    //but are not actually stale
+    falseAlarmSignalsCount: 0,
     //used to notify the effect when a state value of state currently tracking the effect turns
     //stale or freshens up after turning stale
-    sendSignal: (signal: "fresh" | "stale"): void =>
+    sendSignal: (signal: SignalTypes): void =>
       sendSignal(effect, execute as ExecuteFn, fn, signal, depArray),
   };
 

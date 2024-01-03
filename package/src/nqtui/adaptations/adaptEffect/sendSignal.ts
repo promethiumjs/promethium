@@ -5,14 +5,15 @@ import {
   InternalEffectObject,
   EffectFn,
   ExecuteFn,
+  SignalTypes,
 } from "./effectTypes";
 
 export default function sendSignal<T = any, U extends any[] = any[]>(
   effect: InternalEffectObject,
   execute: ExecuteFn,
   fn: EffectFn<T, U>,
-  signal: "stale" | "fresh",
-  depArray?: DepArray<U>
+  signal: SignalTypes,
+  depArray?: DepArray<U>,
 ) {
   if (signal === "stale") {
     effect.staleStateValuesCount++;
@@ -25,7 +26,7 @@ export default function sendSignal<T = any, U extends any[] = any[]>(
         effect,
         execute,
         fn,
-        depArray
+        depArray,
       );
     }
   }
@@ -36,18 +37,18 @@ const executeMap = {
     effect: InternalEffectObject,
     execute: ExecuteFn,
     fn: EffectFn<T, U>,
-    depArray?: DepArray<U>
+    depArray?: DepArray<U>,
   ) => execute(effect, fn, depArray!),
   async: <T = any, U extends any[] = any[]>(
     effect: InternalEffectObject,
     execute: ExecuteFn,
     fn: EffectFn<T, U>,
-    depArray?: DepArray<U>
+    depArray?: DepArray<U>,
   ) => addAsyncEffect(() => execute(effect, fn, depArray!)),
   render: <T = any, U extends any[] = any[]>(
     effect: InternalEffectObject,
     execute: ExecuteFn,
     fn: EffectFn<T, U>,
-    depArray?: DepArray<U>
+    depArray?: DepArray<U>,
   ) => addRenderEffect(() => execute(effect, fn, depArray!)),
 };

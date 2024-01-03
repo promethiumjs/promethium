@@ -30,15 +30,22 @@ export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
     cleanupTreeNodePointer: null,
     observableSubscriptionSets: new Set(),
     staleStateValuesCount: 0,
+    falseAlarmSignalsCount: 0,
     sendSignal: (signal) => sendSignal(memo, fn, signal),
   };
 
   setInitialParameters(memo);
   setCleanupSet(memo);
 
-  const cleanupMemo = updateValueAndSendFreshNotifications(memo, fn);
+  let freshMemoRun = true;
+  let cleanupMemo: InternalMemoObject | undefined;
 
-  return (
-    cleanupMemo ? () => get<T>(cleanupMemo) : () => get<T>(memo)
-  ) as Getter<T>;
+  return () => {
+    if (freshMemoRun === true) {
+      cleanupMemo = updateValueAndSendFreshNotifications(memo, fn);
+      freshMemoRun = false;
+    }
+
+    return (cleanupMemo ? get<T>(cleanupMemo) : get<T>(memo)) as T;
+  };
 }

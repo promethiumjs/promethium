@@ -2,6 +2,8 @@ import { Getter } from "../adaptState/stateTypes";
 
 export type CleanupTree = Map<number, CleanupTree | Set<() => void>>;
 
+export type SignalTypes = "stale" | "fresh" | "falseAlarm";
+
 export type InternalEffectObject<T = any, U extends any[] = any[]> = {
   firstRun: boolean;
   type: "async" | "sync" | "render" | "memo";
@@ -13,9 +15,10 @@ export type InternalEffectObject<T = any, U extends any[] = any[]> = {
   cleanupTreeNodePointer: number[] | null;
   observableSubscriptionSets: Set<Set<InternalEffectObject>>;
   staleStateValuesCount: number;
+  falseAlarmSignalsCount: number;
   returnValue?: T;
   argsArray?: U;
-  sendSignal: (signal: "stale" | "fresh") => void;
+  sendSignal: (signal: SignalTypes) => void;
 };
 
 export type EffectOptions = {
@@ -24,7 +27,7 @@ export type EffectOptions = {
 
 export type EffectFn<T = any, U extends any[] = any[]> = (
   returnValue?: T,
-  argsArray?: U
+  argsArray?: U,
 ) => (() => T) | void;
 
 export type DepArray<U extends any[] = any[]> = {
@@ -35,5 +38,5 @@ export type ExecuteFn = <T = any, U extends any[] = any[]>(
   effect: InternalEffectObject,
   fn: EffectFn<T, U>,
   depArray?: DepArray<U>,
-  options?: EffectOptions
+  options?: EffectOptions,
 ) => () => void;
