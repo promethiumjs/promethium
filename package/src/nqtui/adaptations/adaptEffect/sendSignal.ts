@@ -17,17 +17,23 @@ export default function sendSignal<T = any, U extends any[] = any[]>(
 ) {
   if (signal === "stale") {
     effect.staleStateValuesCount++;
-  } else if (signal === "fresh") {
+    effect.falseAlarmSignalsCount++;
+  } else if (signal === "fresh" || signal === "falseAlarm") {
     effect.staleStateValuesCount--;
+    if (signal === "falseAlarm") {
+      effect.falseAlarmSignalsCount--;
+    }
     if (effect.staleStateValuesCount <= 0) {
-      //to make sure "effect.stateStateValuesCount" doesn't go beyond zero
+      if (effect.falseAlarmSignalsCount > 0) {
+        executeMap[effect.type as "sync" | "render" | "async"](
+          effect,
+          execute,
+          fn,
+          depArray,
+        );
+      }
+      effect.falseAlarmSignalsCount = 0;
       effect.staleStateValuesCount = 0;
-      executeMap[effect.type as "sync" | "render" | "async"](
-        effect,
-        execute,
-        fn,
-        depArray,
-      );
     }
   }
 }

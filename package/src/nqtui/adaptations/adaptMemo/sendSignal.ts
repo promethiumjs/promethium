@@ -1,9 +1,7 @@
 import { SignalTypes } from "../adaptEffect/effectTypes";
 import { InternalMemoObject } from "./memoTypes";
-import {
-  sendStaleNotifications,
-  updateValueAndSendFreshNotifications,
-} from "./notifyAndUpdate";
+import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications";
+import { sendSignals } from "../sendSignals";
 
 export default function sendSignal(
   memo: InternalMemoObject,
@@ -12,16 +10,23 @@ export default function sendSignal(
 ) {
   if (signal === "stale") {
     memo.staleStateValuesCount++;
+    memo.falseAlarmSignalsCount++;
     if (memo.staleStateValuesCount === 1) {
-      sendStaleNotifications(memo);
+      sendSignals(memo, "stale");
     }
-  } else if (signal === "fresh") {
+  } else if (signal === "fresh" || signal === "falseAlarm") {
     memo.staleStateValuesCount--;
-    if (memo.staleStateValuesCount <= 0) {
-      //to make sure "memo.stateStateValuesCount" doesn't go beyond zero
-      memo.staleStateValuesCount = 0;
-      updateValueAndSendFreshNotifications(memo, fn);
+    if (signal === "falseAlarm") {
+      memo.falseAlarmSignalsCount--;
     }
-  } else if (signal === "falseAlarm") {
+    if (memo.staleStateValuesCount <= 0) {
+      if (memo.falseAlarmSignalsCount > 0) {
+        updateValueAndSendFreshNotifications(memo, fn);
+      } else {
+        sendSignals(memo, "falseAlarm");
+      }
+      memo.staleStateValuesCount = 0;
+      memo.falseAlarmSignalsCount = 0;
+    }
   }
 }

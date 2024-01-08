@@ -48,7 +48,7 @@ export default function createEffect<T = any, U extends any[] = any[]>(
       sendSignal(effect, execute as ExecuteFn, fn, signal, depArray),
   };
 
-  //create `cleanupTreeNodePointer` for effect and create `cleanupTree` for effect tree is this is the
+  //create `cleanupTreeNodePointer` for effect and create `cleanupTree` for effect tree if this is the
   //topmost parent effect (father of the whole tree)
   setInitialParameters(effect);
   //create `cleanupSet` for effect if it doesn't already exist

@@ -107,10 +107,12 @@ describe("adaptMemo", () => {
     expect(memoFn_4).toHaveBeenCalledTimes(0);
     expect(threeOrLessPlusOne()).toBe(threeOrLess() + 1);
     expect(memoFn_4).toHaveBeenCalledTimes(1);
+    setCount(2);
+    expect(memoFn_4).toHaveBeenCalledTimes(2);
     setCount(3);
-    expect(memoFn_4).toHaveBeenCalledTimes(2);
+    expect(memoFn_4).toHaveBeenCalledTimes(3);
     setCount(4);
-    expect(memoFn_4).toHaveBeenCalledTimes(2);
+    expect(memoFn_4).toHaveBeenCalledTimes(3);
   });
 
   test.todo("memo cleanup works");

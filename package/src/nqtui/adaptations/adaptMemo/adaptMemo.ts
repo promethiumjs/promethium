@@ -2,7 +2,7 @@ import sendSignal from "./sendSignal";
 import get from "../get";
 import setInitialParameters from "../setInitialParameters";
 import setCleanupSet from "../setCleanupSet";
-import { updateValueAndSendFreshNotifications } from "./notifyAndUpdate";
+import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications";
 import { InternalMemoObject } from "./memoTypes";
 import { Getter } from "../adaptState/stateTypes";
 
@@ -38,14 +38,13 @@ export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
   setCleanupSet(memo);
 
   let freshMemoRun = true;
-  let cleanupMemo: InternalMemoObject | undefined;
 
   return () => {
     if (freshMemoRun === true) {
-      cleanupMemo = updateValueAndSendFreshNotifications(memo, fn);
+      updateValueAndSendFreshNotifications(memo, fn);
       freshMemoRun = false;
     }
 
-    return (cleanupMemo ? get<T>(cleanupMemo) : get<T>(memo)) as T;
+    return get<T>(memo) as T;
   };
 }
