@@ -1,9 +1,5 @@
 *.swp
 *.map
-src
-test
-jsdoc.json
-tsconfig.json
 
 # Logs
 logs
@@ -126,3 +122,12 @@ out
 *.css.map
 *.sass.map
 *.scss.map
+
+# custom
+src
+test
+jsdoc.json
+tsconfig.json
+tsconfig.type-test.json
+__tests__
+__type-tests__
