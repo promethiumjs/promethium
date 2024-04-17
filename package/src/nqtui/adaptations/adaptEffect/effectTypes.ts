@@ -28,7 +28,7 @@ export type EffectOptions = {
 export type EffectFn<T = any, U extends any[] = any[]> = (
   returnValue?: T,
   argsArray?: U,
-) => (() => T) | void;
+) => (() => T) | void | Promise<() => T> | Promise<void>;
 
 export type DepArray<U extends any[] = any[]> = {
   [I in keyof U]: Getter<U[I]>;

@@ -1,6 +1,8 @@
 import { sendSignals } from "../sendSignals";
 import { InternalStateObject } from "./stateTypes";
 
+export const imperativeUpdate = Symbol("imperativeUpdate");
+
 export default function set<T>(
   state: InternalStateObject<T>,
   nextValue: T | ((prev: T) => T),
@@ -10,7 +12,10 @@ export default function set<T>(
       ? (nextValue as (prev: T) => T)(state.value!)
       : nextValue;
 
-  if (Object.is(newStateValue, state.value)) {
+  if (
+    Object.is(newStateValue, state.value) &&
+    newStateValue !== imperativeUpdate
+  ) {
     return;
   }
 

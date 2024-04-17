@@ -9,7 +9,7 @@ type Actions<S extends StateEntities> = {
 
 export default class ActionEntity<
   S extends StateEntities = StateEntities,
-  A extends Actions<S> = Actions<S>
+  A extends Actions<S> = Actions<S>,
 > {
   private actions: A;
   private stateEntities: S;
@@ -23,7 +23,7 @@ export default class ActionEntity<
 
   dispatch<T extends keyof A>(
     id: T,
-    payload: Parameters<A[T]>[0]
+    payload: Parameters<A[T]>[0],
   ): ReturnType<A[T]> {
     return this.actions[id](payload, this.stateEntities);
   }

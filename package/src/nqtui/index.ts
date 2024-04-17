@@ -13,6 +13,7 @@ import type {
 import { renderTemplateFn } from "./renderTemplateFn";
 import h from "./h";
 import { adaptState } from "./adaptations/adaptState/adaptState";
+import { imperativeUpdate } from "./adaptations/adaptState/set";
 import {
   unify,
   getGetter,
@@ -36,6 +37,7 @@ export {
   renderTemplateFn,
   h,
   adaptState,
+  imperativeUpdate,
   unify,
   getGetter,
   getSetter,

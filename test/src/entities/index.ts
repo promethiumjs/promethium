@@ -53,10 +53,10 @@ export const actionEntity = new ActionEntity(
       return 5 as const;
     },
     whatever: (num: number) => {
-      return 6;
+      return num;
     },
   },
-  { particleEntity, derivativeEntity }
+  { particleEntity, derivativeEntity },
 );
 
 actionEntity.dispatch("addToCount", undefined);
