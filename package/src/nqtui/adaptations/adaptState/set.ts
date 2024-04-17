@@ -27,7 +27,9 @@ export default function set<T>(
   sendSignals(state, "stale");
 
   //update state value
-  state.value = newStateValue as T;
+  if (newStateValue !== imperativeUpdate) {
+    state.value = newStateValue as T;
+  }
 
   //let subscriptions know that their stale value has been updated so that they can notify and
   //update themselves and their subscriptions if any
