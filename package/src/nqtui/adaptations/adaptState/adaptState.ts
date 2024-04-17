@@ -1,9 +1,14 @@
 import get from "../get";
-import set from "./set";
+import set, { imperativeUpdate } from "./set";
 import { InternalStateObject, State } from "./stateTypes";
 
 export function adaptState<T>(): State<T | undefined>;
-export function adaptState<T>(initialValue: T | (() => T)): State<T>;
+export function adaptState<T>(
+  initialValue:
+    | T
+    | typeof imperativeUpdate
+    | (() => T | typeof imperativeUpdate),
+): State<T>;
 export function adaptState<T>(initialValue?: T | (() => T)): State<T> {
   //create state object with three sets of subscriptions
   const state: InternalStateObject<T> = {
