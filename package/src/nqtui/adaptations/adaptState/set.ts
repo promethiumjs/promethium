@@ -5,7 +5,10 @@ export const imperativeUpdate = Symbol("imperativeUpdate");
 
 export default function set<T>(
   state: InternalStateObject<T>,
-  nextValue: T | ((prev: T) => T),
+  nextValue:
+    | T
+    | typeof imperativeUpdate
+    | ((prev: T) => T | typeof imperativeUpdate),
 ) {
   const newStateValue =
     typeof nextValue === "function"
@@ -24,7 +27,7 @@ export default function set<T>(
   sendSignals(state, "stale");
 
   //update state value
-  state.value = newStateValue;
+  state.value = newStateValue as T;
 
   //let subscriptions know that their stale value has been updated so that they can notify and
   //update themselves and their subscriptions if any
