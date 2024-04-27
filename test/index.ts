@@ -3,4 +3,10 @@ import App from "./src/App";
 import "./index.css";
 import { html } from "lit";
 
-renderTemplateFn(() => html`${h(App)}`, { renderContainer: "body" });
+const re = renderTemplateFn(() => html`${h(App)}`, { renderContainer: "body" });
+
+setTimeout(() => {
+  console.log("yo");
+
+  re();
+}, 5000);

@@ -1,6 +1,6 @@
 {
   "name": "promethium-js",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "The Radioactive JavaScript Framework",
   "main": "promethium-js.js",
   "type": "module",

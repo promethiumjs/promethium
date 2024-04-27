@@ -1,4 +1,4 @@
-import { render, TemplateResult, RootPart, RenderOptions } from "lit";
+import { render, TemplateResult, RootPart, RenderOptions, html } from "lit";
 
 export type Component<T = null> = T extends null
   ? (props?: null) => () => TemplateResult
@@ -9,7 +9,7 @@ export function renderTemplateFn(
   props: {
     renderContainer: string | HTMLElement | DocumentFragment;
     renderOptions?: RenderOptions;
-  }
+  },
 ): () => RootPart {
   //check whether or not "renderContainer" is a string and handle it
   //accordingly.
@@ -18,7 +18,7 @@ export function renderTemplateFn(
     props.renderContainer instanceof String
   ) {
     props.renderContainer = document.querySelector(
-      props.renderContainer as any
+      props.renderContainer as any,
     );
   }
 
@@ -26,12 +26,20 @@ export function renderTemplateFn(
     return render(
       RootTemplateResult(),
       props.renderContainer as HTMLElement | DocumentFragment,
-      props.renderOptions
+      props.renderOptions,
     );
   };
   renderTemplateFn();
 
   //return "renderTemplateFn" function to allow re-rendering of whole root
   //component tree.
-  return renderTemplateFn;
+  return () => {
+    render(
+      html``,
+      props.renderContainer as HTMLElement | DocumentFragment,
+      props.renderOptions,
+    );
+
+    return renderTemplateFn();
+  };
 }
