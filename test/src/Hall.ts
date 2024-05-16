@@ -6,7 +6,7 @@ const Hall = (props: { num: () => number }) => {
   return () => {
     console.log("Hall!", props.num());
 
-    return html`${props.num()} ${h(Couch)} `;
+    return html`${props.num()} ${h(Couch, { num: props.num() })} `;
   };
 };
 

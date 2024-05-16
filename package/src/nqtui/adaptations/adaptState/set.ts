@@ -15,10 +15,7 @@ export default function set<T>(
       ? (nextValue as (prev: T) => T)(state.value!)
       : nextValue;
 
-  if (
-    Object.is(newStateValue, state.value) &&
-    newStateValue !== imperativeUpdate
-  ) {
+  if (newStateValue === state.value && newStateValue !== imperativeUpdate) {
     return;
   }
 

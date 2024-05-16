@@ -4,7 +4,7 @@ import {
   DirectiveResult,
   PartInfo,
 } from "lit/async-directive.js";
-import { ChildPart, noChange, TemplateResult } from "lit";
+import { ChildPart, html, noChange, TemplateResult } from "lit";
 import { Component } from "./renderTemplateFn";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
 
@@ -12,6 +12,7 @@ class $ extends AsyncDirective {
   updateFlag: "initialize" | "updateProps";
   cleanups: (() => void)[];
   props: any;
+  htmlFn: () => TemplateResult;
 
   constructor(partInfo: PartInfo) {
     super(partInfo);
@@ -22,6 +23,7 @@ class $ extends AsyncDirective {
     //1. general component cleanup for all its effects and memos
     //2. cleanup of the effect created from the function (that returns a template result) the component returns
     this.cleanups = [];
+    this.htmlFn = () => html``;
   }
 
   protected disconnected() {
@@ -32,7 +34,7 @@ class $ extends AsyncDirective {
   initialize(
     props: any,
     _: ChildPart,
-    Component: (props: any) => () => TemplateResult
+    Component: (props: any) => () => TemplateResult,
   ) {
     this.props = props;
 
@@ -41,20 +43,18 @@ class $ extends AsyncDirective {
 
   initializeComponent(
     Component: (props: any) => () => TemplateResult,
-    props: any
+    props: any,
   ) {
-    //store the function (that returns a template result) the component returns in `htmlFn` for later use
-    let htmlFn: () => TemplateResult;
     //initialize component effects and memos and store the 1st cleanup
     this.cleanups.push(
       adaptSyncEffect(() => {
-        htmlFn = Component(props);
-      }, [])
+        this.htmlFn = Component(props);
+      }, []),
     );
 
     let templateResult: TemplateResult;
     const componentCleanup = adaptSyncEffect(() => {
-      templateResult = htmlFn();
+      templateResult = this.htmlFn();
       if (this.updateFlag !== "initialize") {
         this.setValue(templateResult);
       }
@@ -70,7 +70,7 @@ class $ extends AsyncDirective {
 
   update(
     part: ChildPart,
-    [Component, props]: [(props: any) => () => TemplateResult, any]
+    [Component, props]: [(props: any) => () => TemplateResult, any],
   ) {
     //initialize component for the first time or update props based on the state of `updateFlag`
     return this[this.updateFlag](props, part, Component);
@@ -81,12 +81,19 @@ class $ extends AsyncDirective {
   }
 
   render() {
-    return noChange;
+    return this.htmlFn();
   }
 
   updateProps(props: any) {
+    let change: boolean;
     for (const prop in props) {
-      this.props[prop] = props[prop];
+      if (this.props[prop] !== props[prop]) {
+        this.props[prop] = props[prop];
+        change = true;
+      }
+    }
+    if (change!) {
+      return this.render();
     }
 
     return noChange;
@@ -98,7 +105,7 @@ declare function hFn(Component: Component<{}>): DirectiveResult;
 
 declare function hFn<Type>(
   Component: Component<Type>,
-  props: Type extends object ? Parameters<typeof Component>[0] : never
+  props: Type extends object ? Parameters<typeof Component>[0] : never,
 ): DirectiveResult;
 
 const h: typeof hFn = directive($);

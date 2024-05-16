@@ -3,10 +3,5 @@ import App from "./src/App";
 import "./index.css";
 import { html } from "lit";
 
-const re = renderTemplateFn(() => html`${h(App)}`, { renderContainer: "body" });
-
-setTimeout(() => {
-  console.log("yo");
-
-  re();
-}, 5000);
+// TODO: check the implementation of this function (most especially its return value)
+renderTemplateFn(() => html`${h(App)}`, { renderContainer: "body" });

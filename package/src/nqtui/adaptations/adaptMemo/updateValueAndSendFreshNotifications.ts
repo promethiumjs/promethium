@@ -34,7 +34,7 @@ export function updateValueAndSendFreshNotifications(
 
   //let subscriptions know that their stale value has been updated so that they can notify and
   //update themselves and their subscriptions if any
-  if (Object.is(prevMemoValue, memo.value)) {
+  if (prevMemoValue === memo.value) {
     sendSignals(memo, "falseAlarm");
   } else {
     sendSignals(memo, "fresh");
