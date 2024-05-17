@@ -4,7 +4,7 @@ import {
   DirectiveResult,
   PartInfo,
 } from "lit/async-directive.js";
-import { ChildPart, html, noChange, TemplateResult } from "lit";
+import { ChildPart, html, TemplateResult } from "lit";
 import { Component } from "./renderTemplateFn";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
 
@@ -85,18 +85,11 @@ class $ extends AsyncDirective {
   }
 
   updateProps(props: any) {
-    let change: boolean;
     for (const prop in props) {
-      if (this.props[prop] !== props[prop]) {
-        this.props[prop] = props[prop];
-        change = true;
-      }
-    }
-    if (change!) {
-      return this.render();
+      this.props[prop] = props[prop];
     }
 
-    return noChange;
+    return this.render();
   }
 }
 
