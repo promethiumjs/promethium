@@ -11,6 +11,7 @@ import type {
 import {
   renderTemplateFn,
   h,
+  watch,
   adaptState,
   imperativeUpdate,
   unify,
@@ -36,6 +37,7 @@ export {
   DepArray,
   renderTemplateFn,
   h,
+  watch,
   adaptState,
   imperativeUpdate,
   unify,

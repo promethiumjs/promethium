@@ -12,6 +12,7 @@ import type {
 } from "./adaptations/adaptEffect/effectTypes";
 import { renderTemplateFn } from "./renderTemplateFn";
 import h from "./h";
+import watch from "./watch";
 import { adaptState } from "./adaptations/adaptState/adaptState";
 import { imperativeUpdate } from "./adaptations/adaptState/set";
 import {
@@ -36,6 +37,7 @@ export {
   DepArray,
   renderTemplateFn,
   h,
+  watch,
   adaptState,
   imperativeUpdate,
   unify,
