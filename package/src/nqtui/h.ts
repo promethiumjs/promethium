@@ -4,14 +4,14 @@ import {
   DirectiveResult,
   PartInfo,
 } from "lit/async-directive.js";
-import { TemplateResult } from "lit";
-import { Component } from "./renderTemplateFn";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
+import { noChange } from "lit";
+import { untrack } from "./adaptations/adaptState/utils";
 
 class $ extends AsyncDirective {
   cleanups: (() => void)[];
   props: any = {};
-  htmlFn?: () => TemplateResult;
+  htmlFn?: () => unknown;
   Component?: Component<any>;
 
   constructor(partInfo: PartInfo) {
@@ -39,7 +39,7 @@ class $ extends AsyncDirective {
         this.htmlFn = this.Component?.(this.props);
       }, []),
     );
-    let templateResult: TemplateResult | undefined;
+    let templateResult: unknown;
     let updateFromLit = true;
     const componentCleanup = adaptSyncEffect(() => {
       templateResult = this.htmlFn?.();
@@ -59,23 +59,37 @@ class $ extends AsyncDirective {
   }
 
   render(Component: Component<any>, props?: any) {
+    let propChanged = false;
     props = props ?? {};
     for (const prop in props) {
-      this.props[prop] = props[prop];
+      if (this.props[prop] !== props[prop]) {
+        propChanged = true;
+        this.props[prop] = props[prop];
+      }
     }
 
-    let templateResult: TemplateResult | undefined;
+    let templateResult: unknown;
+    let firstRenderPass = false;
     if (this.Component !== Component) {
+      firstRenderPass = true;
       this.Component = Component;
       this.disposeComponent();
       templateResult = this.initializeComponent();
     }
 
-    return templateResult ?? this.htmlFn?.();
+    if (propChanged || firstRenderPass) {
+      return templateResult ?? untrack(this.htmlFn!);
+    } else {
+      return noChange;
+    }
   }
 }
 
-declare function hFn(Component: () => () => TemplateResult): DirectiveResult;
+export type Component<T = null> = T extends null
+  ? (props?: null) => () => unknown
+  : (props: T) => () => unknown;
+
+declare function hFn(Component: () => () => unknown): DirectiveResult;
 declare function hFn(Component: Component<{}>): DirectiveResult;
 declare function hFn<Type>(
   Component: Component<Type>,

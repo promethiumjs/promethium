@@ -1,4 +1,4 @@
-import type { Component } from "./renderTemplateFn";
+import type { Component } from "./h";
 import type {
   Getter,
   Setter,
@@ -10,13 +10,13 @@ import type {
   EffectOptions,
   DepArray,
 } from "./adaptations/adaptEffect/effectTypes";
-import { renderTemplateFn } from "./renderTemplateFn";
 import h from "./h";
 import watch from "./watch";
 import { adaptState } from "./adaptations/adaptState/adaptState";
 import { imperativeUpdate } from "./adaptations/adaptState/set";
 import {
   unify,
+  untrack,
   getGetter,
   getSetter,
   getValue,
@@ -35,12 +35,12 @@ export {
   EffectFn,
   EffectOptions,
   DepArray,
-  renderTemplateFn,
   h,
   watch,
   adaptState,
   imperativeUpdate,
   unify,
+  untrack,
   getGetter,
   getSetter,
   getValue,
