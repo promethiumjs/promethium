@@ -5,8 +5,6 @@ import {
   PartInfo,
 } from "lit/async-directive.js";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
-import { noChange } from "lit";
-import { untrack } from "./adaptations/adaptState/utils";
 
 class $ extends AsyncDirective {
   cleanups: (() => void)[];
@@ -32,18 +30,18 @@ class $ extends AsyncDirective {
     this.disposeComponent();
   }
 
-  initializeComponent() {
+  initializeComponent(reconnected: boolean = false) {
     //initialize component effects and memos and store the 1st cleanup
     this.cleanups.push(
       adaptSyncEffect(() => {
         this.htmlFn = this.Component?.(this.props);
-      }, []),
+      }, [])
     );
     let templateResult: unknown;
     let updateFromLit = true;
     const componentCleanup = adaptSyncEffect(() => {
       templateResult = this.htmlFn?.();
-      if (updateFromLit === false) {
+      if (updateFromLit === false || reconnected === true) {
         this.setValue(templateResult);
       }
     });
@@ -55,36 +53,27 @@ class $ extends AsyncDirective {
   }
 
   protected reconnected() {
-    this.initializeComponent();
+    this.initializeComponent(true);
   }
 
   render(Component: Component<any>, props?: any) {
-    let propChanged = false;
     props = props ?? {};
     for (const prop in props) {
-      if (this.props[prop] !== props[prop]) {
-        propChanged = true;
-        this.props[prop] = props[prop];
-      }
+      this.props[prop] = props[prop];
     }
-
     let templateResult: unknown;
-    let firstRenderPass = false;
     if (this.Component !== Component) {
-      firstRenderPass = true;
       this.Component = Component;
       this.disposeComponent();
       templateResult = this.initializeComponent();
     }
 
-    if (propChanged || firstRenderPass) {
-      return templateResult ?? untrack(this.htmlFn!);
-    } else {
-      return noChange;
-    }
+    // try untracking `this.htmlFn?.()` and prop diffing (with `this.firstRenderPass`)
+    return templateResult ?? this.htmlFn?.();
   }
 }
 
+// TODO: clearly specify return type for component return function instead of using `unknown`
 export type Component<T = null> = T extends null
   ? (props?: null) => () => unknown
   : (props: T) => () => unknown;
@@ -93,7 +82,7 @@ declare function hFn(Component: () => () => unknown): DirectiveResult;
 declare function hFn(Component: Component<{}>): DirectiveResult;
 declare function hFn<Type>(
   Component: Component<Type>,
-  props: Type extends object ? Parameters<typeof Component>[0] : never,
+  props: Type extends object ? Parameters<typeof Component>[0] : never
 ): DirectiveResult;
 
 const h: typeof hFn = directive($);
