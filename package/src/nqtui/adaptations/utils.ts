@@ -1,5 +1,5 @@
-import { effectContexts } from "../effectContexts";
-import { Getter, Setter, State, UnifiedState } from "./stateTypes";
+import { effectContexts } from "./effectContexts";
+import { Getter, Setter, State, UnifiedState } from "./adaptState/stateTypes";
 
 export function unify<T>(state: State<T>): UnifiedState<T>;
 export function unify<T>(state: undefined): undefined;
@@ -65,11 +65,12 @@ export function getSetter<T>(state: State<T> | undefined) {
   }
 }
 
-export function untrack<T>(stateGetter: Getter<T>): T {
+export function untrack<T>(stateOrEffectFn: (...args: any[]) => T): T {
   const _effectContexts = effectContexts.slice();
   effectContexts.length = 0;
-  const stateValue = stateGetter();
+  const returnValue = stateOrEffectFn();
+  effectContexts.length = 0;
   effectContexts.push(..._effectContexts);
 
-  return stateValue;
+  return returnValue;
 }

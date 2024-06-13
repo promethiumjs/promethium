@@ -3,23 +3,22 @@ import getCleanupNode from "../getCleanupNode";
 import { effectContexts } from "../effectContexts";
 import { sendSignals } from "../sendSignals";
 import { InternalMemoObject } from "./memoTypes";
+import effectAndDescendantCleanup from "../effectAndDescendantCeanup";
+import setInitialParameters from "../setInitialParameters";
+import setCleanupSet from "../setCleanupSet";
+import unsetParameters from "../unsetParameters";
 
-//aside from a few caveats, this function basically runs like the execute function of an effect
+//aside from a few differences, this function basically runs like the execute function of an effect
 export function updateValueAndSendFreshNotifications(
   memo: InternalMemoObject,
   fn: (prev?: any) => any,
 ) {
-  //set `childCount` back to zero to enable children effects to obtain correct positions upon recreation
-  memo.childCount = 0;
+  //fire cleanups to make sure proceedings go smoothly
+  effectAndDescendantCleanup(memo);
 
-  //fire cleanups make sure proceedings go smoothly
-  const cleanupSet = getCleanupNode(memo)?.get(0) as
-    | Set<() => void>
-    | undefined;
-  cleanupSet?.forEach((cleanup) => {
-    cleanup();
-  });
-  cleanupSet?.clear();
+  //do some setup to make sure proceedings go smoothly
+  setInitialParameters(memo);
+  setCleanupSet(memo);
 
   //push memo onto context to enable tracking by state and other memos
   effectContexts.push(memo);
@@ -27,7 +26,11 @@ export function updateValueAndSendFreshNotifications(
   const prevMemoValue = memo.value;
   memo.value = fn(memo.value);
 
+  const cleanupSet = getCleanupNode(memo)?.get(0) as
+    | Set<() => void>
+    | undefined;
   cleanupSet?.add(() => observableSubscriptionsCleanup(memo));
+  cleanupSet?.add(() => unsetParameters(memo));
 
   //remove memo from context to disable tracking by state and other memos
   effectContexts.pop();

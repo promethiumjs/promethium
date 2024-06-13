@@ -1,5 +1,5 @@
-import getCleanupNode from "../getCleanupNode";
-import { CleanupTree, InternalEffectObject } from "./effectTypes";
+import getCleanupNode from "./getCleanupNode";
+import { CleanupTree, InternalEffectObject } from "./adaptEffect/effectTypes";
 
 function traverseAndEvaluate(cleanupNode: CleanupTree | null) {
   let nextChildNode = 0;
@@ -20,7 +20,7 @@ function traverseAndEvaluate(cleanupNode: CleanupTree | null) {
 }
 
 export default function effectAndDescendantCleanup(
-  effect: InternalEffectObject
+  effect: InternalEffectObject,
 ) {
   const cleanupNode = getCleanupNode(effect);
   traverseAndEvaluate(cleanupNode);

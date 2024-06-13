@@ -127,4 +127,5 @@ dist
 package/nqtrouter
 package/nqtui
 package/nqtx
+package/jsx-runtime
 package/promethium-js*

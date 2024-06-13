@@ -20,7 +20,7 @@ import {
   getGetter,
   getSetter,
   getValue,
-} from "./adaptations/adaptState/utils";
+} from "./adaptations/utils";
 import adaptEffect from "./adaptations/adaptEffect/adaptEffect";
 import adaptRenderEffect from "./adaptations/adaptEffect/adaptRenderEffect";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";

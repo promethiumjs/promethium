@@ -35,7 +35,7 @@ class $ extends AsyncDirective {
     this.cleanups.push(
       adaptSyncEffect(() => {
         this.htmlFn = this.Component?.(this.props);
-      }, [])
+      }, []),
     );
     let templateResult: unknown;
     let updateFromLit = true;
@@ -57,19 +57,14 @@ class $ extends AsyncDirective {
   }
 
   render(Component: Component<any>, props?: any) {
-    props = props ?? {};
     for (const prop in props) {
       this.props[prop] = props[prop];
     }
-    let templateResult: unknown;
-    if (this.Component !== Component) {
-      this.Component = Component;
-      this.disposeComponent();
-      templateResult = this.initializeComponent();
-    }
+    this.Component = Component;
+    this.disposeComponent();
+    const templateResult = this.initializeComponent();
 
-    // try untracking `this.htmlFn?.()` and prop diffing (with `this.firstRenderPass`)
-    return templateResult ?? this.htmlFn?.();
+    return templateResult;
   }
 }
 
@@ -82,7 +77,7 @@ declare function hFn(Component: () => () => unknown): DirectiveResult;
 declare function hFn(Component: Component<{}>): DirectiveResult;
 declare function hFn<Type>(
   Component: Component<Type>,
-  props: Type extends object ? Parameters<typeof Component>[0] : never
+  props: Type extends object ? Parameters<typeof Component>[0] : never,
 ): DirectiveResult;
 
 const h: typeof hFn = directive($);

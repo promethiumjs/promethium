@@ -1,10 +1,10 @@
 import { baseExecuteFn } from "./baseExecuteFn";
-import effectAndDescendantCleanup from "./effectAndDescendantCeanup";
+import effectAndDescendantCleanup from "../effectAndDescendantCeanup";
 import { InternalEffectObject, EffectFn } from "./effectTypes";
 
 export default function implicitDependencyExecuteFn<
   T = any,
-  U extends any[] = any[]
+  U extends any[] = any[],
 >(effect: InternalEffectObject<T, U>, fn: EffectFn<T, U>) {
   baseExecuteFn(effect, (cleanupSet) => internalFn(effect, fn, cleanupSet));
 
@@ -15,7 +15,7 @@ export default function implicitDependencyExecuteFn<
 function internalFn<T = any, U extends any[] = any[]>(
   effect: InternalEffectObject<T, U>,
   fn: EffectFn<T, U>,
-  cleanupSet: Set<() => void> | undefined
+  cleanupSet: Set<() => void> | undefined,
 ) {
   //call effect with previous return value
   const fnReturnValue = fn(effect.returnValue);

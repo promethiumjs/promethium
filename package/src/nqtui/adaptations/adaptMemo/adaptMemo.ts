@@ -1,7 +1,5 @@
 import sendSignal from "./sendSignal";
 import get from "../get";
-import setInitialParameters from "../setInitialParameters";
-import setCleanupSet from "../setCleanupSet";
 import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications";
 import { InternalMemoObject } from "./memoTypes";
 import { Getter } from "../adaptState/stateTypes";
@@ -33,9 +31,6 @@ export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
     falseAlarmSignalsCount: 0,
     sendSignal: (signal) => sendSignal(memo, fn, signal),
   };
-
-  setInitialParameters(memo);
-  setCleanupSet(memo);
 
   let freshMemoRun = true;
 

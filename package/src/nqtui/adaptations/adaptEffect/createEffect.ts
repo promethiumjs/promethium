@@ -1,7 +1,5 @@
 import executeFns from "./executeFns";
 import sendSignal from "./sendSignal";
-import setInitialParameters from "../setInitialParameters";
-import setCleanupSet from "../setCleanupSet";
 import {
   DepArray,
   InternalEffectObject,
@@ -47,12 +45,6 @@ export default function createEffect<T = any, U extends any[] = any[]>(
     sendSignal: (signal: SignalTypes): void =>
       sendSignal(effect, execute as ExecuteFn, fn, signal, depArray),
   };
-
-  //create `cleanupTreeNodePointer` for effect and create `cleanupTree` for effect tree if this is the
-  //topmost parent effect (father of the whole tree)
-  setInitialParameters(effect);
-  //create `cleanupSet` for effect if it doesn't already exist
-  setCleanupSet(effect);
 
   //return effect `execute` function and effect itself
   return [execute, effect] as const;

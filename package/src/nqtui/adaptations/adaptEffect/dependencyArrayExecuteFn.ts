@@ -1,5 +1,5 @@
 import { baseExecuteFn } from "./baseExecuteFn";
-import effectAndDescendantCleanup from "./effectAndDescendantCeanup";
+import effectAndDescendantCleanup from "../effectAndDescendantCeanup";
 import {
   DepArray,
   InternalEffectObject,
@@ -11,10 +11,10 @@ export function dependencyArrayExecuteFn<T = any, U extends any[] = any[]>(
   effect: InternalEffectObject<T, U>,
   fn: EffectFn<T, U>,
   depArray: DepArray<U>,
-  options: EffectOptions = {}
+  options: EffectOptions = {},
 ) {
   baseExecuteFn(effect, (cleanupSet) =>
-    internalFn(effect, fn, depArray, options, cleanupSet)
+    internalFn(effect, fn, depArray, options, cleanupSet),
   );
 
   return () => effectAndDescendantCleanup(effect);
@@ -25,7 +25,7 @@ function internalFn<T = any, U extends any[] = any[]>(
   fn: EffectFn<T, U>,
   depArray: DepArray<U>,
   options: EffectOptions = {},
-  cleanupSet: Set<() => void> | undefined
+  cleanupSet: Set<() => void> | undefined,
 ) {
   //if effect is supposed to be deferred, do nothing on the first run
   if (effect.firstRun && options.defer) {
