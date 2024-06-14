@@ -1,4 +1,4 @@
-import type { Component } from "./h";
+import type { Component, PromethiumNode } from "./h";
 import type {
   Getter,
   Setter,
@@ -28,6 +28,7 @@ import adaptMemo from "./adaptations/adaptMemo/adaptMemo";
 
 export {
   Component,
+  PromethiumNode,
   Getter,
   Setter,
   State,

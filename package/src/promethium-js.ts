@@ -1,5 +1,6 @@
 import type {
   Component,
+  PromethiumNode,
   Getter,
   Setter,
   State,
@@ -28,6 +29,7 @@ import { Router } from "./nqtrouter";
 
 export {
   Component,
+  PromethiumNode,
   Getter,
   Setter,
   State,
