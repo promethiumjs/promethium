@@ -128,4 +128,5 @@ package/nqtrouter
 package/nqtui
 package/nqtx
 package/jsx-runtime
+package/jsx-dev-runtime
 package/promethium-js*
