@@ -1,4 +1,4 @@
-import { adaptState, h } from "promethium-js";
+import { adaptState } from "promethium-js";
 import { html } from "lit";
 import Hall from "./Hall";
 
@@ -8,7 +8,7 @@ const Home = () => {
     console.log("Home!");
 
     return html`<div>This is my Home page!</div>
-      ${h(Hall, { num })}
+      ${(<Hall num={num} />)}
       <button @click=${() => setNum(num() + 1)}>Let's see</button> `;
   };
 };

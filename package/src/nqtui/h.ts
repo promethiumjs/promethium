@@ -5,13 +5,18 @@ import {
   PartInfo,
 } from "lit/async-directive.js";
 import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
+import { noChange, nothing, TemplateResult } from "lit";
+import { JSX } from "../jsx-runtime";
 
 class $ extends AsyncDirective {
   cleanups: (() => void)[];
   props: any = {};
-  htmlFn?: () => unknown;
+  htmlFn?: ReturnType<Component>;
   Component?: Component<any>;
 
+  // TODO: only allow directive use in the child position
+  // TODO: find out why reconnection doesn't happen
+  // TODO: perform prop diffing and stop unnecessary component initialization
   constructor(partInfo: PartInfo) {
     super(partInfo);
 
@@ -68,12 +73,35 @@ class $ extends AsyncDirective {
   }
 }
 
-// TODO: clearly specify return type for component return function instead of using `unknown`
-export type Component<T = null> = T extends null
-  ? (props?: null) => () => unknown
-  : (props: T) => () => unknown;
+export type ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions =
+  | string
+  | number
+  | bigint
+  | boolean
+  | null
+  | undefined
+  | TemplateResult
+  | DirectiveResult
+  | Node
+  | typeof nothing
+  | typeof noChange
+  | Iterable<ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions>;
 
-declare function hFn(Component: () => () => unknown): DirectiveResult;
+export type Component<T = null> = T extends null
+  ? (
+      props?: null,
+    ) =>
+      | (() => ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions)
+      | null
+  : (
+      props: T,
+    ) =>
+      | (() => ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions)
+      | null;
+
+declare function hFn(
+  Component: () => () => ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions,
+): DirectiveResult;
 declare function hFn(Component: Component<{}>): DirectiveResult;
 declare function hFn<Type>(
   Component: Component<Type>,
@@ -81,5 +109,9 @@ declare function hFn<Type>(
 ): DirectiveResult;
 
 const h: typeof hFn = directive($);
+
+export type PromethiumNode =
+  | ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions
+  | JSX.Element;
 
 export default h;

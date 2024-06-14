@@ -6,6 +6,7 @@ import type {
   Getter,
   Setter,
 } from "../nqtui/adaptations/adaptState/stateTypes";
+import { PromethiumNode } from "../nqtui/h";
 
 type PathsObject = {
   [key: string]: string;
@@ -65,8 +66,8 @@ export default class Router<P extends Paths> {
   }
 
   Switch: Component<{
-    routes: Array<[P[keyof P], () => TemplateResult]>;
-    default?: () => TemplateResult;
+    routes: Array<[P[keyof P], () => PromethiumNode]>;
+    default?: () => PromethiumNode;
   }> = (props) => {
     return () =>
       html`${choose(this.currentPath(), props.routes, props.default)}`;

@@ -1,4 +1,4 @@
-import { h, unify } from "promethium-js";
+import { unify } from "promethium-js";
 import { html } from "lit";
 import Home from "./Home";
 import About from "./About";
@@ -12,15 +12,19 @@ const App = () => {
     console.log("App!");
 
     return html`<div>Hello Promethium</div>
-      ${h(Link, { to: paths.Home, text: "Home" })}
-      ${h(Link, { to: paths.About, text: "About" })}
-      ${h(Switch, {
-        routes: [
-          [paths.Home, () => html`${h(Home)}`],
-          [paths.About, () => html`${h(About)}`],
-        ],
-        default: () => html`${h(Home)}`,
-      })}
+      ${(
+        <>
+          <Link to={paths.Home} text="Home"></Link>
+          <Link to={paths.About} text="About"></Link>
+          <Switch
+            routes={[
+              [paths.Home, () => <Home />],
+              [paths.About, () => <About />],
+            ]}
+            default={() => <Home />}
+          ></Switch>
+        </>
+      )}
       <button @click=${() => count((count) => count + 1)}>${count()}</button> `;
   };
 };
