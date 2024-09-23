@@ -2,16 +2,9 @@ import { InternalEffectObject } from "../adaptEffect/effectTypes";
 import { imperativeUpdate } from "./set";
 
 export type InternalStateObject<T = any> = {
-  syncSubscriptions: {
-    one: Set<InternalEffectObject>;
-    two: Set<InternalEffectObject>;
-  };
-  memoSubscriptions: {
-    one: Set<InternalEffectObject>;
-    two: Set<InternalEffectObject>;
-  };
+  syncSubscriptions: Set<InternalEffectObject>;
+  memoSubscriptions: Set<InternalEffectObject>;
   asyncAndRenderSubscriptions: Set<InternalEffectObject>;
-  activeSubscriptions: "one" | "two";
   value: T | undefined;
 };
 

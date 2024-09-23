@@ -4,10 +4,9 @@ import { InternalEffectObject } from "./adaptEffect/effectTypes";
 
 function subscribe<T = any>(
   state: InternalStateObject<T>,
-  effect: InternalEffectObject
+  effect: InternalEffectObject,
 ) {
   //get active subscriptions to properly manage sync effects and memos
-  const activeSubscriptions = state.activeSubscriptions;
   const type = effect.type;
 
   //if `effect.tracking` is equal to "depArray", don't track effects because the tracking
@@ -22,10 +21,8 @@ function subscribe<T = any>(
     effect.observableSubscriptionSets.add(state.asyncAndRenderSubscriptions);
   } else {
     //tracking sync effects and memos
-    state[`${type}Subscriptions`][activeSubscriptions].add(effect);
-    effect.observableSubscriptionSets.add(
-      state[`${type}Subscriptions`][activeSubscriptions]
-    );
+    state[`${type}Subscriptions`].add(effect);
+    effect.observableSubscriptionSets.add(state[`${type}Subscriptions`]);
   }
 }
 

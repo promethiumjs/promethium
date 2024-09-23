@@ -23,6 +23,10 @@ export function updateValueAndSendFreshNotifications(
   //push memo onto context to enable tracking by state and other memos
   effectContexts.push(memo);
 
+  //let subscriptions know that they have a stale value so that they can notify their
+  //subscriptions if any
+  sendSignals(memo, "stale");
+
   const prevMemoValue = memo.value;
   memo.value = fn(memo.value);
 

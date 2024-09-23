@@ -7,16 +7,9 @@ import { Getter } from "../adaptState/stateTypes";
 export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
   const memo: InternalMemoObject = {
     //state properties
-    syncSubscriptions: {
-      one: new Set(),
-      two: new Set(),
-    },
-    memoSubscriptions: {
-      one: new Set(),
-      two: new Set(),
-    },
+    syncSubscriptions: new Set(),
+    memoSubscriptions: new Set(),
     asyncAndRenderSubscriptions: new Set(),
-    activeSubscriptions: "one",
     value: undefined,
     //effect properties
     firstRun: true,
