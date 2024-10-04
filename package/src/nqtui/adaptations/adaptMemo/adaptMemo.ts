@@ -25,14 +25,7 @@ export default function adaptMemo<T = any>(fn: (prev?: T) => T): Getter<T> {
     sendSignal: (signal) => sendSignal(memo, fn, signal),
   };
 
-  let freshMemoRun = true;
+  updateValueAndSendFreshNotifications(memo, fn);
 
-  return () => {
-    if (freshMemoRun === true) {
-      updateValueAndSendFreshNotifications(memo, fn);
-      freshMemoRun = false;
-    }
-
-    return get<T>(memo) as T;
-  };
+  return () => get<T>(memo) as T;
 }

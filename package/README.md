@@ -7,5 +7,4 @@ It aims to make the building of complex web apps simple, easy and nice.
 
 ### Urgent
 
-- adapt adaptEffect to work with functions that return promises
-- depArray memos
+- get type tests working
