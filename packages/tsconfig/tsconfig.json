@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": ["es5", "es6", "es2018", "dom", "dom.iterable"],
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./dist",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "name": "promethium-js",
+  "version": "0.14.2",
+  "description": "Another JavaScript framework",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest --ui",
+    "coverage": "vitest run --coverage && tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/promethiumjs/promethium.git"
+  },
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./jsx-runtime": {
+      "default": "./dist/jsx-runtime/index.js",
+      "types": "./dist/jsx-runtime/index.d.ts"
+    },
+    "./jsx-dev-runtime": {
+      "default": "./dist/jsx-dev-runtime/index.js",
+      "types": "./dist/jsx-dev-runtime/index.d.ts"
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/promethiumjs/promethium/issues"
+  },
+  "homepage": "https://github.com/promethiumjs/promethium#readme",
+  "keywords": [
+    "frontend",
+    "ui",
+    "lit-html",
+    "lit",
+    "framework",
+    "typescript"
+  ],
+  "devDependencies": {
+    "@repo/tsconfig": "workspace:*",
+    "@vitest/coverage-v8": "^1.1.0",
+    "@vitest/ui": "^1.1.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "lit": ">=2.x"
+  }
+}
