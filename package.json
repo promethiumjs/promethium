@@ -5,10 +5,12 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.29.4",
     "turbo": "^2.3.3"
   }
 }

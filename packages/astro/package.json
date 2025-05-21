@@ -1,5 +1,6 @@
 {
   "name": "@promethium-js/astro",
+  "version": "0.0.1",
   "description": "Astro integration for promethium-js",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

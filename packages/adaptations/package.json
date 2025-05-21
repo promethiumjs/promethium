@@ -1,5 +1,6 @@
 {
   "name": "@promethium-js/adaptations",
+  "version": "0.0.1",
   "description": "Adaptations for promethium-js",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
