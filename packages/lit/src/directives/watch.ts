@@ -1,11 +1,12 @@
 import { directive } from "lit/directive.js";
 import { AsyncDirective } from "lit/async-directive.js";
-import { Getter, adaptSyncEffect } from "../promethium-js";
+import { Getter, adaptSyncEffect } from "@promethium-js/adaptations";
 
 class WatchDirective extends AsyncDirective {
   private stateGetter?: Getter<unknown>;
   private cleanup?: () => void;
 
+  // TODO: add support for a default value(similar to nullish coalescing)
   render(stateGetter: Getter<unknown>) {
     if (stateGetter !== this.stateGetter) {
       this.cleanup?.();
@@ -36,6 +37,4 @@ class WatchDirective extends AsyncDirective {
   }
 }
 
-const watch = directive(WatchDirective);
-
-export default watch;
+export const watch = directive(WatchDirective);

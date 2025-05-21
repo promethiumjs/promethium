@@ -8,11 +8,14 @@ import {
   SignalTypes,
 } from "./effectTypes";
 
-export default function createEffect<T = any, U extends any[] = any[]>(
+export default function createEffect<
+  T extends unknown[] = unknown[],
+  U extends unknown = unknown
+>(
   type: "async" | "sync" | "render",
   tracking: "implicit" | "depArray",
   fn: EffectFn<T, U>,
-  depArray?: DepArray<U>,
+  depArray?: DepArray<T>
 ) {
   const execute = executeFns[tracking];
 

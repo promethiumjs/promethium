@@ -2,16 +2,16 @@ import observableSubscriptionsCleanup from "../observableSubscriptionsCleanup";
 import getCleanupNode from "../getCleanupNode";
 import { effectContexts } from "../effectContexts";
 import { sendSignals } from "../sendSignals";
-import { InternalMemoObject } from "./memoTypes";
+import { InternalMemoObject, MemoFn } from "./memoTypes";
 import effectAndDescendantCleanup from "../effectAndDescendantCeanup";
 import setInitialParameters from "../setInitialParameters";
 import setCleanupSet from "../setCleanupSet";
 import unsetParameters from "../unsetParameters";
 
 //aside from a few differences, this function basically runs like the execute function of an effect
-export function updateValueAndSendFreshNotifications(
-  memo: InternalMemoObject,
-  fn: (prev?: any) => any,
+export function updateValueAndSendFreshNotifications<T, U>(
+  memo: InternalMemoObject<T>,
+  fn: MemoFn<T, U>
 ) {
   //fire cleanups to make sure proceedings go smoothly
   effectAndDescendantCleanup(memo);
@@ -28,7 +28,7 @@ export function updateValueAndSendFreshNotifications(
   sendSignals(memo, "stale");
 
   const prevMemoValue = memo.value;
-  memo.value = fn(memo.value);
+  memo.value = fn(memo.value as U);
 
   const cleanupSet = getCleanupNode(memo)?.get(0) as
     | Set<() => void>

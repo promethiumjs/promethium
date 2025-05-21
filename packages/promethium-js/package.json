@@ -8,8 +8,10 @@
     "dev": "tsc --watch",
     "build": "tsc",
     "prepublishOnly": "pnpm run build",
-    "test": "vitest --ui",
-    "coverage": "vitest run --coverage && tsc --noEmit"
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --watch",
+    "check-types": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
@@ -24,11 +26,11 @@
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./jsx-runtime": {
+    "./dist/jsx-runtime": {
       "default": "./dist/jsx-runtime/index.js",
       "types": "./dist/jsx-runtime/index.d.ts"
     },
-    "./jsx-dev-runtime": {
+    "./dist/jsx-dev-runtime": {
       "default": "./dist/jsx-dev-runtime/index.js",
       "types": "./dist/jsx-dev-runtime/index.d.ts"
     }
@@ -47,12 +49,12 @@
   ],
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@vitest/coverage-v8": "^1.1.0",
     "@vitest/ui": "^1.1.0",
-    "typescript": "^5.3.3",
-    "vitest": "^1.1.0"
+    "vitest": "^1.1.0",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
-    "lit": ">=2.x"
+    "@promethium-js/adaptations": "workspace:*",
+    "@promethium-js/lit": "workspace:*"
   }
 }

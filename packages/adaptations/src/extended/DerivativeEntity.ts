@@ -1,4 +1,5 @@
-import { getValue } from "../nqtui";
+import { MemoFn } from "../core/adaptMemo/memoTypes";
+import { getValue } from "../core/utils";
 import {
   Deletable,
   OptionalLiteralKeys,
@@ -6,7 +7,7 @@ import {
 } from "./entityTypes";
 
 type Derivatives = {
-  [key: string]: () => any;
+  [key: string]: MemoFn;
 };
 
 type DerivativeValues<D extends Derivatives> = {
@@ -15,24 +16,24 @@ type DerivativeValues<D extends Derivatives> = {
     : ReturnType<Exclude<D[T], undefined>> | undefined;
 };
 
-export default class DerivativeEntity<D extends Derivatives = Derivatives> {
+class DerivativeEntity<D extends Derivatives = Derivatives> {
   private derivatives: D;
 
   constructor(initialDerivativeFns: D) {
     this.derivatives = {} as D;
     this.createDerivatives(initialDerivativeFns);
-    this.adaptDerivative = this.adaptDerivative.bind(this);
-    this.adaptDerivatives = this.adaptDerivatives.bind(this);
-    this.adaptDerivativeValue = this.adaptDerivativeValue.bind(this);
-    this.adaptDerivativeValues = this.adaptDerivativeValues.bind(this);
+    this.getDerivative = this.getDerivative.bind(this);
+    this.getDerivatives = this.getDerivatives.bind(this);
+    this.getDerivativeValue = this.getDerivativeValue.bind(this);
+    this.getDerivativeValues = this.getDerivativeValues.bind(this);
     this.createDerivative = this.createDerivative.bind(this);
     this.createDerivatives = this.createDerivatives.bind(this);
     this.deleteDerivative = this.deleteDerivative.bind(this);
     this.deleteDerivatives = this.deleteDerivatives.bind(this);
   }
 
-  adaptDerivative<T extends keyof D>(
-    id: T
+  getDerivative<T extends keyof D>(
+    id: T,
   ): T extends RequiredLiteralKeys<D>
     ? Exclude<D[T], undefined>
     : Exclude<D[T], undefined> | undefined {
@@ -41,26 +42,26 @@ export default class DerivativeEntity<D extends Derivatives = Derivatives> {
       : Exclude<D[T], undefined> | undefined;
   }
 
-  adaptDerivatives(): [keyof D, Exclude<D[keyof D], undefined>][] {
+  getDerivatives(): [keyof D, Exclude<D[keyof D], undefined>][] {
     return Object.entries(this.derivatives) as [
       keyof D,
-      Exclude<D[keyof D], undefined>
+      Exclude<D[keyof D], undefined>,
     ][];
   }
 
-  adaptDerivativeValue<T extends keyof D>(
-    id: T
+  getDerivativeValue<T extends keyof D>(
+    id: T,
   ): T extends RequiredLiteralKeys<D>
     ? ReturnType<Exclude<D[T], undefined>>
     : ReturnType<Exclude<D[T], undefined>> | undefined {
-    return getValue(this.derivatives[id]);
+    return getValue(this.derivatives[id]) as any;
   }
 
-  adaptDerivativeValues() {
+  getDerivativeValues() {
     const derivativeValues = {} as DerivativeValues<D>;
     Object.keys(this.derivatives).forEach(
       (derivative: keyof DerivativeValues<D>) =>
-        (derivativeValues[derivative] = this.derivatives[derivative]())
+        (derivativeValues[derivative] = this.derivatives[derivative]() as any),
     );
 
     return derivativeValues;
@@ -68,7 +69,7 @@ export default class DerivativeEntity<D extends Derivatives = Derivatives> {
 
   createDerivative<T extends keyof D>(
     id: T,
-    initialDerivativeFn: D[T]
+    initialDerivativeFn: D[T],
   ): Exclude<D[T], undefined> {
     if (this.derivatives[id] === undefined) {
       this.derivatives[id] = initialDerivativeFn;
@@ -92,4 +93,10 @@ export default class DerivativeEntity<D extends Derivatives = Derivatives> {
   deleteDerivatives(ids: Array<OptionalLiteralKeys<D> | Deletable>) {
     ids.forEach((id) => this.deleteDerivative(id));
   }
+}
+
+export function adaptDerivativeEntity<D extends Derivatives = Derivatives>(
+  initialDerivativeFns: D,
+) {
+  return new DerivativeEntity<D>(initialDerivativeFns);
 }

@@ -1,10 +1,10 @@
 import { EffectFn, EffectOptions, ExecuteFn, DepArray } from "./effectTypes";
 import createEffect from "./createEffect";
 
-export default function adaptEffect<T = any, U extends any[] = any[]>(
-  fn: EffectFn<T, U>,
-  depArray?: DepArray<U>,
-  options?: EffectOptions,
+export default function adaptEffect<T extends unknown[], V extends U, U = V>(
+  fn: EffectFn<T, undefined | NoInfer<U>, V>,
+  depArray?: DepArray<T>,
+  options?: EffectOptions
 ) {
   //determine if the effect is tracked by the state it uses implicitly, or using the
   //state provided by its dependency array
@@ -17,6 +17,6 @@ export default function adaptEffect<T = any, U extends any[] = any[]>(
   return new Promise<() => void>((resolve) =>
     setTimeout(() => {
       resolve(execute(effect, fn, depArray!, options) as ReturnType<ExecuteFn>);
-    }),
+    })
   );
 }

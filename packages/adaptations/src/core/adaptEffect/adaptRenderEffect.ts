@@ -1,9 +1,13 @@
 import createEffect from "./createEffect";
 import { EffectFn, EffectOptions, ExecuteFn, DepArray } from "./effectTypes";
 
-export default function adaptRenderEffect<T = any, U extends any[] = any[]>(
-  fn: EffectFn<T, U>,
-  depArray?: DepArray<U>,
+export default function adaptRenderEffect<
+  T extends unknown[],
+  V extends U,
+  U = V
+>(
+  fn: EffectFn<T, undefined | NoInfer<U>, V>,
+  depArray?: DepArray<T>,
   options?: EffectOptions
 ) {
   //determine if the effect is tracked by the state it uses implicitly, or using the

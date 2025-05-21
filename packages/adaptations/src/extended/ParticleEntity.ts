@@ -1,12 +1,6 @@
-import {
-  adaptState,
-  State,
-  Getter,
-  Setter,
-  getGetter,
-  getSetter,
-  getValue,
-} from "../nqtui";
+import { adaptState } from "../core/adaptState/adaptState";
+import { getGetter, getSetter, getValue } from "../core/utils";
+import { State, Getter, Setter } from "../core/adaptState/stateTypes";
 import {
   Deletable,
   OptionalLiteralKeys,
@@ -27,28 +21,26 @@ type Particles<PV> = {
   [T in keyof PV]: State<PV[T]>;
 };
 
-export default class ParticleEntity<
-  PV extends ParticleValues = ParticleValues
-> {
+class ParticleEntity<PV extends ParticleValues = ParticleValues> {
   private particles: Particles<PV>;
 
   constructor(initialParticleValues: PV) {
     this.particles = {} as Particles<PV>;
     this.createParticles(initialParticleValues);
-    this.adaptParticle = this.adaptParticle.bind(this);
-    this.adaptParticleGetter = this.adaptParticleGetter.bind(this);
-    this.adaptParticles = this.adaptParticles.bind(this);
-    this.adaptParticleSetter = this.adaptParticleSetter.bind(this);
-    this.adaptParticleValue = this.adaptParticleValue.bind(this);
-    this.adaptParticleValues = this.adaptParticleValues.bind(this);
+    this.getParticle = this.getParticle.bind(this);
+    this.getParticleGetter = this.getParticleGetter.bind(this);
+    this.getParticles = this.getParticles.bind(this);
+    this.getParticleSetter = this.getParticleSetter.bind(this);
+    this.getParticleValue = this.getParticleValue.bind(this);
+    this.getParticleValues = this.getParticleValues.bind(this);
     this.createParticle = this.createParticle.bind(this);
     this.createParticles = this.createParticles.bind(this);
     this.deleteParticle = this.deleteParticle.bind(this);
     this.deleteParticles = this.deleteParticles.bind(this);
   }
 
-  adaptParticle<T extends keyof PV>(
-    id: T
+  getParticle<T extends keyof PV>(
+    id: T,
   ): T extends RequiredLiteralKeys<PV>
     ? State<Exclude<PV[T], undefined>>
     : State<Exclude<PV[T], undefined>> | undefined {
@@ -57,8 +49,8 @@ export default class ParticleEntity<
       : State<Exclude<PV[T], undefined>> | undefined;
   }
 
-  adaptParticleGetter<T extends keyof PV>(
-    id: T
+  getParticleGetter<T extends keyof PV>(
+    id: T,
   ): T extends RequiredLiteralKeys<PV>
     ? Getter<Exclude<PV[T], undefined>>
     : Getter<Exclude<PV[T], undefined>> | undefined {
@@ -67,12 +59,12 @@ export default class ParticleEntity<
       : Getter<Exclude<PV[T], undefined>> | undefined;
   }
 
-  adaptParticles(): [keyof PV, State<Exclude<PV[keyof PV], undefined>>][] {
+  getParticles(): [keyof PV, State<Exclude<PV[keyof PV], undefined>>][] {
     return Object.entries(this.particles);
   }
 
-  adaptParticleSetter<T extends keyof PV>(
-    id: T
+  getParticleSetter<T extends keyof PV>(
+    id: T,
   ): T extends RequiredLiteralKeys<PV>
     ? Setter<Exclude<PV[T], undefined>>
     : Setter<Exclude<PV[T], undefined>> | undefined {
@@ -81,16 +73,16 @@ export default class ParticleEntity<
       : Setter<Exclude<PV[T], undefined>> | undefined;
   }
 
-  adaptParticleValue<T extends keyof PV>(
-    id: T
+  getParticleValue<T extends keyof PV>(
+    id: T,
   ): T extends RequiredLiteralKeys<PV> ? PV[T] : PV[T] | undefined {
     return getValue(this.particles[id]);
   }
 
-  adaptParticleValues() {
+  getParticleValues() {
     const particleValues = {} as ParticleValues;
     Object.keys(this.particles).forEach(
-      (particle) => (particleValues[particle] = this.particles[particle][0]())
+      (particle) => (particleValues[particle] = this.particles[particle][0]()),
     );
 
     return particleValues as ReturnedParticleValues<PV>;
@@ -98,7 +90,7 @@ export default class ParticleEntity<
 
   createParticle<T extends keyof PV>(
     id: T,
-    initialValue: PV[T]
+    initialValue: PV[T],
   ): State<Exclude<PV[T], undefined>> {
     if (this.particles[id] === undefined) {
       this.particles[id] = adaptState(initialValue);
@@ -122,4 +114,10 @@ export default class ParticleEntity<
   deleteParticles(ids: Array<OptionalLiteralKeys<PV> | Deletable>) {
     ids.forEach((id) => this.deleteParticle(id));
   }
+}
+
+export function adaptParticleEntity<PV extends ParticleValues = ParticleValues>(
+  initialParticleValues: PV,
+) {
+  return new ParticleEntity<PV>(initialParticleValues);
 }

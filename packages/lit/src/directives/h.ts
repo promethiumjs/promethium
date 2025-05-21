@@ -4,7 +4,7 @@ import {
   DirectiveResult,
   PartInfo,
 } from "lit/async-directive.js";
-import adaptSyncEffect from "./adaptations/adaptEffect/adaptSyncEffect";
+import { adaptSyncEffect } from "@promethium-js/adaptations";
 import { noChange, nothing, TemplateResult } from "lit";
 import { JSX } from "../jsx-runtime";
 
@@ -16,7 +16,8 @@ class $ extends AsyncDirective {
 
   // TODO: only allow directive use in the child position
   // TODO: find out why reconnection doesn't happen
-  // TODO: perform prop diffing and stop unnecessary component initialization
+  // TODO: perform prop diffing and stop unnecessary component re-initialization
+  // TODO: make properties private
   constructor(partInfo: PartInfo) {
     super(partInfo);
 
@@ -108,10 +109,8 @@ declare function hFn<Type>(
   props: Type extends object ? Parameters<typeof Component>[0] : never,
 ): DirectiveResult;
 
-const h: typeof hFn = directive($);
+export const h: typeof hFn = directive($);
 
 export type PromethiumNode =
   | ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions
   | JSX.Element;
-
-export default h;

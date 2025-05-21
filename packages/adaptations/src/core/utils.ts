@@ -4,7 +4,7 @@ import { Getter, Setter, State, UnifiedState } from "./adaptState/stateTypes";
 export function unify<T>(state: State<T>): UnifiedState<T>;
 export function unify<T>(state: undefined): undefined;
 export function unify<T>(
-  state: State<T> | undefined,
+  state: State<T> | undefined
 ): UnifiedState<T> | undefined;
 export function unify<T>(state: State<T> | undefined) {
   if (state !== undefined) {
@@ -25,7 +25,7 @@ export function unify<T>(state: State<T> | undefined) {
 export function getValue<T>(stateOrGetter: State<T> | Getter<T>): T;
 export function getValue<T>(stateOrGetter: undefined): undefined;
 export function getValue<T>(
-  stateOrGetter: State<T> | Getter<T> | undefined,
+  stateOrGetter: State<T> | Getter<T> | undefined
 ): T | undefined;
 export function getValue<T>(stateOrGetter: State<T> | Getter<T> | undefined) {
   if (stateOrGetter !== undefined) {
@@ -42,7 +42,7 @@ export function getValue<T>(stateOrGetter: State<T> | Getter<T> | undefined) {
 export function getGetter<T>(state: State<T>): Getter<T>;
 export function getGetter<T>(state: undefined): undefined;
 export function getGetter<T>(
-  state: State<T> | undefined,
+  state: State<T> | undefined
 ): Getter<T> | undefined;
 export function getGetter<T>(state: State<T> | undefined) {
   if (state !== undefined) {
@@ -55,7 +55,7 @@ export function getGetter<T>(state: State<T> | undefined) {
 export function getSetter<T>(state: State<T>): Setter<T>;
 export function getSetter<T>(state: undefined): undefined;
 export function getSetter<T>(
-  state: State<T> | undefined,
+  state: State<T> | undefined
 ): Setter<T> | undefined;
 export function getSetter<T>(state: State<T> | undefined) {
   if (state !== undefined) {
@@ -65,7 +65,7 @@ export function getSetter<T>(state: State<T> | undefined) {
   }
 }
 
-export function untrack<T>(stateOrEffectFn: (...args: any[]) => T): T {
+export function untrack<T>(stateOrEffectFn: (...args: unknown[]) => T): T {
   const _effectContexts = effectContexts.slice();
   effectContexts.length = 0;
   const returnValue = stateOrEffectFn();

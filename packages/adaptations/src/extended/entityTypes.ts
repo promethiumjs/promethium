@@ -18,6 +18,7 @@ export type RequiredLiteralKeys<T> = keyof {
     : K]: 0;
 };
 
+// TODO: refactor this
 export type Deletable = symbol &
   number &
   string & {

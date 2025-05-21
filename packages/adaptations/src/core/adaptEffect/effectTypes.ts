@@ -4,7 +4,10 @@ export type CleanupTree = Map<number, CleanupTree | Set<() => void>>;
 
 export type SignalTypes = "stale" | "fresh" | "falseAlarm";
 
-export type InternalEffectObject<T = any, U extends any[] = any[]> = {
+export type InternalEffectObject<
+  T extends unknown[] = unknown[],
+  U extends unknown = unknown
+> = {
   firstRun: boolean;
   type: "async" | "sync" | "render" | "memo";
   tracking?: "implicit" | "depArray" | "componentFn";
@@ -16,8 +19,8 @@ export type InternalEffectObject<T = any, U extends any[] = any[]> = {
   observableSubscriptionSets: Set<Set<InternalEffectObject>>;
   staleStateValuesCount: number;
   falseAlarmSignalsCount: number;
-  returnValue?: T;
-  argsArray?: U;
+  returnValue?: U;
+  argsArray?: T;
   sendSignal: (signal: SignalTypes) => void;
 };
 
@@ -25,18 +28,27 @@ export type EffectOptions = {
   defer?: boolean;
 };
 
-export type EffectFn<T = any, U extends any[] = any[]> = (
-  returnValue?: T,
-  argsArray?: U,
-) => (() => T) | void | Promise<() => T> | Promise<void>;
+export type EffectFn<
+  T extends unknown[] = unknown[],
+  U extends unknown = unknown,
+  V extends U = U
+> = (
+  prev?: U,
+  input?: T,
+  prevInput?: T
+) => (() => V) | void | Promise<() => V> | Promise<void>;
 
-export type DepArray<U extends any[] = any[]> = {
-  [I in keyof U]: Getter<U[I]>;
-};
+// transforms a tuple to an tuple of getters in a way that allows generics to be inferred
+export type DepArray<T extends unknown[] = unknown[]> = [
+  ...Extract<{ [K in keyof T]: Getter<T[K]> }, readonly unknown[]>
+];
 
-export type ExecuteFn = <T = any, U extends any[] = any[]>(
+export type ExecuteFn = <
+  T extends unknown[] = unknown[],
+  U extends unknown = unknown
+>(
   effect: InternalEffectObject,
   fn: EffectFn<T, U>,
-  depArray?: DepArray<U>,
-  options?: EffectOptions,
+  depArray?: DepArray<T>,
+  options?: EffectOptions
 ) => () => void;

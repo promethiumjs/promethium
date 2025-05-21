@@ -5,9 +5,25 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "test:watch": {
+      "persistent": true,
+      "cache": false
+    },
+    "test:ui": {
+      "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "preview": {
+      "dependsOn": ["build"]
     }
   }
 }

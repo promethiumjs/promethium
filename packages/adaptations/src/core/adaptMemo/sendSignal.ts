@@ -1,12 +1,12 @@
 import { SignalTypes } from "../adaptEffect/effectTypes";
-import { InternalMemoObject } from "./memoTypes";
+import { InternalMemoObject, MemoFn } from "./memoTypes";
 import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications";
 import { sendSignals } from "../sendSignals";
 
-export default function sendSignal(
-  memo: InternalMemoObject,
-  fn: (prev?: any) => any,
-  signal: SignalTypes,
+export default function sendSignal<T, U>(
+  memo: InternalMemoObject<T>,
+  fn: MemoFn<T, U>,
+  signal: SignalTypes
 ) {
   if (signal === "stale") {
     memo.staleStateValuesCount++;

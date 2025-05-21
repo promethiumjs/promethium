@@ -1,7 +1,7 @@
 import { InternalEffectObject } from "../adaptEffect/effectTypes";
 import { imperativeUpdate } from "./set";
 
-export type InternalStateObject<T = any> = {
+export type InternalStateObject<T = unknown> = {
   syncSubscriptions: Set<InternalEffectObject>;
   memoSubscriptions: Set<InternalEffectObject>;
   asyncAndRenderSubscriptions: Set<InternalEffectObject>;
@@ -13,7 +13,7 @@ export type Setter<T> = (
   nextValue:
     | T
     | typeof imperativeUpdate
-    | ((prev: T) => T | typeof imperativeUpdate),
+    | ((prev: T) => T | typeof imperativeUpdate)
 ) => void;
 export type State<T> = readonly [Getter<T>, Setter<T>];
 export interface UnifiedState<T> {

@@ -1,6 +1,4 @@
 import type {
-  Component,
-  PromethiumNode,
   Getter,
   Setter,
   State,
@@ -8,10 +6,9 @@ import type {
   EffectFn,
   EffectOptions,
   DepArray,
-} from "./nqtui";
+  Deletable,
+} from "@promethium-js/adaptations";
 import {
-  h,
-  watch,
   adaptState,
   imperativeUpdate,
   unify,
@@ -20,9 +17,15 @@ import {
   adaptRenderEffect,
   adaptSyncEffect,
   adaptMemo,
-} from "./nqtui";
-import type { StateEntities, Deletable } from "./nqtx";
-import { ParticleEntity, DerivativeEntity, ActionEntity } from "./nqtx";
+  adaptParticleEntity,
+  adaptDerivativeEntity,
+  adaptActionEntity,
+  args,
+  action,
+  machine,
+} from "@promethium-js/adaptations";
+import type { Component, PromethiumNode } from "@promethium-js/lit";
+import { h, watch, styles } from "@promethium-js/lit";
 
 export {
   Component,
@@ -36,6 +39,7 @@ export {
   DepArray,
   h,
   watch,
+  styles,
   adaptState,
   imperativeUpdate,
   unify,
@@ -44,9 +48,11 @@ export {
   adaptRenderEffect,
   adaptSyncEffect,
   adaptMemo,
-  StateEntities,
   Deletable,
-  ParticleEntity,
-  DerivativeEntity,
-  ActionEntity,
+  adaptParticleEntity,
+  adaptDerivativeEntity,
+  adaptActionEntity,
+  args,
+  action,
+  machine,
 };
