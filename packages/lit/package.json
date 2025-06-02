@@ -2,6 +2,9 @@
   "name": "@promethium-js/lit",
   "version": "0.0.1",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Lit integration for promethium-js",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
