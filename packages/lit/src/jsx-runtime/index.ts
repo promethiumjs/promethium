@@ -1,6 +1,6 @@
 import { DirectiveResult } from "lit/async-directive.js";
 import { type Component, h } from "../directives/h";
-import { html } from "lit/static-html.js";
+import { html } from "lit";
 import { noChange, nothing } from "lit";
 
 // TODO: revise and refine attribute types
@@ -73,8 +73,8 @@ type IntrinsicElementsSVGAttributes =
   | "from"
   | "fr"
   | "fx"
-  | "fy"
   | "g1"
+  | "fy"
   | "g2"
   | "glyph-name"
   | "glyph-orientation-horizontal"
@@ -484,10 +484,10 @@ type IntrinsicElementsEventListenerOrEventListenerObjectMap = {
 };
 
 type PropType = Exclude<
-  `${"" | "_"}${"prop" | "attr" | "on" | "bool" | "use"}`,
-  "_use"
+  `${"" | "$"}${"prop" | "attr" | "on" | "bool" | "use"}`,
+  "$use"
 >;
-type BasicPropType = Exclude<PropType, `_${string}`>;
+type BasicPropType = Exclude<PropType, `$${string}`>;
 
 type Prefixify<Tag, Prefix extends string> =
   | {
@@ -499,23 +499,36 @@ type Prefixify<Tag, Prefix extends string> =
         | null;
     } & { children?: unknown };
 
+type PrefixifyWithoutChildren<Tag, Prefix extends string> =
+  | {
+      [TagProp in keyof Tag as `${Prefix}${string &
+        TagProp}`]+?: TagProp extends "children"
+        ? unknown
+        : Tag[TagProp] | typeof nothing | typeof noChange | undefined | null;
+    } & { children?: unknown };
+
 type ConvertToIntrinsicElements<TagNameMap, Attributes extends string> = {
   [TagName in keyof TagNameMap]: Partial<Record<Attributes, string>>;
 } & {
+  [TagName in keyof TagNameMap]: PrefixifyWithoutChildren<
+    TagNameMap[TagName],
+    ""
+  >;
+} & {
   [TagName in keyof TagNameMap]: Prefixify<TagNameMap[TagName], "prop:">;
 } & {
-  [TagName in keyof TagNameMap]: Prefixify<Record<string, unknown>, "_prop:">;
+  [TagName in keyof TagNameMap]: Prefixify<Record<string, unknown>, "$prop:">;
 } & {
   [TagName in keyof TagNameMap]: Prefixify<Record<Attributes, string>, "attr:">;
 } & {
-  [TagName in keyof TagNameMap]: Prefixify<Record<string, unknown>, "_attr:">;
+  [TagName in keyof TagNameMap]: Prefixify<Record<string, unknown>, "$attr:">;
 } & {
   [TagName in keyof TagNameMap]: Prefixify<
     Record<Attributes, boolean>,
     "bool:"
   >;
 } & {
-  [TagName in keyof TagNameMap]: Prefixify<Record<string, boolean>, "_bool:">;
+  [TagName in keyof TagNameMap]: Prefixify<Record<string, boolean>, "$bool:">;
 } & {
   [TagName in keyof TagNameMap]: Prefixify<
     IntrinsicElementsEventListenerOrEventListenerObjectMap,
@@ -524,7 +537,7 @@ type ConvertToIntrinsicElements<TagNameMap, Attributes extends string> = {
 } & {
   [TagName in keyof TagNameMap]: Prefixify<
     Record<string, (e: Event) => void>,
-    "_on:"
+    "$on:"
   >;
 } & {
   [TagName in keyof TagNameMap]: Prefixify<
@@ -627,7 +640,7 @@ function jsx<T>(
         const propName = propDescriptorSegments.join(":");
         switch (propType) {
           case "prop":
-          case "_prop":
+          case "$prop":
             insertPropOrElementDirective({
               propType: "prop",
               propIndex: index,
@@ -638,7 +651,7 @@ function jsx<T>(
             });
             break;
           case "attr":
-          case "_attr":
+          case "$attr":
             insertPropOrElementDirective({
               propType: "attr",
               propIndex: index,
@@ -649,7 +662,7 @@ function jsx<T>(
             });
             break;
           case "on":
-          case "_on":
+          case "$on":
             insertPropOrElementDirective({
               propType: "on",
               propIndex: index,
@@ -660,7 +673,7 @@ function jsx<T>(
             });
             break;
           case "bool":
-          case "_bool":
+          case "$bool":
             insertPropOrElementDirective({
               propType: "bool",
               propIndex: index,
