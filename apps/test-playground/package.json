@@ -1,7 +1,7 @@
 {
   "name": "test-playground",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Test playground for promethium-js libraries",
   "scripts": {
     "dev": "vite",

@@ -489,17 +489,15 @@ type PropType = Exclude<
 >;
 type BasicPropType = Exclude<PropType, `$${string}`>;
 
-type Prefixify<Tag, Prefix extends string> =
+type Prefixify<Tag, Prefix extends string, filter = any> =
   | {
-      [TagProp in keyof Tag as `${Prefix}${string & TagProp}`]+?:
-        | Tag[TagProp]
-        | typeof nothing
-        | typeof noChange
-        | undefined
-        | null;
+      [TagProp in keyof Tag as `${Prefix}${string &
+        TagProp}`]+?: Tag[TagProp] extends filter
+        ? Tag[TagProp] | typeof nothing | typeof noChange | undefined | null
+        : never;
     } & { children?: unknown };
 
-type PrefixifyWithoutChildren<Tag, Prefix extends string> =
+type PrefixifyWithoutChildrenConflict<Tag, Prefix extends string> =
   | {
       [TagProp in keyof Tag as `${Prefix}${string &
         TagProp}`]+?: TagProp extends "children"
@@ -510,7 +508,7 @@ type PrefixifyWithoutChildren<Tag, Prefix extends string> =
 type ConvertToIntrinsicElements<TagNameMap, Attributes extends string> = {
   [TagName in keyof TagNameMap]: Partial<Record<Attributes, string>>;
 } & {
-  [TagName in keyof TagNameMap]: PrefixifyWithoutChildren<
+  [TagName in keyof TagNameMap]: PrefixifyWithoutChildrenConflict<
     TagNameMap[TagName],
     ""
   >;
@@ -521,6 +519,12 @@ type ConvertToIntrinsicElements<TagNameMap, Attributes extends string> = {
 } & {
   [TagName in keyof TagNameMap]: Prefixify<Record<Attributes, string>, "attr:">;
 } & {
+  [TagName in keyof TagNameMap]: Prefixify<
+    TagNameMap[TagName],
+    "attr:",
+    string
+  >;
+} & {
   [TagName in keyof TagNameMap]: Prefixify<Record<string, unknown>, "$attr:">;
 } & {
   [TagName in keyof TagNameMap]: Prefixify<
@@ -528,7 +532,17 @@ type ConvertToIntrinsicElements<TagNameMap, Attributes extends string> = {
     "bool:"
   >;
 } & {
-  [TagName in keyof TagNameMap]: Prefixify<Record<string, boolean>, "$bool:">;
+  [TagName in keyof TagNameMap]: Prefixify<
+    TagNameMap[TagName],
+    "bool:",
+    boolean
+  >;
+} & {
+  [TagName in keyof TagNameMap]: Prefixify<
+    Record<string, boolean>,
+    "$bool:",
+    boolean
+  >;
 } & {
   [TagName in keyof TagNameMap]: Prefixify<
     IntrinsicElementsEventListenerOrEventListenerObjectMap,
