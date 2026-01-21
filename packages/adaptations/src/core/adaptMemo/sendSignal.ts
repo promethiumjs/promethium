@@ -1,11 +1,11 @@
-import { SignalTypes } from "../adaptEffect/effectTypes";
-import { InternalMemoObject, MemoFn } from "./memoTypes";
-import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications";
-import { sendSignals } from "../sendSignals";
+import { SignalTypes } from "../adaptEffect/effectTypes.js";
+import { InternalMemoObject, MemoFn } from "./memoTypes.js";
+import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications.js";
+import { sendSignals } from "../sendSignals.js";
 
-export default function sendSignal<T, U>(
+export function sendSignal<T>(
   memo: InternalMemoObject<T>,
-  fn: MemoFn<T, U>,
+  fn: MemoFn<T>,
   signal: SignalTypes
 ) {
   if (signal === "stale") {

@@ -1,55 +1,33 @@
-import type {
+export type {
   Getter,
   Setter,
   State,
   UnifiedState,
-} from "./core/adaptState/stateTypes";
-import type {
+} from "./core/adaptState/stateTypes.js";
+export type {
   EffectFn,
   EffectOptions,
   DepArray,
-} from "./core/adaptEffect/effectTypes";
-import type { Deletable } from "./extended/entityTypes";
-import { adaptState } from "./core/adaptState/adaptState";
-import { imperativeUpdate } from "./core/adaptState/set";
-import { unify, untrack, getGetter, getSetter, getValue } from "./core/utils";
-import adaptEffect from "./core/adaptEffect/adaptEffect";
-import adaptRenderEffect from "./core/adaptEffect/adaptRenderEffect";
-import adaptSyncEffect from "./core/adaptEffect/adaptSyncEffect";
-import adaptMemo from "./core/adaptMemo/adaptMemo";
-import { adaptParticleEntity } from "./extended/ParticleEntity";
-import { adaptDerivativeEntity } from "./extended/DerivativeEntity";
-import {
-  adaptActionEntity,
-  args,
-  action,
-  machine,
-} from "./extended/ActionEntity";
-
+} from "./core/adaptEffect/effectTypes.js";
+export type { Deletable } from "./extended/entityTypes.js";
+export { adaptState } from "./core/adaptState/adaptState.js";
+export { imperativeUpdate } from "./core/adaptState/set.js";
 export {
-  Getter,
-  Setter,
-  State,
-  UnifiedState,
-  EffectFn,
-  EffectOptions,
-  DepArray,
-  Deletable,
-  adaptState,
-  imperativeUpdate,
   unify,
   untrack,
   getGetter,
   getSetter,
   getValue,
-  adaptEffect,
-  adaptRenderEffect,
-  adaptSyncEffect,
-  adaptMemo,
-  adaptParticleEntity,
-  adaptDerivativeEntity,
+} from "./core/utils.js";
+export { adaptEffect } from "./core/adaptEffect/adaptEffect.js";
+export { adaptRenderEffect } from "./core/adaptEffect/adaptRenderEffect.js";
+export { adaptSyncEffect } from "./core/adaptEffect/adaptSyncEffect.js";
+export { adaptMemo } from "./core/adaptMemo/adaptMemo.js";
+export { adaptParticleEntity } from "./extended/ParticleEntity.js";
+export { adaptDerivativeEntity } from "./extended/DerivativeEntity.js";
+export {
   adaptActionEntity,
   args,
   action,
   machine,
-};
+} from "./extended/ActionEntity.js";

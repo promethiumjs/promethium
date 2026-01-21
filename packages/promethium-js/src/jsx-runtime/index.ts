@@ -4,6 +4,6 @@ import {
   jsx as jsxDEV,
   JSX,
   Fragment,
-} from "@promethium-js/lit/dist/jsx-runtime";
+} from "@promethium-js/lit/jsx-runtime";
 
 export { jsx, jsxs, jsxDEV, JSX, Fragment };

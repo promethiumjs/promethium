@@ -30,11 +30,11 @@
       "default": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
-    "./dist/jsx-runtime": {
+    "./jsx-runtime": {
       "default": "./dist/jsx-runtime/index.js",
       "types": "./dist/jsx-runtime/index.d.ts"
     },
-    "./dist/jsx-dev-runtime": {
+    "./jsx-dev-runtime": {
       "default": "./dist/jsx-dev-runtime/index.js",
       "types": "./dist/jsx-dev-runtime/index.d.ts"
     }

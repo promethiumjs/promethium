@@ -1,22 +1,19 @@
-import addAsyncEffect from "./addAsyncEffect";
-import addRenderEffect from "./addRenderEffect";
+import { addAsyncEffect } from "./addAsyncEffect.js";
+import { addRenderEffect } from "./addRenderEffect.js";
 import {
-  DepArray,
   InternalEffectObject,
   EffectFn,
   ExecuteFn,
   SignalTypes,
-} from "./effectTypes";
+  EffectOptions,
+} from "./effectTypes.js";
 
-export default function sendSignal<
-  T extends unknown[] = unknown[],
-  U extends unknown = unknown
->(
+export function sendSignal<T extends unknown[] = unknown[]>(
   effect: InternalEffectObject,
   execute: ExecuteFn,
-  fn: EffectFn<T, U>,
+  fn: EffectFn,
   signal: SignalTypes,
-  depArray?: DepArray<T>
+  options?: EffectOptions<T>
 ) {
   if (signal === "stale") {
     effect.staleStateValuesCount++;
@@ -32,7 +29,7 @@ export default function sendSignal<
           effect,
           execute,
           fn,
-          depArray
+          options
         );
       }
       effect.falseAlarmSignalsCount = 0;
@@ -42,22 +39,22 @@ export default function sendSignal<
 }
 
 const executeMap = {
-  sync: <T extends unknown[] = unknown[], U extends unknown = unknown>(
+  sync: <T extends unknown[] = unknown[]>(
     effect: InternalEffectObject,
     execute: ExecuteFn,
-    fn: EffectFn<T, U>,
-    depArray?: DepArray<T>
-  ) => execute(effect, fn, depArray!),
-  async: <T extends unknown[] = unknown[], U extends unknown = unknown>(
+    fn: EffectFn,
+    options?: EffectOptions<T>
+  ) => execute(effect, fn, options),
+  async: <T extends unknown[] = unknown[]>(
     effect: InternalEffectObject,
     execute: ExecuteFn,
-    fn: EffectFn<T, U>,
-    depArray?: DepArray<T>
-  ) => addAsyncEffect(() => execute(effect, fn, depArray!)),
-  render: <T extends unknown[] = unknown[], U extends unknown = unknown>(
+    fn: EffectFn,
+    options?: EffectOptions<T>
+  ) => addAsyncEffect(() => execute(effect, fn, options)),
+  render: <T extends unknown[] = unknown[]>(
     effect: InternalEffectObject,
     execute: ExecuteFn,
-    fn: EffectFn<T, U>,
-    depArray?: DepArray<T>
-  ) => addRenderEffect(() => execute(effect, fn, depArray!)),
+    fn: EffectFn,
+    options?: EffectOptions<T>
+  ) => addRenderEffect(() => execute(effect, fn, options)),
 };

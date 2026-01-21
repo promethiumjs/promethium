@@ -2,7 +2,7 @@ const asyncEffectArray1: (() => void)[] = [];
 const asyncEffectArray2: (() => void)[] = [];
 let one = true;
 
-export default function addAsyncEffect(fn: () => void) {
+export function addAsyncEffect(fn: () => void) {
   const asyncEffectArray = one ? asyncEffectArray1 : asyncEffectArray2;
   const newOne = one ? false : true;
 

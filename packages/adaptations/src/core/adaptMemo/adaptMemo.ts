@@ -1,12 +1,10 @@
-import sendSignal from "./sendSignal";
-import get from "../get";
-import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications";
-import { InternalMemoObject, MemoFn } from "./memoTypes";
-import { Getter } from "../adaptState/stateTypes";
+import { sendSignal } from "./sendSignal.js";
+import { get } from "../get.js";
+import { updateValueAndSendFreshNotifications } from "./updateValueAndSendFreshNotifications.js";
+import { InternalMemoObject, MemoFn } from "./memoTypes.js";
+import { Getter } from "../adaptState/stateTypes.js";
 
-export default function adaptMemo<T extends U, U = T>(
-  fn: MemoFn<T, U>
-): Getter<T> {
+export function adaptMemo<T>(fn: MemoFn<T>): Getter<T> {
   const memo: InternalMemoObject<T> = {
     //state properties
     syncSubscriptions: new Set(),

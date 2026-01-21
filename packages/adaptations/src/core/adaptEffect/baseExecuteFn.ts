@@ -1,15 +1,15 @@
-import effectAndDescendantCleanup from "../effectAndDescendantCeanup";
-import { effectContexts } from "../effectContexts";
-import getCleanupNode from "../getCleanupNode";
-import observableSubscriptionsCleanup from "../observableSubscriptionsCleanup";
-import setCleanupSet from "../setCleanupSet";
-import setInitialParameters from "../setInitialParameters";
-import unsetParameters from "../unsetParameters";
-import { InternalEffectObject } from "./effectTypes";
+import { effectAndDescendantCleanup } from "../effectAndDescendantCeanup.js";
+import { effectContexts } from "../effectContexts.js";
+import { getCleanupNode } from "../getCleanupNode.js";
+import { observableSubscriptionsCleanup } from "../observableSubscriptionsCleanup.js";
+import { setCleanupSet } from "../setCleanupSet.js";
+import { setInitialParameters } from "../setInitialParameters.js";
+import { unsetParameters } from "../unsetParameters.js";
+import { InternalEffectObject } from "./effectTypes.js";
 
 export function baseExecuteFn(
   effect: InternalEffectObject,
-  fn: (cleanupSet: Set<() => void> | undefined) => void,
+  fn: (cleanupSet: Set<() => void> | undefined) => void
 ) {
   //fire cleanups to make sure proceedings go smoothly
   effectAndDescendantCleanup(effect);

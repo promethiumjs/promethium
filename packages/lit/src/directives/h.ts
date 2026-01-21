@@ -5,8 +5,6 @@ import {
   PartInfo,
 } from "lit/async-directive.js";
 import { adaptSyncEffect } from "@promethium-js/adaptations";
-import { noChange, nothing, TemplateResult } from "lit";
-import { JSX } from "../jsx-runtime";
 
 class $ extends AsyncDirective {
   cleanups: (() => void)[];
@@ -39,9 +37,12 @@ class $ extends AsyncDirective {
   initializeComponent(reconnected: boolean = false) {
     //initialize component effects and memos and store the 1st cleanup
     this.cleanups.push(
-      adaptSyncEffect(() => {
-        this.htmlFn = this.Component?.(this.props);
-      }, []),
+      adaptSyncEffect(
+        () => {
+          this.htmlFn = this.Component?.(this.props);
+        },
+        { deps: [] }
+      )
     );
     let templateResult: unknown;
     let updateFromLit = true;
@@ -74,43 +75,15 @@ class $ extends AsyncDirective {
   }
 }
 
-export type ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions =
-  | string
-  | number
-  | bigint
-  | boolean
-  | null
-  | undefined
-  | TemplateResult
-  | DirectiveResult
-  | Node
-  | typeof nothing
-  | typeof noChange
-  | Iterable<ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions>;
-
 export type Component<T = null> = T extends null
-  ? (
-      props?: null,
-    ) =>
-      | (() => ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions)
-      | null
-  : (
-      props: T,
-    ) =>
-      | (() => ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions)
-      | null;
+  ? (props?: null) => (() => unknown) | null
+  : (props: T) => (() => unknown) | null;
 
-declare function hFn(
-  Component: () => () => ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions,
-): DirectiveResult;
+declare function hFn(Component: () => () => unknown): DirectiveResult;
 declare function hFn(Component: Component<{}>): DirectiveResult;
 declare function hFn<Type>(
   Component: Component<Type>,
-  props: Type extends object ? Parameters<typeof Component>[0] : never,
+  props: Type extends object ? Parameters<typeof Component>[0] : never
 ): DirectiveResult;
 
 export const h: typeof hFn = directive($);
-
-export type PromethiumNode =
-  | ComponentFunctionReturnNotToBeUsedOutsideOfLitHTMLExpressions
-  | JSX.Element;

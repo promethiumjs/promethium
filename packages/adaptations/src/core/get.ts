@@ -1,6 +1,6 @@
-import { effectContexts } from "./effectContexts";
-import { InternalStateObject } from "./adaptState/stateTypes";
-import { InternalEffectObject } from "./adaptEffect/effectTypes";
+import { effectContexts } from "./effectContexts.js";
+import { InternalStateObject } from "./adaptState/stateTypes.js";
+import { InternalEffectObject } from "./adaptEffect/effectTypes.js";
 
 function subscribe<T = unknown>(
   state: InternalStateObject<T>,
@@ -26,7 +26,7 @@ function subscribe<T = unknown>(
   }
 }
 
-export default function get<T = unknown>(state: InternalStateObject<T>) {
+export function get<T = unknown>(state: InternalStateObject<T>) {
   const currentEffect = effectContexts[effectContexts.length - 1];
   if (currentEffect) {
     subscribe(state, currentEffect);

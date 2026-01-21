@@ -31,8 +31,7 @@ class WatchDirective extends AsyncDirective {
       () => {
         this.setValue(this.stateGetter?.());
       },
-      [this.stateGetter!],
-      { defer },
+      { deps: [this.stateGetter!], defer }
     );
   }
 }

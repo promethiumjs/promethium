@@ -1,4 +1,4 @@
-import { adaptState } from "../core/adaptState/adaptState";
+import { adaptState } from "../core/adaptState/adaptState.js";
 
 type PathsObject = {
   [key: string]: string;

@@ -1,9 +1,7 @@
-import implicitDependencyExecuteFn from "./implicitDependencyExecuteFn";
-import { dependencyArrayExecuteFn } from "./dependencyArrayExecuteFn";
+import { implicitDependencyExecuteFn } from "./implicitDependencyExecuteFn.js";
+import { dependencyArrayExecuteFn } from "./dependencyArrayExecuteFn.js";
 
-const executeFns = {
+export const executeFns = {
   implicit: implicitDependencyExecuteFn,
   depArray: dependencyArrayExecuteFn,
 };
-
-export default executeFns;

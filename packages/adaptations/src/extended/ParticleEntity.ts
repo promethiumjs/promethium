@@ -1,11 +1,11 @@
-import { adaptState } from "../core/adaptState/adaptState";
-import { getGetter, getSetter, getValue } from "../core/utils";
-import { State, Getter, Setter } from "../core/adaptState/stateTypes";
+import { adaptState } from "../core/adaptState/adaptState.js";
+import { getGetter, getSetter, getValue } from "../core/utils.js";
+import { State, Getter, Setter } from "../core/adaptState/stateTypes.js";
 import {
   Deletable,
   OptionalLiteralKeys,
   RequiredLiteralKeys,
-} from "./entityTypes";
+} from "./entityTypes.js";
 
 type ParticleValues = {
   [key: string]: any;
@@ -40,7 +40,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
   }
 
   getParticle<T extends keyof PV>(
-    id: T,
+    id: T
   ): T extends RequiredLiteralKeys<PV>
     ? State<Exclude<PV[T], undefined>>
     : State<Exclude<PV[T], undefined>> | undefined {
@@ -50,7 +50,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
   }
 
   getParticleGetter<T extends keyof PV>(
-    id: T,
+    id: T
   ): T extends RequiredLiteralKeys<PV>
     ? Getter<Exclude<PV[T], undefined>>
     : Getter<Exclude<PV[T], undefined>> | undefined {
@@ -64,7 +64,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
   }
 
   getParticleSetter<T extends keyof PV>(
-    id: T,
+    id: T
   ): T extends RequiredLiteralKeys<PV>
     ? Setter<Exclude<PV[T], undefined>>
     : Setter<Exclude<PV[T], undefined>> | undefined {
@@ -74,7 +74,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
   }
 
   getParticleValue<T extends keyof PV>(
-    id: T,
+    id: T
   ): T extends RequiredLiteralKeys<PV> ? PV[T] : PV[T] | undefined {
     return getValue(this.particles[id]);
   }
@@ -82,7 +82,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
   getParticleValues() {
     const particleValues = {} as ParticleValues;
     Object.keys(this.particles).forEach(
-      (particle) => (particleValues[particle] = this.particles[particle][0]()),
+      (particle) => (particleValues[particle] = this.particles[particle][0]())
     );
 
     return particleValues as ReturnedParticleValues<PV>;
@@ -90,7 +90,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
 
   createParticle<T extends keyof PV>(
     id: T,
-    initialValue: PV[T],
+    initialValue: PV[T]
   ): State<Exclude<PV[T], undefined>> {
     if (this.particles[id] === undefined) {
       this.particles[id] = adaptState(initialValue);
@@ -117,7 +117,7 @@ class ParticleEntity<PV extends ParticleValues = ParticleValues> {
 }
 
 export function adaptParticleEntity<PV extends ParticleValues = ParticleValues>(
-  initialParticleValues: PV,
+  initialParticleValues: PV
 ) {
   return new ParticleEntity<PV>(initialParticleValues);
 }

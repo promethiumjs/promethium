@@ -1,5 +1,5 @@
-import { InternalEffectObject } from "../adaptEffect/effectTypes";
-import { imperativeUpdate } from "./set";
+import { InternalEffectObject } from "../adaptEffect/effectTypes.js";
+import { imperativeUpdate } from "./set.js";
 
 export type InternalStateObject<T = unknown> = {
   syncSubscriptions: Set<InternalEffectObject>;

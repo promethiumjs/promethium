@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { adaptState } from "../src/core/adaptState/adaptState";
-import adaptEffect from "../src/core/adaptEffect/adaptEffect";
-import adaptMemo from "../src/core/adaptMemo/adaptMemo";
+import { adaptEffect } from "../adaptEffect/adaptEffect.js";
+import { adaptState } from "../adaptState/adaptState.js";
+import { adaptMemo } from "./adaptMemo.js";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -10,38 +10,6 @@ beforeEach(() => {
 afterEach(() => {
   vi.restoreAllMocks();
 });
-
-describe("adaptState", () => {
-  const [count, setCount] = adaptState(0);
-  const effectFn = vi.fn(() => {
-    count();
-  });
-
-  test("state has right value", () => {
-    expect(count()).toBe(0);
-  });
-
-  test("setState correctly changes state value", () => {
-    setCount(1);
-    expect(count()).toBe(1);
-  });
-
-  test("state change triggers effects", () => {
-    adaptEffect(effectFn);
-    vi.advanceTimersToNextTimer();
-    expect(effectFn).toHaveBeenCalledTimes(1);
-    setCount(2);
-    vi.advanceTimersToNextTimer();
-    expect(effectFn).toHaveBeenCalledTimes(2);
-  });
-
-  test("state doesn't trigger effects when its value hasn't changed", () => {
-    setCount(2);
-    vi.advanceTimersToNextTimer();
-    expect(effectFn).toHaveBeenCalledTimes(0);
-  });
-});
-
 describe("adaptMemo", () => {
   const [count, setCount] = adaptState(0);
   const memoFn_1 = vi.fn(() => count() + 1);
@@ -116,15 +84,4 @@ describe("adaptMemo", () => {
   });
 
   test.todo("memo cleanup works");
-});
-
-describe("adaptEffect functions", () => {
-  test.todo("effects are reactive");
-  test.todo("effect cleanup functions work properly");
-  test.todo("effect cleanup function return values work properly");
-  test.todo("dependency array effects work properly");
-  test.todo("effect cleanups work properly");
-  test.todo(
-    "wrapping effects effectively clean up every effect and memo within the scope they wrap (that are synchronously called)"
-  );
 });

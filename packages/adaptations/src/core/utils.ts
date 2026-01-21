@@ -1,5 +1,10 @@
-import { effectContexts } from "./effectContexts";
-import { Getter, Setter, State, UnifiedState } from "./adaptState/stateTypes";
+import { effectContexts } from "./effectContexts.js";
+import {
+  Getter,
+  Setter,
+  State,
+  UnifiedState,
+} from "./adaptState/stateTypes.js";
 
 export function unify<T>(state: State<T>): UnifiedState<T>;
 export function unify<T>(state: undefined): undefined;

@@ -1,14 +1,14 @@
-import { sendSignals } from "../sendSignals";
-import { InternalStateObject } from "./stateTypes";
+import { sendSignals } from "../sendSignals.js";
+import { InternalStateObject } from "./stateTypes.js";
 
 export const imperativeUpdate = Symbol("imperativeUpdate");
 
-export default function set<T>(
+export function set<T>(
   state: InternalStateObject<T>,
   nextValue:
     | T
     | typeof imperativeUpdate
-    | ((prev: T) => T | typeof imperativeUpdate),
+    | ((prev: T) => T | typeof imperativeUpdate)
 ) {
   const newStateValue =
     typeof nextValue === "function"

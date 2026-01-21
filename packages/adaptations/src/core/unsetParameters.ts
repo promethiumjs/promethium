@@ -1,6 +1,6 @@
-import { InternalEffectObject } from "./adaptEffect/effectTypes";
+import { InternalEffectObject } from "./adaptEffect/effectTypes.js";
 
-export default function unsetParameters(effect: InternalEffectObject) {
+export function unsetParameters(effect: InternalEffectObject) {
   effect.level = null;
   effect.position = null;
   effect.cleanupTreeNodePointer = null;

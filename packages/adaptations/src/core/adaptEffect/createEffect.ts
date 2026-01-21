@@ -1,25 +1,22 @@
-import executeFns from "./executeFns";
-import sendSignal from "./sendSignal";
+import { executeFns } from "./executeFns.js";
+import { sendSignal } from "./sendSignal.js";
 import {
-  DepArray,
   InternalEffectObject,
   EffectFn,
   ExecuteFn,
   SignalTypes,
-} from "./effectTypes";
+  EffectOptions,
+} from "./effectTypes.js";
 
-export default function createEffect<
-  T extends unknown[] = unknown[],
-  U extends unknown = unknown
->(
+export function createEffect<T extends unknown[] = unknown[]>(
   type: "async" | "sync" | "render",
   tracking: "implicit" | "depArray",
-  fn: EffectFn<T, U>,
-  depArray?: DepArray<T>
+  fn: EffectFn,
+  options?: EffectOptions<T>
 ) {
   const execute = executeFns[tracking];
 
-  const effect: InternalEffectObject<T, U> = {
+  const effect: InternalEffectObject = {
     //whether or not the effect hasn't been ran before
     firstRun: true,
     //whether the effect is async, sync or a render effect
@@ -46,7 +43,7 @@ export default function createEffect<
     //used to notify the effect when a state value of state currently tracking the effect turns
     //stale or freshens up after turning stale
     sendSignal: (signal: SignalTypes): void =>
-      sendSignal(effect, execute as ExecuteFn, fn, signal, depArray),
+      sendSignal(effect, execute as ExecuteFn, fn, signal, options),
   };
 
   //return effect `execute` function and effect itself

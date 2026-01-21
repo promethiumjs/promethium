@@ -1,5 +1,5 @@
-import { SignalTypes } from "./adaptEffect/effectTypes";
-import { InternalStateObject } from "./adaptState/stateTypes";
+import { SignalTypes } from "./adaptEffect/effectTypes.js";
+import { InternalStateObject } from "./adaptState/stateTypes.js";
 
 const subscriptionTypes = [
   "memoSubscriptions",

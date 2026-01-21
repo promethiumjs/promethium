@@ -1,10 +1,10 @@
-import { MemoFn } from "../core/adaptMemo/memoTypes";
-import { getValue } from "../core/utils";
+import { MemoFn } from "../core/adaptMemo/memoTypes.js";
+import { getValue } from "../core/utils.js";
 import {
   Deletable,
   OptionalLiteralKeys,
   RequiredLiteralKeys,
-} from "./entityTypes";
+} from "./entityTypes.js";
 
 type Derivatives = {
   [key: string]: MemoFn;
@@ -33,7 +33,7 @@ class DerivativeEntity<D extends Derivatives = Derivatives> {
   }
 
   getDerivative<T extends keyof D>(
-    id: T,
+    id: T
   ): T extends RequiredLiteralKeys<D>
     ? Exclude<D[T], undefined>
     : Exclude<D[T], undefined> | undefined {
@@ -45,12 +45,12 @@ class DerivativeEntity<D extends Derivatives = Derivatives> {
   getDerivatives(): [keyof D, Exclude<D[keyof D], undefined>][] {
     return Object.entries(this.derivatives) as [
       keyof D,
-      Exclude<D[keyof D], undefined>,
+      Exclude<D[keyof D], undefined>
     ][];
   }
 
   getDerivativeValue<T extends keyof D>(
-    id: T,
+    id: T
   ): T extends RequiredLiteralKeys<D>
     ? ReturnType<Exclude<D[T], undefined>>
     : ReturnType<Exclude<D[T], undefined>> | undefined {
@@ -61,7 +61,7 @@ class DerivativeEntity<D extends Derivatives = Derivatives> {
     const derivativeValues = {} as DerivativeValues<D>;
     Object.keys(this.derivatives).forEach(
       (derivative: keyof DerivativeValues<D>) =>
-        (derivativeValues[derivative] = this.derivatives[derivative]() as any),
+        (derivativeValues[derivative] = this.derivatives[derivative]() as any)
     );
 
     return derivativeValues;
@@ -69,7 +69,7 @@ class DerivativeEntity<D extends Derivatives = Derivatives> {
 
   createDerivative<T extends keyof D>(
     id: T,
-    initialDerivativeFn: D[T],
+    initialDerivativeFn: D[T]
   ): Exclude<D[T], undefined> {
     if (this.derivatives[id] === undefined) {
       this.derivatives[id] = initialDerivativeFn;
@@ -96,7 +96,7 @@ class DerivativeEntity<D extends Derivatives = Derivatives> {
 }
 
 export function adaptDerivativeEntity<D extends Derivatives = Derivatives>(
-  initialDerivativeFns: D,
+  initialDerivativeFns: D
 ) {
   return new DerivativeEntity<D>(initialDerivativeFns);
 }

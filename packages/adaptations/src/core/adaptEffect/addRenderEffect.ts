@@ -2,7 +2,7 @@ const renderEffectArray1: (() => void)[] = [];
 const renderEffectArray2: (() => void)[] = [];
 let one = true;
 
-export default function addRenderEffect(fn: () => void) {
+export function addRenderEffect(fn: () => void) {
   const renderEffectArray = one ? renderEffectArray1 : renderEffectArray2;
   const newOne = one ? false : true;
 
