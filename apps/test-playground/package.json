@@ -1,17 +1,16 @@
 {
   "name": "test-playground",
   "private": true,
-  "version": "1.0.2",
   "description": "Test playground for promethium-js libraries",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest --watch",
     "check-types": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "5.9.3",

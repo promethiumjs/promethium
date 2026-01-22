@@ -54,12 +54,10 @@
   ],
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@vitest/ui": "^1.1.0",
-    "vitest": "^1.1.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "lit": ">=2.x",
-    "@promethium-js/adaptations": "workspace:*"
+    "@promethium-js/adaptations": "workspace:*",
+    "lit": ">=2.x"
   }
 }
