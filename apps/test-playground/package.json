@@ -6,9 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:watch": "vitest --watch",
+    "test": "vitest src",
+    "test:ui": "vitest src --ui",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {

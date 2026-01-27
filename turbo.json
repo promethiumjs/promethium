@@ -5,15 +5,13 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-    "test:watch": {
+    "test:ui": {
       "persistent": true,
       "cache": false
     },
-    "test:ui": {
-      "dependsOn": ["^build"]
-    },
     "test": {
-      "dependsOn": ["^build"]
+      "persistent": true,
+      "cache": false
     },
     "check-types": {
       "dependsOn": ["^check-types"]

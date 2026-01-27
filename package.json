@@ -6,11 +6,16 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "publish-packages": "turbo run build && changeset && changeset version && changeset publish"
+    "publish-packages": "turbo run build && changeset && changeset version && changeset publish",
+    "test": "turbo run test",
+    "test:ui": "turbo run test:ui",
+    "test:watch": "turbo run test:watch",
+    "check-types": "turbo run check-types",
+    "preview": "turbo run preview"
   },
   "license": "MIT",
   "devDependencies": {
-    "@changesets/cli": "^2.29.4",
+    "@changesets/cli": "^2.29.8",
     "@vitest/ui": "^4.0.18",
     "turbo": "^2.5.4",
     "vitest": "^4.0.18"
