@@ -4,7 +4,7 @@ import {
   DirectiveResult,
   PartInfo,
 } from "lit/async-directive.js";
-import { adaptSyncEffect } from "@promethium-js/adaptations";
+import { adaptEffect } from "@promethium-js/adaptations";
 
 class $ extends AsyncDirective {
   cleanups: (() => void)[];
@@ -37,21 +37,24 @@ class $ extends AsyncDirective {
   initializeComponent(reconnected: boolean = false) {
     //initialize component effects and memos and store the 1st cleanup
     this.cleanups.push(
-      adaptSyncEffect(
+      adaptEffect(
         () => {
           this.htmlFn = this.Component?.(this.props);
         },
-        { deps: [] }
-      )
+        { deps: () => {}, timing: "sync" }
+      ).dispose
     );
     let templateResult: unknown;
     let updateFromLit = true;
-    const componentCleanup = adaptSyncEffect(() => {
-      templateResult = this.htmlFn?.();
-      if (updateFromLit === false || reconnected === true) {
-        this.setValue(templateResult);
-      }
-    });
+    const componentCleanup = adaptEffect(
+      () => {
+        templateResult = this.htmlFn?.();
+        if (updateFromLit === false || reconnected === true) {
+          this.setValue(templateResult);
+        }
+      },
+      { timing: "sync" }
+    ).dispose;
     updateFromLit = false;
     //store 2nd cleanup
     this.cleanups.push(componentCleanup);

@@ -1,6 +1,6 @@
 {
   "name": "@promethium-js/adaptations",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -13,9 +13,8 @@
     "dev": "tsc --watch",
     "build": "tsc",
     "prepublishOnly": "pnpm run build",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:watch": "vitest --watch",
+    "test": "vitest src",
+    "test:ui": "vitest src --ui",
     "check-types": "tsc --noEmit"
   },
   "repository": {
@@ -42,8 +41,6 @@
   ],
   "devDependencies": {
     "@repo/tsconfig": "workspace:*",
-    "@vitest/ui": "^1.1.0",
-    "vitest": "^1.1.0",
     "typescript": "^5.3.3"
   }
 }
