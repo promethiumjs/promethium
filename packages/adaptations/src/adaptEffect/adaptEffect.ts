@@ -1,16 +1,24 @@
-import { Effect, untracked, type Disposable } from "../signals/signals.js";
+import {
+  Effect,
+  EffectFn,
+  EffectOptions,
+  untracked,
+} from "../signals/signals.js";
 
 export type EffectTiming = "sync" | "macro" | "micro";
 
 export type TimingStrategy = "first" | "subsequent" | "all";
 
-export interface AdaptedEffect {
-  name?: string;
-  dispose: Disposable;
+class InternalAdaptedEffect extends Effect {
+  constructor(fn: EffectFn, options?: EffectOptions) {
+    super(fn, options);
+  }
 }
 
+export type AdaptedEffect = Pick<InternalAdaptedEffect, "name" | "dispose">;
+
 export interface AdaptEffectOptions {
-  name?: string;
+  name?: EffectOptions["name"];
   deps?: () => any;
   defer?: boolean;
   timing?: EffectTiming;
@@ -66,7 +74,7 @@ export function adaptEffect(
 
     return fn();
   };
-  const e = new Effect(wrapper, { scheduler, name });
+  const e = new InternalAdaptedEffect(wrapper, { scheduler, name });
   if (isAsyncFirst) {
     getScheduler(timing)(() => {
       try {
@@ -84,11 +92,6 @@ export function adaptEffect(
       throw err;
     }
   }
-  const dispose = e.dispose.bind(e) as Disposable;
-  dispose[Symbol.dispose] = dispose;
 
-  return {
-    name: e.name,
-    dispose: (() => e.dispose()) as Disposable,
-  };
+  return e as AdaptedEffect;
 }

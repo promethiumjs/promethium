@@ -1,5 +1,17 @@
 # promethium-js
 
+## 0.18.0
+
+### Minor Changes
+
+- Minor changes to types and performance and memory improvements
+
+### Patch Changes
+
+- Updated dependencies
+  - @promethium-js/adaptations@0.2.0
+  - @promethium-js/lit@0.2.1
+
 ## 0.17.0
 
 ### Minor Changes

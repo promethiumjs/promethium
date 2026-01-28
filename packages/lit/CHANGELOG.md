@@ -1,5 +1,12 @@
 # @promethium-js/lit
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @promethium-js/adaptations@0.2.0
+
 ## 0.2.0
 
 ### Minor Changes

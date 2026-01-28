@@ -4,14 +4,29 @@ import {
   type SignalOptions,
 } from "../signals/signals.js";
 
-export interface AdaptedState<T> {
-  name?: string;
-  get(): T;
-  set(value: T): void;
-  peek(): T;
-  mutate(fn: () => void): void;
-  subscribe(fn: (value: T) => void): () => void;
+class InternalAdaptedState<T> extends Signal<T> {
+  constructor(value?: T, options?: SignalOptions<T>) {
+    super(value, options);
+  }
+
+  get(): T {
+    return this.value;
+  }
+
+  set(value: T): void {
+    this.value = value;
+  }
+
+  mutate(fn: () => void): void {
+    fn();
+    this.value = imperativeUpdate;
+  }
 }
+
+export type AdaptedState<T> = Pick<
+  InternalAdaptedState<T>,
+  "name" | "get" | "set" | "peek" | "mutate" | "subscribe" | "value"
+>;
 
 export interface AdaptStateOptions<T> extends SignalOptions<T> {}
 
@@ -24,19 +39,5 @@ export function adaptState<T>(
   value?: T,
   options?: SignalOptions<T>
 ): AdaptedState<T> {
-  const s = new Signal(value, options);
-
-  return {
-    name: s.name,
-    get: () => s.value,
-    set: (value: T) => {
-      s.value = value;
-    },
-    mutate: (fn: () => void) => {
-      fn();
-      s.value = imperativeUpdate;
-    },
-    peek: () => s.peek(),
-    subscribe: (fn) => s.subscribe(fn),
-  };
+  return new InternalAdaptedState(value, options) as AdaptedState<T>;
 }

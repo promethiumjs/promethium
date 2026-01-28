@@ -694,7 +694,7 @@ function endEffect(this: Effect, prevContext?: Computed | Effect) {
 }
 
 export type EffectFn =
-  | ((this: { dispose: () => void }) => void | (() => void))
+  | ((this: { dispose: Disposable }) => void | (() => void))
   | (() => void | (() => void));
 
 export interface EffectOptions {
@@ -731,6 +731,7 @@ export class Effect {
     this.name = options?.name;
     this._scheduler = options?.scheduler;
     this.dispose = (() => this._dispose()) as Disposable;
+    this.dispose[Symbol.dispose] = this.dispose;
     if (evalContext instanceof Effect) {
       this._parent = evalContext;
       this._nextSibling = evalContext._firstChild;
